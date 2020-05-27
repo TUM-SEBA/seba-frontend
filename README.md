@@ -1,4 +1,4 @@
-## Available Scripts
+## Care for Flora and Fauna
 
 In the project directory, you can run:
 

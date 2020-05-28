@@ -1,6 +1,12 @@
 ## Care for Flora and Fauna
 
-In the project directory, you can run:
+Make sure you have yarn installed in your system. If not install it from here: https://classic.yarnpkg.com/en/docs/install
+
+Then in the project directory, run:
+
+### `yarn install`
+
+You can then run:
 
 ### `yarn start`
 

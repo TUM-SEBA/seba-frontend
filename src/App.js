@@ -4,7 +4,7 @@ import {ThemeProvider} from "@material-ui/styles";
 import theme from "./themes/index";
 import ErrorPage from "./pages/ErrorPage";
 import {createBrowserHistory} from "history";
-import WelcomePage from "./pages/WelcomePage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   const history = createBrowserHistory();
@@ -12,7 +12,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
-          <Route exact path="/" render={() => <WelcomePage history={history} />} />
+          <Route exact path="/" render={() => <LoginPage history={history} />} />
           <Route exact path="/error" render={() => <ErrorPage history={history} />} />
           <Route path="*" render={() => <ErrorPage history={history} />} />
         </Switch>

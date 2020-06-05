@@ -12,7 +12,17 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Alert from "@material-ui/lab/Alert";
-import {changeUserId, changePassword, setLoginAlert} from "../actions/loginPage";
+import {
+  changeUserId,
+  changePassword,
+  setLoginAlert,
+  setIsSignUpDialogOpen,
+  showSnackBar,
+} from "../actions/loginPage";
+import {loginCustomer} from "../services/loginService";
+import SignUpForm from "../components/SignUpForm";
+import SnackbarAlert from "../components/SnackbarAlert";
+import {loginSuccess} from "../constants";
 
 const styles = (theme) => ({
   paper: {
@@ -35,6 +45,11 @@ const styles = (theme) => ({
   alert: {
     margin: theme.spacing(1),
   },
+  signUp: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
 });
 
 const CustomTextField = withStyles({
@@ -55,6 +70,7 @@ const CustomTextField = withStyles({
 
 function LoginPage(props) {
   const {
+    history,
     classes,
     selectedUserId,
     selectedPassword,
@@ -62,12 +78,20 @@ function LoginPage(props) {
     changeUserId,
     changePassword,
     setLoginAlert,
+    setIsSignUpDialogOpen,
+    showSnackBar,
   } = props;
 
-  function attemptLoginHandler(username, password) {
+  function handleLoginSuccess() {
+    showSnackBar(true, loginSuccess, "success");
+    window.location.reload();
+  }
+
+  async function attemptLoginHandler(username, password) {
     setLoginAlert(false);
-    if (username === "user" && password === "pass") alert("Login Successful");
-    else setLoginAlert(true);
+    await loginCustomer(username, password).then((status) =>
+      status ? handleLoginSuccess() : setLoginAlert(true)
+    );
   }
 
   return (
@@ -128,8 +152,20 @@ function LoginPage(props) {
               LogIn
             </Button>
           </form>
+          <div className={classes.signUp}>
+            <Typography variant="body1">Don't have an account?</Typography>
+            <Button
+              color="secondary"
+              style={{backgroundColor: "transparent"}}
+              onClick={() => setIsSignUpDialogOpen(true)}
+            >
+              Sign Up
+            </Button>
+          </div>
         </div>
       </Container>
+      <SignUpForm history={history} />
+      <SnackbarAlert />
     </div>
   );
 }
@@ -144,6 +180,8 @@ const mapDispatchToProps = {
   changeUserId: changeUserId,
   changePassword: changePassword,
   setLoginAlert: setLoginAlert,
+  setIsSignUpDialogOpen: setIsSignUpDialogOpen,
+  showSnackBar: showSnackBar,
 };
 
 export default connect(

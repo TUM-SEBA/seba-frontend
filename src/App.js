@@ -5,6 +5,7 @@ import theme from "./themes/index";
 import ErrorPage from "./pages/ErrorPage";
 import {createBrowserHistory} from "history";
 import LoginPage from "./pages/LoginPage";
+import CaretakerPage from "./pages/CaretakerPage";
 
 function App() {
   const history = createBrowserHistory();
@@ -14,6 +15,7 @@ function App() {
         <Switch>
           <Route exact path="/" render={() => <LoginPage history={history} />} />
           <Route exact path="/error" render={() => <ErrorPage history={history} />} />
+          <Route path="/caretaker" render={() => <CaretakerPage history={history} />} />
           <Route path="*" render={() => <ErrorPage history={history} />} />
         </Switch>
       </Router>

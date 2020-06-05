@@ -6,6 +6,8 @@ import ErrorPage from "./pages/ErrorPage";
 import {createBrowserHistory} from "history";
 import LoginPage from "./pages/LoginPage";
 import CaretakerPage from "./pages/CaretakerPage";
+import WelcomePage from "./pages/WelcomePage";
+import {isAuthenticated} from "../src/services/loginService";
 
 function App() {
   const history = createBrowserHistory();
@@ -13,7 +15,17 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
-          <Route exact path="/" render={() => <LoginPage history={history} />} />
+          <Route
+            exact
+            path="/"
+            render={() =>
+              !isAuthenticated() ? (
+                <LoginPage history={history} />
+              ) : (
+                <WelcomePage history={history} />
+              )
+            }
+          />
           <Route exact path="/error" render={() => <ErrorPage history={history} />} />
           <Route path="/caretaker" render={() => <CaretakerPage history={history} />} />
           <Route path="*" render={() => <ErrorPage history={history} />} />

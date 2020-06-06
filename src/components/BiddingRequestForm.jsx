@@ -48,18 +48,31 @@ const styles = (theme) => ({
   contentRight: {
     width: "45%",
   },
-  offerCardPetImage: {
+  petImageContent: {
     display: "flex",
     flexDirection: "row",
     marginTop: theme.spacing(6),
   },
-  petImage: {
-    width: "20%",
-    margin: `0 ${theme.spacing(1)}px`,
-  },
   ownerName: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(4),
+  },
+  petImageContainer: {
+    position: "relative",
+    width: "80%",
+    height: theme.spacing(10),
+    overflow: "hidden",
+  },
+  petImage: {
+    position: "absolute",
+    width: "20%",
+    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
+    transition: "all 500ms",
+  },
+  navigationButton: {
+    width: theme.spacing(6),
+    height: theme.spacing(6),
+    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
   },
 });
 
@@ -157,23 +170,28 @@ function BiddingRequestForm(props) {
                     />
                   </div>
                   <div className={classes.ownerName}>Owner</div>
-                  <div className={classes.offerCardPetImage}>
-                    <IconButton onClick={() => handleNavigateBefore()}>
+                  <div className={classes.petImageContent}>
+                    <IconButton
+                      onClick={() => handleNavigateBefore()}
+                      className={classes.navigationButton}
+                    >
                       <NavigateBefore />
                     </IconButton>
-                    {Array.from(Array(dummyOffer.length).keys())
-                      .filter((index) => {
-                        return index >= imageShow && index <= imageShow + 2;
-                      })
-                      .map((index) => (
+                    <div className={classes.petImageContainer}>
+                      {Array.from(Array(dummyOffer.length).keys()).map((index) => (
                         <img
                           key={index}
                           className={classes.petImage}
                           src={dummyOffer.image}
                           alt={"Pet"}
+                          style={{left: `${(index - imageShow) * 90}px`}}
                         />
                       ))}
-                    <IconButton onClick={() => handleNavigateNext()}>
+                    </div>
+                    <IconButton
+                      onClick={() => handleNavigateNext()}
+                      className={classes.navigationButton}
+                    >
                       <NavigateNext />
                     </IconButton>
                   </div>

@@ -13,7 +13,13 @@ import {
   CardActions,
   Button,
 } from "@material-ui/core";
-import {changeFilterBy, changeSearch} from "../actions/caretakerPage";
+import {
+  changeFilterBy,
+  changeSearch,
+  setIsBiddingRequestDialogOpen,
+} from "../actions/caretakerPage";
+import SnackbarAlert from "../components/SnackbarAlert";
+import BiddingRequestForm from "../components/BiddingRequestForm";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -23,6 +29,7 @@ const dummyOffer = {
     "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
   description:
     "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+  length: 10,
 };
 
 const styles = (theme) => ({
@@ -72,7 +79,15 @@ const styles = (theme) => ({
 });
 
 function CaretakerPage(props) {
-  const {classes, selectedFilterBy, searchValue, changeFilterBy, changeSearch} = props;
+  const {
+    history,
+    classes,
+    selectedFilterBy,
+    searchValue,
+    changeFilterBy,
+    changeSearch,
+    setIsBiddingRequestDialogOpen,
+  } = props;
   function getGridListTile(index) {
     return (
       <GridListTile key={index}>
@@ -85,7 +100,12 @@ function CaretakerPage(props) {
             <div className={classes.offerCardDescription}>{dummyOffer.description}</div>
           </CardContent>
           <CardActions className={classes.offerCardActions}>
-            <Button variant="contained" color="secondary" size="small">
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={() => setIsBiddingRequestDialogOpen(true, index)}
+            >
               Interested
             </Button>
             <Button variant="contained" color="secondary" size="small">
@@ -137,7 +157,7 @@ function CaretakerPage(props) {
       </div>
       <div className={classes.body}>
         <GridList cellHeight={210} cols={3} spacing={25}>
-          {Array.from(Array(10).keys())
+          {Array.from(Array(dummyOffer.length).keys())
             .filter((index) => {
               if (searchValue === "") {
                 return true;
@@ -159,6 +179,8 @@ function CaretakerPage(props) {
             .map((index) => getGridListTile(index))}
         </GridList>
       </div>
+      <BiddingRequestForm history={history} />
+      <SnackbarAlert />
     </div>
   );
 }
@@ -171,6 +193,7 @@ const mapStateToProps = ({caretakerPage: {selectedFilterBy, searchValue}}) => ({
 const mapDispatchToProps = {
   changeFilterBy: changeFilterBy,
   changeSearch: changeSearch,
+  setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
 };
 
 export default connect(

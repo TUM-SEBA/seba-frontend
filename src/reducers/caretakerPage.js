@@ -1,8 +1,18 @@
-import {CHANGEFILTERBY, CHANGESEARCH} from "../actions/caretakerPage";
+import {
+  CHANGEFILTERBY,
+  CHANGESEARCH,
+  SETBIDDINGREQUESTFIELDVALUE,
+  SETISBIDDINGREQUESTDIALOGOPEN,
+} from "../actions/caretakerPage";
 
 let initialState = {
   selectedFilterBy: "-1",
   searchValue: "",
+  isBiddingRequestDialogOpen: false,
+  biddingRequestFields: {
+    biddingAmount: "",
+    remarks: "",
+  },
 };
 
 export default function caretakerPage(state = initialState, action) {
@@ -16,6 +26,21 @@ export default function caretakerPage(state = initialState, action) {
       return {
         ...state,
         searchValue: action.value,
+      };
+    case SETISBIDDINGREQUESTDIALOGOPEN:
+      return {
+        ...state,
+        isBiddingRequestDialogOpen: action.isOpen,
+        offerId: action.offerId,
+        biddingRequestFields: initialState.biddingRequestFields,
+      };
+    case SETBIDDINGREQUESTFIELDVALUE:
+      return {
+        ...state,
+        biddingRequestFields: {
+          ...state.biddingRequestFields,
+          [action.fieldName]: action.value,
+        },
       };
     default:
       return state;

@@ -6,12 +6,11 @@ import {
   InputLabel,
   Select,
   TextField,
-  GridList,
-  GridListTile,
   Card,
   CardContent,
   CardActions,
   Button,
+  Grid,
 } from "@material-ui/core";
 import {
   changeFilterBy,
@@ -37,16 +36,11 @@ const styles = (theme) => ({
     margin: `${theme.spacing(10)}px auto 0 auto`,
     width: "80%",
   },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
   filter: {
-    width: theme.spacing(20),
+    width: "100%",
   },
   search: {
-    width: theme.spacing(30),
-    marginLeft: theme.spacing(3),
+    width: "100%",
   },
   body: {
     marginTop: theme.spacing(5),
@@ -72,9 +66,13 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(3),
     textAlign: "justify",
     fontSize: "10pt",
+    overflow: "scroll",
   },
   offerCardActions: {
     justifyContent: "flex-end",
+  },
+  button: {
+    width: "100%",
   },
 });
 
@@ -88,9 +86,9 @@ function CaretakerPage(props) {
     changeSearch,
     setIsBiddingRequestDialogOpen,
   } = props;
-  function getGridListTile(index) {
+  function getGridItem(index) {
     return (
-      <GridListTile key={index}>
+      <Grid item xs={12} md={6} lg={4} key={index}>
         <Card variant="outlined">
           <div className={classes.offerCardId}>{index}</div>
           <CardContent className={classes.offerCardContent}>
@@ -100,63 +98,84 @@ function CaretakerPage(props) {
             <div className={classes.offerCardDescription}>{dummyOffer.description}</div>
           </CardContent>
           <CardActions className={classes.offerCardActions}>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={() => setIsBiddingRequestDialogOpen(true, index)}
-            >
-              Interested
-            </Button>
-            <Button variant="contained" color="secondary" size="small">
-              Not Interested
-            </Button>
+            <Grid container spacing={1}>
+              <Grid item xs={"auto"} sm={5} md={3} lg={2} />
+              <Grid item xs={12} sm={3} md={4} lg={4}>
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  color="secondary"
+                  size="small"
+                  onClick={() => setIsBiddingRequestDialogOpen(true, index)}
+                >
+                  Interested
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={4} md={5} lg={6}>
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  color="secondary"
+                  size="small"
+                >
+                  Not Interested
+                </Button>
+              </Grid>
+            </Grid>
           </CardActions>
         </Card>
-      </GridListTile>
+      </Grid>
     );
   }
   return (
     <div className={classes.container}>
-      <div className={classes.header}>
-        <div>Hello, Caretaker</div>
-        <div>
-          <form>
-            <FormControl className={classes.filter}>
-              <InputLabel htmlFor="filter-by">Filter by</InputLabel>
-              <Select
-                native
-                value={selectedFilterBy}
+      <div>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={3}>
+            Hello, Caretaker
+          </Grid>
+          <Grid item xs={"auto"} md={2} lg={4} />
+          <Grid container item xs={12} md={7} lg={5} spacing={2}>
+            <Grid item xs={12} sm={4} md={5}>
+              <FormControl className={classes.filter}>
+                <InputLabel htmlFor="filter-by">Filter by</InputLabel>
+                <Select
+                  native
+                  value={selectedFilterBy}
+                  onChange={(event) => {
+                    changeFilterBy(event.target.value);
+                  }}
+                  inputProps={{
+                    id: "filter-by",
+                  }}
+                  color="secondary"
+                >
+                  <option key="-1" aria-label="None" value="-1" />
+                  {filterByOptions.map((value, index) => (
+                    <option key={index} value={index}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6} md={7}>
+              <TextField
+                className={classes.search}
+                value={searchValue}
                 onChange={(event) => {
-                  changeFilterBy(event.target.value);
-                }}
-                inputProps={{
-                  id: "filter-by",
+                  changeSearch(event.target.value);
                 }}
                 color="secondary"
-              >
-                <option key="-1" aria-label="None" value="-1" />
-                {filterByOptions.map((value, index) => (
-                  <option key={index} value={index}>
-                    {value}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              className={classes.search}
-              value={searchValue}
-              onChange={(event) => {
-                changeSearch(event.target.value);
-              }}
-              color="secondary"
-              label="Search"
-            />
-          </form>
-        </div>
+                label="Search"
+              />
+            </Grid>
+            <Grid item xs={"auto"} sm={2} md={"auto"} />
+          </Grid>
+        </Grid>
       </div>
       <div className={classes.body}>
-        <GridList cellHeight={210} cols={3} spacing={25}>
+        <Grid container spacing={2}>
           {Array.from(Array(dummyOffer.length).keys())
             .filter((index) => {
               if (searchValue === "") {
@@ -176,8 +195,8 @@ function CaretakerPage(props) {
               }
               return false;
             })
-            .map((index) => getGridListTile(index))}
-        </GridList>
+            .map((index) => getGridItem(index))}
+        </Grid>
       </div>
       <BiddingRequestForm history={history} />
       <SnackbarAlert />

@@ -26,12 +26,6 @@ const styles = (theme) => ({
   textFields: {
     margin: theme.spacing(2),
   },
-  contentCard: {
-    height: "100%",
-    width: "400px",
-    minWidth: "400px",
-    margin: "0 auto",
-  },
   offerId: {
     textAlign: "right",
     padding: `${theme.spacing(1)}px ${theme.spacing(2)}px 0 0`,
@@ -60,7 +54,6 @@ const styles = (theme) => ({
   petImage: {
     position: "absolute",
     width: "60px",
-    // margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
     transition: "all 500ms",
   },
   navigationButton: {
@@ -68,6 +61,13 @@ const styles = (theme) => ({
     height: theme.spacing(6),
     margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
   },
+  content: {
+    height: "100%",
+    width: "400px",
+    minWidth: "400px",
+    margin: "0 auto",
+  },
+  button: {},
 });
 
 const CustomTextField = withStyles({
@@ -152,8 +152,8 @@ function BiddingRequestForm(props) {
       <form className={classes.form} noValidate>
         <DialogContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={7}>
-              <Card variant="outlined" className={classes.contentCard}>
+            <Grid item xs={12} md={6}>
+              <Card variant="outlined" className={classes.content}>
                 <div className={classes.offerId}>{offerId}</div>
                 <CardContent className={classes.offerCardContent}>
                   <div>
@@ -192,37 +192,48 @@ function BiddingRequestForm(props) {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} md={5}>
-              <DialogContentText>
-                Please fill in this form to create a bidding request
-              </DialogContentText>
-              {Object.keys(biddingRequestFields).map((keyName, i) => {
-                return (
-                  <div key={i} className={classes.textFields}>
-                    <CustomTextField
-                      id={keyName}
-                      fullWidth
-                      type={"number"}
-                      label={keyMap[keyName].label}
-                      required={true}
-                      variant="outlined"
-                      multiline={keyMap[keyName].type === FieldType.TEXT_AREA}
-                      rows={keyMap[keyName].type === FieldType.TEXT_AREA ? 10 : 1}
-                      onChange={(event) => {
-                        setBiddingRequestFieldValue(keyName, event.target.value);
-                      }}
-                    />
-                  </div>
-                );
-              })}
+            <Grid item xs={12} md={6}>
+              <div className={classes.content}>
+                <DialogContentText>
+                  Please fill in this form to create a bidding request
+                </DialogContentText>
+                {Object.keys(biddingRequestFields).map((keyName, i) => {
+                  return (
+                    <div key={i} className={classes.textFields}>
+                      <CustomTextField
+                        id={keyName}
+                        fullWidth
+                        type={"number"}
+                        label={keyMap[keyName].label}
+                        required={true}
+                        variant="outlined"
+                        multiline={keyMap[keyName].type === FieldType.TEXT_AREA}
+                        rows={keyMap[keyName].type === FieldType.TEXT_AREA ? 10 : 1}
+                        onChange={(event) => {
+                          setBiddingRequestFieldValue(keyName, event.target.value);
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsBiddingRequestDialogOpen(false)} color="secondary">
+          <Button
+            className={classes.button}
+            onClick={() => setIsBiddingRequestDialogOpen(false)}
+            color="secondary"
+          >
             Cancel
           </Button>
-          <Button onClick={handleSave} color="secondary" variant="contained">
+          <Button
+            className={classes.button}
+            onClick={handleSave}
+            color="secondary"
+            variant="contained"
+          >
             Submit
           </Button>
         </DialogActions>

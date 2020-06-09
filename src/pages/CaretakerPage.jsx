@@ -66,9 +66,13 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(3),
     textAlign: "justify",
     fontSize: "10pt",
+    overflow: "scroll",
   },
   offerCardActions: {
     justifyContent: "flex-end",
+  },
+  button: {
+    width: "100%",
   },
 });
 
@@ -94,17 +98,30 @@ function CaretakerPage(props) {
             <div className={classes.offerCardDescription}>{dummyOffer.description}</div>
           </CardContent>
           <CardActions className={classes.offerCardActions}>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={() => setIsBiddingRequestDialogOpen(true, index)}
-            >
-              Interested
-            </Button>
-            <Button variant="contained" color="secondary" size="small">
-              Not Interested
-            </Button>
+            <Grid container spacing={1}>
+              <Grid item xs={"auto"} sm={5} md={3} lg={2} />
+              <Grid item xs={12} sm={3} md={4} lg={4}>
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  color="secondary"
+                  size="small"
+                  onClick={() => setIsBiddingRequestDialogOpen(true, index)}
+                >
+                  Interested
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={4} md={5} lg={6}>
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  color="secondary"
+                  size="small"
+                >
+                  Not Interested
+                </Button>
+              </Grid>
+            </Grid>
           </CardActions>
         </Card>
       </Grid>
@@ -119,7 +136,7 @@ function CaretakerPage(props) {
           </Grid>
           <Grid item xs={"auto"} md={2} lg={4} />
           <Grid container item xs={12} md={7} lg={5} spacing={2}>
-            <Grid item xs={4} md={5}>
+            <Grid item xs={12} sm={4} md={5}>
               <FormControl className={classes.filter}>
                 <InputLabel htmlFor="filter-by">Filter by</InputLabel>
                 <Select
@@ -142,7 +159,7 @@ function CaretakerPage(props) {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6} md={7}>
+            <Grid item xs={12} sm={6} md={7}>
               <TextField
                 className={classes.search}
                 value={searchValue}
@@ -153,7 +170,7 @@ function CaretakerPage(props) {
                 label="Search"
               />
             </Grid>
-            <Grid item xs={2} md={"auto"} />
+            <Grid item xs={"auto"} sm={2} md={"auto"} />
           </Grid>
         </Grid>
       </div>

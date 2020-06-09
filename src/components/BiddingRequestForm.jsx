@@ -10,6 +10,7 @@ import {
   CardContent,
   Card,
   IconButton,
+  Grid,
 } from "@material-ui/core";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
@@ -25,12 +26,11 @@ const styles = (theme) => ({
   textFields: {
     margin: theme.spacing(2),
   },
-  content: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
   contentCard: {
     height: "100%",
+    width: "400px",
+    minWidth: "400px",
+    margin: "0 auto",
   },
   offerId: {
     textAlign: "right",
@@ -41,12 +41,6 @@ const styles = (theme) => ({
   ownerImage: {
     width: "30%",
     borderRadius: "100%",
-  },
-  contentLeft: {
-    width: "45%",
-  },
-  contentRight: {
-    width: "45%",
   },
   petImageContent: {
     display: "flex",
@@ -59,14 +53,14 @@ const styles = (theme) => ({
   },
   petImageContainer: {
     position: "relative",
-    width: "80%",
+    width: "240px",
     height: theme.spacing(10),
     overflow: "hidden",
   },
   petImage: {
     position: "absolute",
-    width: "20%",
-    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
+    width: "60px",
+    // margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
     transition: "all 500ms",
   },
   navigationButton: {
@@ -157,8 +151,8 @@ function BiddingRequestForm(props) {
       <DialogTitle id="form-dialog-title">Bidding Request</DialogTitle>
       <form className={classes.form} noValidate>
         <DialogContent>
-          <div className={classes.content}>
-            <div className={classes.contentLeft}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={7}>
               <Card variant="outlined" className={classes.contentCard}>
                 <div className={classes.offerId}>{offerId}</div>
                 <CardContent className={classes.offerCardContent}>
@@ -197,8 +191,8 @@ function BiddingRequestForm(props) {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-            <div className={classes.contentRight}>
+            </Grid>
+            <Grid item xs={12} md={5}>
               <DialogContentText>
                 Please fill in this form to create a bidding request
               </DialogContentText>
@@ -221,8 +215,8 @@ function BiddingRequestForm(props) {
                   </div>
                 );
               })}
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsBiddingRequestDialogOpen(false)} color="secondary">

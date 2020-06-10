@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
@@ -19,10 +19,12 @@ import {
 } from "../actions/caretakerPage";
 import SnackbarAlert from "../components/SnackbarAlert";
 import BiddingRequestForm from "../components/BiddingRequestForm";
+import {getAllOffer} from "../services/offerService";
+import {isAuthenticated} from "../services/loginService";
+import {showSnackBar} from "../actions/loginPage";
+import {fetchFailed} from "../constants";
 
 const filterByOptions = ["ID", "Description"];
-
-// TODO: remove this when backend is connected
 const dummyOffer = {
   image:
     "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
@@ -30,7 +32,6 @@ const dummyOffer = {
     "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
   length: 10,
 };
-
 const styles = (theme) => ({
   container: {
     margin: `${theme.spacing(10)}px auto 0 auto`,
@@ -75,7 +76,6 @@ const styles = (theme) => ({
     width: "100%",
   },
 });
-
 function CaretakerPage(props) {
   const {
     history,
@@ -85,17 +85,37 @@ function CaretakerPage(props) {
     changeFilterBy,
     changeSearch,
     setIsBiddingRequestDialogOpen,
+    showSnackBar,
   } = props;
-  function getGridItem(index) {
+
+  const [offers, setOffers] = useState([]);
+
+  useEffect(() => {
+    function getOffers() {
+      getAllOffer()
+        .then((response) => {
+          setOffers(response);
+        })
+        .catch((_) => {
+          showSnackBar(true, fetchFailed, "error");
+        });
+    }
+    if (!isAuthenticated()) {
+      history.push("/");
+      window.location.reload();
+    }
+    getOffers();
+  }, [history, showSnackBar]);
+  function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
         <Card variant="outlined">
-          <div className={classes.offerCardId}>{index}</div>
+          <div className={classes.offerCardId}>{offer._id}</div>
           <CardContent className={classes.offerCardContent}>
             <div>
               <img className={classes.offerImage} src={dummyOffer.image} alt={"Pet"} />
             </div>
-            <div className={classes.offerCardDescription}>{dummyOffer.description}</div>
+            <div className={classes.offerCardDescription}>{offer.description}</div>
           </CardContent>
           <CardActions className={classes.offerCardActions}>
             <Grid container spacing={1}>
@@ -127,81 +147,85 @@ function CaretakerPage(props) {
       </Grid>
     );
   }
-  return (
-    <div className={classes.container}>
-      <div>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={3}>
-            Hello, Caretaker
-          </Grid>
-          <Grid item xs={"auto"} md={2} lg={4} />
-          <Grid container item xs={12} md={7} lg={5} spacing={2}>
-            <Grid item xs={12} sm={4} md={5}>
-              <FormControl className={classes.filter}>
-                <InputLabel htmlFor="filter-by">Filter by</InputLabel>
-                <Select
-                  native
-                  value={selectedFilterBy}
+  if (isAuthenticated()) {
+    return (
+      <div className={classes.container}>
+        <div>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={3}>
+              Hello, Caretaker
+            </Grid>
+            <Grid item xs={"auto"} md={2} lg={4} />
+            <Grid container item xs={12} md={7} lg={5} spacing={2}>
+              <Grid item xs={12} sm={4} md={5}>
+                <FormControl className={classes.filter}>
+                  <InputLabel htmlFor="filter-by">Filter by</InputLabel>
+                  <Select
+                    native
+                    value={selectedFilterBy}
+                    onChange={(event) => {
+                      changeFilterBy(event.target.value);
+                    }}
+                    inputProps={{
+                      id: "filter-by",
+                    }}
+                    color="secondary"
+                  >
+                    <option key="-1" aria-label="None" value="-1" />
+                    {filterByOptions.map((value, index) => (
+                      <option key={index} value={index}>
+                        {value}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6} md={7}>
+                <TextField
+                  className={classes.search}
+                  value={searchValue}
                   onChange={(event) => {
-                    changeFilterBy(event.target.value);
-                  }}
-                  inputProps={{
-                    id: "filter-by",
+                    changeSearch(event.target.value);
                   }}
                   color="secondary"
-                >
-                  <option key="-1" aria-label="None" value="-1" />
-                  {filterByOptions.map((value, index) => (
-                    <option key={index} value={index}>
-                      {value}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
+                  label="Search"
+                />
+              </Grid>
+              <Grid item xs={"auto"} sm={2} md={"auto"} />
             </Grid>
-            <Grid item xs={12} sm={6} md={7}>
-              <TextField
-                className={classes.search}
-                value={searchValue}
-                onChange={(event) => {
-                  changeSearch(event.target.value);
-                }}
-                color="secondary"
-                label="Search"
-              />
-            </Grid>
-            <Grid item xs={"auto"} sm={2} md={"auto"} />
           </Grid>
-        </Grid>
-      </div>
-      <div className={classes.body}>
-        <Grid container spacing={2}>
-          {Array.from(Array(dummyOffer.length).keys())
-            .filter((index) => {
-              if (searchValue === "") {
-                return true;
-              }
-              if (selectedFilterBy === "0") {
-                if (index.toString() === searchValue) {
-                  return true;
-                }
-              } else if (selectedFilterBy === "1") {
+        </div>
+        <div className={classes.body}>
+          <Grid container spacing={2}>
+            {offers
+              .filter((offer) => {
                 var searchRegex = new RegExp(searchValue, "gi");
-                if (searchRegex.test(dummyOffer.description)) {
+                if (searchValue === "") {
                   return true;
                 }
-              } else if (selectedFilterBy === "-1") {
-                return true;
-              }
-              return false;
-            })
-            .map((index) => getGridItem(index))}
-        </Grid>
+                if (selectedFilterBy === "0") {
+                  if (searchRegex.test(offer._id.toString())) {
+                    return true;
+                  }
+                } else if (selectedFilterBy === "1") {
+                  if (searchRegex.test(offer.description)) {
+                    return true;
+                  }
+                } else if (selectedFilterBy === "-1") {
+                  return true;
+                }
+                return false;
+              })
+              .map((offer, index) => getGridItem(index, offer))}
+          </Grid>
+        </div>
+        <BiddingRequestForm history={history} />
+        <SnackbarAlert />
       </div>
-      <BiddingRequestForm history={history} />
-      <SnackbarAlert />
-    </div>
-  );
+    );
+  } else {
+    return <div></div>;
+  }
 }
 
 const mapStateToProps = ({caretakerPage: {selectedFilterBy, searchValue}}) => ({
@@ -213,6 +237,7 @@ const mapDispatchToProps = {
   changeFilterBy: changeFilterBy,
   changeSearch: changeSearch,
   setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
+  showSnackBar: showSnackBar,
 };
 
 export default connect(

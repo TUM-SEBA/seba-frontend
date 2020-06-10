@@ -36,12 +36,7 @@ const Header = () => {
         <Toolbar>
           <Grid container direction="row" justify="space-between" alignItems="center">
             <Grid item xs={8}>
-              <Avatar
-                className={classes.avatarStyle}
-                alt="Home"
-                src={logo}
-                className={classes.large}
-              />
+              <Avatar alt="Home" src={logo} className={classes.large} />
             </Grid>
 
             <Button>

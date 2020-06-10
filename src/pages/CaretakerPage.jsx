@@ -91,22 +91,21 @@ function CaretakerPage(props) {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
+    function getOffers() {
+      getAllOffer()
+        .then((response) => {
+          setOffers(response);
+        })
+        .catch((_) => {
+          showSnackBar(true, fetchFailed, "error");
+        });
+    }
     if (!isAuthenticated()) {
       history.push("/");
       window.location.reload();
     }
     getOffers();
-  }, [getOffers, history]);
-
-  function getOffers() {
-    getAllOffer()
-      .then((response) => {
-        setOffers(response);
-      })
-      .catch((_) => {
-        showSnackBar(true, fetchFailed, "error");
-      });
-  }
+  }, [history, showSnackBar]);
   function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>

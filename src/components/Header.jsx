@@ -4,7 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Avatar} from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
-import logo from "../../logoSEBA.png";
+import logo from "../logoSEBA.png";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({

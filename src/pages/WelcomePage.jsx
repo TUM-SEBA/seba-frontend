@@ -1,6 +1,6 @@
 import React from "react";
 import {Grid, Typography} from "@material-ui/core";
-import Header from "../components/shared-component/Header";
+import Header from "../components/Header";
 import {Avatar} from "@material-ui/core";
 import logo1 from "../logoSEBA.png";
 import {makeStyles} from "@material-ui/core/styles";

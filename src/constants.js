@@ -1,5 +1,5 @@
 //URL
-export const serverURL = "http://localhost:3000";
+export const serverURL = "http://localhost:5000";
 export const authURL = `${serverURL}/auth`;
 export const offerURL = `${serverURL}/offer`;
 

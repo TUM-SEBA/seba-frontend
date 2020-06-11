@@ -64,3 +64,27 @@ export function loginCustomer(username, password) {
       return false;
     });
 }
+
+export function logout() {
+  return fetch(authURL + "/logout", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${localStorage["token"]}`,
+    },
+  })
+    .then((response) => {
+      console.log(response.status);
+      if (response.status !== 200) throw invalidRequest();
+    })
+    .then(() => {
+      console.log("Hello World");
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      return true;
+    })
+    .catch(() => {
+      console.log("Invalid Request");
+      return false;
+    });
+}

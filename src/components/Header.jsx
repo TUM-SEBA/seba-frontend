@@ -6,6 +6,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import logo from "../logoSEBA.png";
 import Button from "@material-ui/core/Button";
+import {logout} from "../services/loginService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +31,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
+
+  async function signout() {
+    await logout().then((status) =>
+      status ? window.location.reload() : console.log("Handle Invalid token")
+    );
+  }
+
   return (
     <div className={classes.headerColor}>
       <AppBar className={classes.headerColor} position="static">
@@ -44,7 +52,7 @@ const Header = () => {
               <Typography>Account Name</Typography>
             </Button>
 
-            <Button>
+            <Button onClick={signout}>
               <Typography>Sign Out</Typography>
               <ExitToAppOutlinedIcon />
             </Button>

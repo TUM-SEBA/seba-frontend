@@ -76,15 +76,8 @@ function OfferForm(props) {
       <DialogTitle id="form-dialog-title">Offer</DialogTitle>
       <form className={classes.form} noValidate>
         <DialogContent>
-          <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              alignItems="center"
-              justify="center"
-              direction="column"
-            >
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={6}>
               <div>Select Category:</div>
               <div align="center" className={classes.categoryGridObject}>
                 <ButtonGroup
@@ -106,14 +99,7 @@ function OfferForm(props) {
               </div>
             </Grid>
 
-            <Grid
-              item
-              xs={12}
-              md={6}
-              alignItems="center"
-              justify="center"
-              direction="column"
-            >
+            <Grid item xs={12} md={6}>
               <Grid container direction="row" justify="center" alignItems="center">
                 <Grid
                   container

@@ -44,15 +44,14 @@ export default function WelcomePage(props) {
             Hello User, XYZ Countinue as
           </Typography>
 
-          <Grid container direction="row" justify="center" alignItems="center">
-            <Grid item direction="column" justify="center" alignItems="center">
+          <Grid container direction="row" justify="space-around" alignItems="center">
+            <Grid item>
               <Button>
                 <Avatar src={logo1} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Caretaker</Typography>
             </Grid>
-
-            <Grid item direction="column" justify="center" alignItems="center">
+            <Grid>
               <Button>
                 <Avatar src={logo1} className={classes.large} />
               </Button>

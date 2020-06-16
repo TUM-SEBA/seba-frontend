@@ -3,6 +3,8 @@ import {Grid, Typography} from "@material-ui/core";
 import Header from "../components/Header";
 import {Avatar} from "@material-ui/core";
 import logo1 from "../logoSEBA.png";
+import caretakerImage from "../assets/caretaker.png";
+import ownerImage from "../assets/owner.png";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
@@ -55,14 +57,14 @@ export default function WelcomePage(props) {
           <Grid container direction="row" justify="space-around" alignItems="center">
             <Link className={classes.navStyle} to="/caretaker">
               <Button>
-                <Avatar src={logo1} className={classes.large} />
+                <Avatar src={caretakerImage} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Caretaker</Typography>
             </Link>
 
             <Link className={classes.navStyle} to="/owner">
               <Button>
-                <Avatar src={logo1} className={classes.large} />
+                <Avatar src={ownerImage} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Owner</Typography>
             </Link>

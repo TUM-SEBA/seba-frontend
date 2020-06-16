@@ -5,6 +5,7 @@ import {Avatar} from "@material-ui/core";
 import logo1 from "../logoSEBA.png";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   large: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
   welcomeContainer: {
     marginTop: "20px;",
+  },
+  navStyle: {
+    color: "#000000",
+    textDecoration: "none",
   },
 }));
 
@@ -48,18 +53,19 @@ export default function WelcomePage(props) {
           </Typography>
 
           <Grid container direction="row" justify="space-around" alignItems="center">
-            <Grid item>
+            <Link className={classes.navStyle} to="/caretaker">
               <Button>
                 <Avatar src={logo1} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Caretaker</Typography>
-            </Grid>
-            <Grid>
+            </Link>
+
+            <Link className={classes.navStyle} to="/owner">
               <Button>
                 <Avatar src={logo1} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Owner</Typography>
-            </Grid>
+            </Link>
           </Grid>
         </Grid>
       </Grid>

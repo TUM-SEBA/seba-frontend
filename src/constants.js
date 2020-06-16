@@ -9,3 +9,4 @@ export const passwordMismatch = "Passwords do not match!!";
 export const requiredFieldsEmpty = "Required fields are empty!!";
 export const loginSuccess = "Login Successful";
 export const fetchFailed = "Failed to fetch";
+export const welcomeMessage = "Hello User XYZ, Continue as";

@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     fontSize: "25px",
   },
+  welcomeContainer: {
+    marginTop: "20px;",
+  },
 }));
 
 export default function WelcomePage(props) {
@@ -31,7 +34,7 @@ export default function WelcomePage(props) {
         <Header />
       </Grid>
 
-      <Grid item>
+      <Grid className={classes.welcomeContainer} item>
         <Grid container direction="column" justify="flex-start" alignItems="stretch">
           <Typography
             style={{

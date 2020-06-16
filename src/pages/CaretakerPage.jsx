@@ -19,7 +19,7 @@ import {
 } from "../actions/caretakerPage";
 import SnackbarAlert from "../components/SnackbarAlert";
 import BiddingRequestForm from "../components/BiddingRequestForm";
-import {getAllOffer} from "../services/offerService";
+import {getOffersByUsername} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
@@ -89,23 +89,26 @@ function CaretakerPage(props) {
   } = props;
 
   const [offers, setOffers] = useState([]);
-
+  function getOffers() {
+    getOffersByUsername()
+      .then((offers) => {
+        setOffers(offers);
+      })
+      .catch((status) => {
+        if (status === 401) {
+          history.push("/");
+          window.location.reload();
+        }
+        showSnackBar(true, fetchFailed, "error");
+      });
+  }
+  if (!isAuthenticated()) {
+    history.push("/");
+    window.location.reload();
+  }
   useEffect(() => {
-    function getOffers() {
-      getAllOffer()
-        .then((response) => {
-          setOffers(response);
-        })
-        .catch((_) => {
-          showSnackBar(true, fetchFailed, "error");
-        });
-    }
-    if (!isAuthenticated()) {
-      history.push("/");
-      window.location.reload();
-    }
     getOffers();
-  }, [history, showSnackBar]);
+  }, [getOffers, history, showSnackBar]);
   function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
@@ -126,7 +129,7 @@ function CaretakerPage(props) {
                   className={classes.button}
                   color="secondary"
                   size="small"
-                  onClick={() => setIsBiddingRequestDialogOpen(true, index)}
+                  onClick={() => setIsBiddingRequestDialogOpen(true, offer._id)}
                 >
                   Interested
                 </Button>
@@ -219,7 +222,7 @@ function CaretakerPage(props) {
               .map((offer, index) => getGridItem(index, offer))}
           </Grid>
         </div>
-        <BiddingRequestForm history={history} />
+        <BiddingRequestForm history={history} successCallback={getOffers} />
         <SnackbarAlert />
       </div>
     );

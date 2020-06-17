@@ -18,9 +18,10 @@ import {
   setBiddingRequestFieldValue,
   setIsBiddingRequestDialogOpen,
 } from "../actions/caretakerPage";
-import {requiredFieldsEmpty} from "../constants";
+import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 import {NavigateBefore, NavigateNext} from "@material-ui/icons";
+import {insertBiddingRequest} from "../services/biddingRequestService";
 
 const styles = (theme) => ({
   textFields: {
@@ -111,7 +112,9 @@ const dummyOffer = {
 
 function BiddingRequestForm(props) {
   const {
+    history,
     classes,
+    successCallback,
     biddingRequestFields,
     offerId,
     isBiddingRequestDialogOpen,
@@ -122,14 +125,33 @@ function BiddingRequestForm(props) {
 
   const [imageShow, setImageShow] = React.useState(0);
 
-  // TODO: change this when backend is connected
   async function handleSave() {
     const emptyField = Object.keys(biddingRequestFields).find(
       (keyName) => biddingRequestFields[keyName] === ""
     );
-    emptyField
-      ? showSnackBar(true, requiredFieldsEmpty, "error")
-      : console.log("Bidding Request is submitted");
+    if (emptyField) {
+      showSnackBar(true, requiredFieldsEmpty, "error");
+    } else {
+      let biddingRequest = {
+        offer: offerId,
+        caretaker: localStorage["username"],
+        price: biddingRequestFields["biddingAmount"],
+        remarks: biddingRequestFields["remarks"],
+      };
+      insertBiddingRequest(biddingRequest)
+        .then(() => {
+          showSnackBar(true, saveSuccess, "success");
+          setIsBiddingRequestDialogOpen(false);
+          successCallback();
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, saveFailed, "error");
+        });
+    }
   }
   function handleNavigateBefore() {
     if (imageShow > 0) {

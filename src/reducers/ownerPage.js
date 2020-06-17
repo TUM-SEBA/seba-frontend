@@ -3,6 +3,10 @@ import {
   CHANGESEARCH,
   SETOFFERFIELDVALUE,
   SETISOFFERDIALOGOPEN,
+  BIDDINGREQUESTLISTCHANGEFILTERBY,
+  BIDDINGREQUESTLISTCHANGESEARCH,
+  SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN,
+  SETISBIDDINGREQUESTDIALOGOPEN,
 } from "../actions/ownerPage";
 
 let initialState = {
@@ -13,6 +17,12 @@ let initialState = {
     biddingAmount: "",
     remarks: "",
   },
+  biddingRequestSelectedFilterBy: "-1",
+  biddingRequestSearchValue: "",
+  isBiddingRequestDialogOpen: true,
+  offerId: "",
+  isAcceptCaretakerConfirmationDialogOpen: false,
+  biddingRequestId: "",
 };
 
 export default function ownerPage(state = initialState, action) {
@@ -41,6 +51,28 @@ export default function ownerPage(state = initialState, action) {
           ...state.offerFields,
           [action.fieldName]: action.value,
         },
+      };
+    case BIDDINGREQUESTLISTCHANGEFILTERBY:
+      return {
+        ...state,
+        biddingRequestSelectedFilterBy: action.value,
+      };
+    case BIDDINGREQUESTLISTCHANGESEARCH:
+      return {
+        ...state,
+        biddingRequestSearchValue: action.value,
+      };
+    case SETISBIDDINGREQUESTDIALOGOPEN:
+      return {
+        ...state,
+        isBiddingRequestDialogOpen: action.isOpen,
+        offerId: action.offerId,
+      };
+    case SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN:
+      return {
+        ...state,
+        isAcceptCaretakerConfirmationDialogOpen: action.isOpen,
+        biddingRequestId: action.biddingRequestId,
       };
     default:
       return state;

@@ -14,7 +14,7 @@ import {
 import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
 import SnackbarAlert from "../components/SnackbarAlert";
 import OfferForm from "../components/OfferForm";
-import {getAllOffer} from "../services/offerService";
+import {getOffersByUsername} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
@@ -114,7 +114,7 @@ function OfferPage(props) {
 
   useEffect(() => {
     function getOffers() {
-      getAllOffer()
+      getOffersByUsername()
         .then((response) => {
           setOffers(response);
         })

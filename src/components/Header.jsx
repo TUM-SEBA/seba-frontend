@@ -2,11 +2,11 @@ import React from "react";
 import {AppBar, Toolbar, Typography, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {Avatar} from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import logo from "../logoSEBA.png";
 import Button from "@material-ui/core/Button";
 import {logout} from "../services/loginService";
+import AccountMenu from "./AccountMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
   headerColor: {
     background: "#DCEFDE",
   },
+
+  sentenceCase: {
+    textTransform: "none",
+  },
 }));
 
 const Header = () => {
@@ -42,20 +46,19 @@ const Header = () => {
     <div className={classes.headerColor}>
       <AppBar className={classes.headerColor} position="static">
         <Toolbar>
-          <Grid container direction="row" justify="space-between" alignItems="center">
-            <Grid item xs={8}>
+          <Grid container direction="row" justify="space-around" alignItems="center">
+            <Grid item xs={4} md={8} sm={8} lg={10}>
               <Avatar alt="Home" src={logo} className={classes.large} />
             </Grid>
-
-            <Button>
-              <AccountCircleIcon />
-              <Typography>Account Name</Typography>
-            </Button>
-
-            <Button onClick={signout}>
-              <Typography>Sign Out</Typography>
-              <ExitToAppOutlinedIcon />
-            </Button>
+            <Grid item xs={4} md={2} sm={2} lg={1}>
+              <AccountMenu />
+            </Grid>
+            <Grid item xs={4} md={2} sm={2} lg={1}>
+              <Button onClick={signout}>
+                <Typography className={classes.sentenceCase}>Sign Out</Typography>
+                <ExitToAppOutlinedIcon />
+              </Button>
+            </Grid>
           </Grid>
         </Toolbar>
       </AppBar>

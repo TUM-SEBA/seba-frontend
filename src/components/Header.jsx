@@ -2,11 +2,11 @@ import React from "react";
 import {AppBar, Toolbar, Typography, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {Avatar} from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import logo from "../logoSEBA.png";
 import Button from "@material-ui/core/Button";
 import {logout} from "../services/loginService";
+import AccountMenu from "./AccountMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,12 +46,7 @@ const Header = () => {
             <Grid item xs={8}>
               <Avatar alt="Home" src={logo} className={classes.large} />
             </Grid>
-
-            <Button>
-              <AccountCircleIcon />
-              <Typography>Account Name</Typography>
-            </Button>
-
+            <AccountMenu />
             <Button onClick={signout}>
               <Typography>Sign Out</Typography>
               <ExitToAppOutlinedIcon />

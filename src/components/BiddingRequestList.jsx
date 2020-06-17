@@ -16,7 +16,7 @@ import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
 } from "../actions/ownerPage";
-import {setIsBiddingRequestDialogOpen} from "../actions/caretakerPage";
+import {setIsBiddingRequestDialogOpen} from "../actions/ownerPage";
 
 const filterByOptions = ["ID", "Description"];
 

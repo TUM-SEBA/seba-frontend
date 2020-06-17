@@ -15,8 +15,10 @@ import {
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
+  setIsAcceptCaretakerConfirmationDialogOpen,
 } from "../actions/ownerPage";
 import {setIsBiddingRequestDialogOpen} from "../actions/ownerPage";
+import AcceptCaretakerConfirmation from "./AcceptCaretakerConfirmation";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -128,6 +130,7 @@ function BiddingRequestList(props) {
     changeSearch,
     isBiddingRequestDialogOpen,
     setIsBiddingRequestDialogOpen,
+    setIsAcceptCaretakerConfirmationDialogOpen,
   } = props;
   const [biddingRequests, setBiddingRequests] = useState([]);
   const [offer, setOffer] = useState(initialOffer);
@@ -229,6 +232,12 @@ function BiddingRequestList(props) {
                       className={classes.button}
                       color="secondary"
                       size="small"
+                      onClick={() => {
+                        setIsAcceptCaretakerConfirmationDialogOpen(
+                          true,
+                          biddingRequest._id
+                        );
+                      }}
                     >
                       Accept
                     </Button>
@@ -336,6 +345,7 @@ function BiddingRequestList(props) {
             .map((biddingRequest, index) => getGridItem(index, biddingRequest))}
         </Grid>
       </div>
+      <AcceptCaretakerConfirmation />
     </Dialog>
   );
 }
@@ -358,6 +368,7 @@ const mapDispatchToProps = {
   changeFilterBy: biddingRequestListChangeFilterBy,
   changeSearch: biddingRequestChangeSearch,
   setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
+  setIsAcceptCaretakerConfirmationDialogOpen: setIsAcceptCaretakerConfirmationDialogOpen,
 };
 
 export default connect(

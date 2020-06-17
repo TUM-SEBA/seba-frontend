@@ -1,6 +1,8 @@
 export const BIDDINGREQUESTLISTCHANGEFILTERBY = "BIDDINGREQUESTLISTCHANGEFILTERBY";
 export const BIDDINGREQUESTLISTCHANGESEARCH = "BIDDINGREQUESTLISTCHANGESEARCH";
 export const SETISBIDDINGREQUESTDIALOGOPEN = "SETISBIDDINGREQUESTDIALOGOPEN";
+export const SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN =
+  "SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN";
 
 export const biddingRequestListChangeFilterBy = (value) => (dispatch) =>
   dispatch({
@@ -19,4 +21,13 @@ export const setIsBiddingRequestDialogOpen = (isOpen, offerId) => (dispatch) =>
     type: SETISBIDDINGREQUESTDIALOGOPEN,
     isOpen,
     offerId,
+  });
+
+export const setIsAcceptCaretakerConfirmationDialogOpen = (isOpen, biddingRequestId) => (
+  dispatch
+) =>
+  dispatch({
+    type: SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN,
+    isOpen,
+    biddingRequestId,
   });

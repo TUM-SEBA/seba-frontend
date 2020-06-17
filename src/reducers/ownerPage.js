@@ -1,6 +1,7 @@
 import {
   BIDDINGREQUESTLISTCHANGEFILTERBY,
   BIDDINGREQUESTLISTCHANGESEARCH,
+  SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN,
   SETISBIDDINGREQUESTDIALOGOPEN,
 } from "../actions/ownerPage";
 
@@ -9,6 +10,8 @@ let initialState = {
   biddingRequestSearchValue: "",
   isBiddingRequestDialogOpen: true,
   offerId: "",
+  isAcceptCaretakerConfirmationDialogOpen: false,
+  biddingRequestId: "",
 };
 
 export default function caretakerPage(state = initialState, action) {
@@ -28,6 +31,12 @@ export default function caretakerPage(state = initialState, action) {
         ...state,
         isBiddingRequestDialogOpen: action.isOpen,
         offerId: action.offerId,
+      };
+    case SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN:
+      return {
+        ...state,
+        isAcceptCaretakerConfirmationDialogOpen: action.isOpen,
+        biddingRequestId: action.biddingRequestId,
       };
     default:
       return state;

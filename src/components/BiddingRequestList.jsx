@@ -15,8 +15,10 @@ import {
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
+  setIsAcceptCaretakerConfirmationDialogOpen,
 } from "../actions/ownerPage";
-import {setIsBiddingRequestDialogOpen} from "../actions/caretakerPage";
+import {setIsBiddingRequestDialogOpen} from "../actions/ownerPage";
+import AcceptCaretakerConfirmation from "./AcceptCaretakerConfirmation";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -63,9 +65,6 @@ const styles = (theme) => ({
 const dummyBiddingRequest = {
   image:
     "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
-  description:
-    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-  length: 10,
 };
 
 const initialCustomer = {
@@ -131,6 +130,7 @@ function BiddingRequestList(props) {
     changeSearch,
     isBiddingRequestDialogOpen,
     setIsBiddingRequestDialogOpen,
+    setIsAcceptCaretakerConfirmationDialogOpen,
   } = props;
   const [biddingRequests, setBiddingRequests] = useState([]);
   const [offer, setOffer] = useState(initialOffer);
@@ -216,7 +216,7 @@ function BiddingRequestList(props) {
                 <img
                   className={classes.biddingRequestImage}
                   src={dummyBiddingRequest.image}
-                  alt={"Pet"}
+                  alt={"Caretaker"}
                 />
               </div>
               <div>{biddingRequest.caretaker.username}</div>
@@ -232,6 +232,12 @@ function BiddingRequestList(props) {
                       className={classes.button}
                       color="secondary"
                       size="small"
+                      onClick={() => {
+                        setIsAcceptCaretakerConfirmationDialogOpen(
+                          true,
+                          biddingRequest._id
+                        );
+                      }}
                     >
                       Accept
                     </Button>
@@ -339,6 +345,7 @@ function BiddingRequestList(props) {
             .map((biddingRequest, index) => getGridItem(index, biddingRequest))}
         </Grid>
       </div>
+      <AcceptCaretakerConfirmation />
     </Dialog>
   );
 }
@@ -361,6 +368,7 @@ const mapDispatchToProps = {
   changeFilterBy: biddingRequestListChangeFilterBy,
   changeSearch: biddingRequestChangeSearch,
   setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
+  setIsAcceptCaretakerConfirmationDialogOpen: setIsAcceptCaretakerConfirmationDialogOpen,
 };
 
 export default connect(

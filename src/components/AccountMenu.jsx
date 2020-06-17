@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PopupState, {bindTrigger, bindMenu} from "material-ui-popup-state";
 import theme from "../themes";
@@ -13,6 +14,9 @@ import {getMyBadges} from "../services/customerService";
 const styles = (theme) => ({
   menuList: {
     color: "#DCEFDE",
+  },
+  sentenceCase: {
+    textTransform: "none",
   },
 });
 
@@ -33,7 +37,7 @@ function MenuPopupState(props) {
         <React.Fragment>
           <Button {...bindTrigger(popupState)}>
             <AccountCircleIcon />
-            My Account
+            <Typography className={classes.sentenceCase}>My Account</Typography>
           </Button>
           <Menu
             className={classes.menuList}

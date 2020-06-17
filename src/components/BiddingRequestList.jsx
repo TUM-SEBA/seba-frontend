@@ -63,9 +63,6 @@ const styles = (theme) => ({
 const dummyBiddingRequest = {
   image:
     "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
-  description:
-    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-  length: 10,
 };
 
 const initialCustomer = {
@@ -216,7 +213,7 @@ function BiddingRequestList(props) {
                 <img
                   className={classes.biddingRequestImage}
                   src={dummyBiddingRequest.image}
-                  alt={"Pet"}
+                  alt={"Caretaker"}
                 />
               </div>
               <div>{biddingRequest.caretaker.username}</div>

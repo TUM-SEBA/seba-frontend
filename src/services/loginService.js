@@ -1,6 +1,6 @@
 import {authURL} from "../constants";
 
-let invalidRequest = () => {
+export let invalidRequest = () => {
   let error = new Error();
   error.name = "Invalid Request";
   return error;

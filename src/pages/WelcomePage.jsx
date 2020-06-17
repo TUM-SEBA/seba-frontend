@@ -2,11 +2,11 @@ import React from "react";
 import {Grid, Typography} from "@material-ui/core";
 import Header from "../components/Header";
 import {Avatar} from "@material-ui/core";
-import logo1 from "../logoSEBA.png";
 import caretakerImage from "../assets/caretaker.png";
 import ownerImage from "../assets/owner.png";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import ViewBadges from "../components/ViewBadges";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,9 +36,11 @@ export default function WelcomePage(props) {
   const classes = useStyles();
 
   return (
-    <Grid container direction="column" justify="flex-start" alignItems="stretch">
-      <Grid item>
-        <Header />
+    <div>
+      <Grid container direction="column" justify="flex-start" alignItems="stretch">
+        <Grid item>
+          <Header />
+        </Grid>
       </Grid>
 
       <Grid className={classes.welcomeContainer} item>
@@ -71,6 +73,7 @@ export default function WelcomePage(props) {
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      <ViewBadges />
+    </div>
   );
 }

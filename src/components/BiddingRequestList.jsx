@@ -1,17 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {
-  Button,
-  Card,
-  CardActions,
-  Dialog,
-  FormControl,
-  Grid,
-  InputLabel,
-  Select,
-  TextField,
-} from "@material-ui/core";
+import {Button, Card, CardActions, Dialog, Grid} from "@material-ui/core";
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
@@ -19,6 +9,7 @@ import {
 } from "../actions/ownerPage";
 import {setIsBiddingRequestDialogOpen} from "../actions/ownerPage";
 import AcceptCaretakerConfirmation from "./AcceptCaretakerConfirmation";
+import FilterSearch from "./FilterSearch";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -272,42 +263,12 @@ function BiddingRequestList(props) {
           Offer Number: {offer.offerId}
         </Grid>
         <Grid item xs={"auto"} sm={2} md={6} lg={5} />
-        <Grid container item xs={12} sm={6} md={3} lg={4} spacing={2}>
-          <Grid item xs={12} sm={4} md={5}>
-            <FormControl className={classes.filter}>
-              <InputLabel htmlFor="filter-by">Filter by</InputLabel>
-              <Select
-                native
-                value={selectedFilterBy}
-                onChange={(event) => {
-                  changeFilterBy(event.target.value);
-                }}
-                inputProps={{
-                  id: "filter-by",
-                }}
-                color="secondary"
-              >
-                <option key="-1" aria-label="None" value="-1" />
-                {filterByOptions.map((value, index) => (
-                  <option key={index} value={index}>
-                    {value}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6} md={7}>
-            <TextField
-              className={classes.search}
-              value={searchValue}
-              onChange={(event) => {
-                changeSearch(event.target.value);
-              }}
-              color="secondary"
-              label="Search"
-            />
-          </Grid>
-          <Grid item xs={"auto"} sm={2} md={"auto"} />
+        <Grid item xs={12} sm={6} md={3} lg={4}>
+          <FilterSearch
+            filterOptions={filterByOptions}
+            changeFilterCallback={(value) => changeFilterBy(value)}
+            changeSearchQueryCallback={(value) => changeSearch(value)}
+          />
         </Grid>
       </Grid>
       <div className={classes.content}>

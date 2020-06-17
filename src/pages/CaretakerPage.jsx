@@ -1,17 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  TextField,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Grid,
-} from "@material-ui/core";
+import {Card, CardContent, CardActions, Button, Grid} from "@material-ui/core";
 import {
   changeFilterBy,
   changeSearch,
@@ -23,6 +13,7 @@ import {getOffersByUsername} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
+import FilterSearch from "../components/FilterSearch";
 
 const filterByOptions = ["ID", "Description"];
 const dummyOffer = {
@@ -36,12 +27,6 @@ const styles = (theme) => ({
   container: {
     margin: `${theme.spacing(10)}px auto 0 auto`,
     width: "80%",
-  },
-  filter: {
-    width: "100%",
-  },
-  search: {
-    width: "100%",
   },
   body: {
     marginTop: theme.spacing(5),
@@ -169,42 +154,12 @@ function CaretakerPage(props) {
               Hello, Caretaker
             </Grid>
             <Grid item xs={"auto"} md={2} lg={4} />
-            <Grid container item xs={12} md={7} lg={5} spacing={2}>
-              <Grid item xs={12} sm={4} md={5}>
-                <FormControl className={classes.filter}>
-                  <InputLabel htmlFor="filter-by">Filter by</InputLabel>
-                  <Select
-                    native
-                    value={selectedFilterBy}
-                    onChange={(event) => {
-                      changeFilterBy(event.target.value);
-                    }}
-                    inputProps={{
-                      id: "filter-by",
-                    }}
-                    color="secondary"
-                  >
-                    <option key="-1" aria-label="None" value="-1" />
-                    {filterByOptions.map((value, index) => (
-                      <option key={index} value={index}>
-                        {value}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6} md={7}>
-                <TextField
-                  className={classes.search}
-                  value={searchValue}
-                  onChange={(event) => {
-                    changeSearch(event.target.value);
-                  }}
-                  color="secondary"
-                  label="Search"
-                />
-              </Grid>
-              <Grid item xs={"auto"} sm={2} md={"auto"} />
+            <Grid item xs={12} md={7} lg={5}>
+              <FilterSearch
+                filterOptions={filterByOptions}
+                changeFilterCallback={(value) => changeFilterBy(value)}
+                changeSearchQueryCallback={(value) => changeSearch(value)}
+              />
             </Grid>
           </Grid>
         </div>

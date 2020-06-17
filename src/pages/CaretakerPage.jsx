@@ -89,7 +89,11 @@ function CaretakerPage(props) {
   } = props;
 
   const [offers, setOffers] = useState([]);
-  function getOffers() {
+  if (!isAuthenticated()) {
+    history.push("/");
+    window.location.reload();
+  }
+  function biddingRequestSaveSuccessCallback() {
     getOffersByUsername()
       .then((offers) => {
         setOffers(offers);
@@ -102,13 +106,19 @@ function CaretakerPage(props) {
         showSnackBar(true, fetchFailed, "error");
       });
   }
-  if (!isAuthenticated()) {
-    history.push("/");
-    window.location.reload();
-  }
   useEffect(() => {
-    getOffers();
-  }, [getOffers, history, showSnackBar]);
+    getOffersByUsername()
+      .then((offers) => {
+        setOffers(offers);
+      })
+      .catch((status) => {
+        if (status === 401) {
+          history.push("/");
+          window.location.reload();
+        }
+        showSnackBar(true, fetchFailed, "error");
+      });
+  }, [history, showSnackBar]);
   function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
@@ -222,12 +232,15 @@ function CaretakerPage(props) {
               .map((offer, index) => getGridItem(index, offer))}
           </Grid>
         </div>
-        <BiddingRequestForm history={history} successCallback={getOffers} />
+        <BiddingRequestForm
+          history={history}
+          successCallback={biddingRequestSaveSuccessCallback}
+        />
         <SnackbarAlert />
       </div>
     );
   } else {
-    return <div></div>;
+    return <div />;
   }
 }
 

@@ -57,6 +57,7 @@ export function loginCustomer(username, password) {
     .then((result) => {
       localStorage["token"] = result.token;
       localStorage["username"] = username;
+      localStorage["id"] = result.id;
       return true;
     })
     .catch(() => {

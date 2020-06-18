@@ -108,7 +108,7 @@ function FeedbackForm(props) {
         <Typography variant="h5">Send Feedback</Typography>
       </DialogTitle>
       <DialogContent>
-        <Grid container direction="row" justify="center" spacing={5} alignItems="center">
+        <Grid container direction="row" justify="space-evenly" alignItems="center">
           <Grid item>
             <Paper elevation={4}>
               <CardContent>

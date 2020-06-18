@@ -7,6 +7,7 @@ import ownerImage from "../assets/owner.png";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ViewBadges from "../components/ViewBadges";
+import ViewFeedbackForm from "../components/FeedbackForm";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -74,6 +75,7 @@ export default function WelcomePage(props) {
         </Grid>
       </Grid>
       <ViewBadges />
+      <ViewFeedbackForm />
     </div>
   );
 }

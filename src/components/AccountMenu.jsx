@@ -9,6 +9,7 @@ import theme from "../themes";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {setIsViewBadgesDialogOpen} from "../actions/welcomePage";
+import {setIsViewFeedbackDialogOpen} from "../actions/welcomePage";
 import {getMyBadges} from "../services/customerService";
 
 const styles = (theme) => ({
@@ -63,6 +64,14 @@ function MenuPopupState(props) {
             >
               View Badges
             </MyMenuItem>
+            <MyMenuItem
+              onClick={() => {
+                setIsViewFeedbackDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              Feedbacks
+            </MyMenuItem>
           </Menu>
         </React.Fragment>
       )}
@@ -76,6 +85,7 @@ const mapStateToProps = ({loginPage: {snackBarData}}) => ({
 
 const mapDispatchToProps = {
   setIsViewBadgesDialogOpen: setIsViewBadgesDialogOpen,
+  setIsViewFeedbackDialogOpen: setIsViewFeedbackDialogOpen,
   getMyBadges: getMyBadges,
 };
 

@@ -1,7 +1,12 @@
-import {ISVIEWBADGESDIALOGOPEN, SAVEMYBADGES} from "../actions/welcomePage";
+import {
+  ISVIEWBADGESDIALOGOPEN,
+  SAVEMYBADGES,
+  ISVIEWFEEDBACKDIALOGOPEN,
+} from "../actions/welcomePage";
 
 let initialState = {
   isViewBadgesDialogOpen: false,
+  isViewFeedbackDialogOpen: true,
   myBadges: {},
 };
 
@@ -11,6 +16,11 @@ export default function welcomePage(state = initialState, action) {
       return {
         ...state,
         isViewBadgesDialogOpen: action.value,
+      };
+    case ISVIEWFEEDBACKDIALOGOPEN:
+      return {
+        ...state,
+        isViewFeedbackDialogOpen: action.value,
       };
     case SAVEMYBADGES:
       return {

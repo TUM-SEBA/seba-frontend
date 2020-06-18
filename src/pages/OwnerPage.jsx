@@ -15,7 +15,7 @@ import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/own
 import SnackbarAlert from "../components/SnackbarAlert";
 import OfferForm from "../components/OfferForm";
 import {getOffersByUsername} from "../services/offerService";
-import {isAuthenticated, getMe} from "../services/loginService";
+import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
 

@@ -42,7 +42,6 @@ const styles = (theme) => ({
   },
 });
 
-// TODO has to be attached to the backend.
 function OfferForm(props) {
   const {
     classes,
@@ -54,13 +53,7 @@ function OfferForm(props) {
     setOfferFieldValue,
   } = props;
 
-  // TODO: change this when backend is connected
-  // TODO: handle submit button
   async function handleSave() {
-    console.log(localStorage["username"]);
-    console.log(offerFields["description"]);
-    console.log(offerFields["startDate"]);
-    console.log(offerFields["endDate"]);
     const emptyField = Object.keys(offerFields).find(
       (keyName) => offerFields[keyName] === ""
     );

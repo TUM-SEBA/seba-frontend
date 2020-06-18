@@ -40,30 +40,14 @@ const styles = (theme) => ({
   },
 });
 
-const FieldType = {
-  TEXT_FIELD: 0,
-  TEXT_AREA: 1,
-};
-
-// TODO
-const keyMap = {};
-
 // TODO has to be attached to the backend.
 function OfferForm(props) {
   const {classes, isOfferDialogOpen, setIsOfferDialogOpen} = props;
-
-  const [imageShow, setImageShow] = React.useState(0);
 
   // TODO: change this when backend is connected
   // TODO: handle submit button
   async function handleSave() {
     console.log("Offer is submitted");
-  }
-
-  function handleNavigateBefore() {
-    if (imageShow > 0) {
-      setImageShow(imageShow - 1);
-    }
   }
 
   return (

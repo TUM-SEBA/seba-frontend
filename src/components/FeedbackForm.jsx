@@ -11,6 +11,7 @@ import {
   TextField,
   Button,
   Avatar,
+  Paper,
 } from "@material-ui/core";
 import {setIsViewFeedbackDialogOpen} from "../actions/welcomePage";
 import {connect} from "react-redux";
@@ -26,8 +27,8 @@ function FeedbackForm(props) {
 
   const useStyles = makeStyles((theme) => ({
     caretakerImage: {
-      width: theme.spacing(12),
-      height: theme.spacing(12),
+      width: theme.spacing(25),
+      height: theme.spacing(25),
     },
     petImageContainer: {
       position: "relative",
@@ -41,11 +42,20 @@ function FeedbackForm(props) {
       transition: "all 500ms",
     },
     textCaretaker: {
-      width: theme.spacing(12),
+      width: theme.spacing(25),
       textAlign: "center",
+      paddingTop: "16px",
     },
     textFields: {
       margin: theme.spacing(2),
+    },
+    navigationButton: {
+      width: theme.spacing(6),
+      height: theme.spacing(6),
+      margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
+    },
+    imageSlider: {
+      marginTop: "25px",
     },
   }));
 
@@ -98,9 +108,9 @@ function FeedbackForm(props) {
         <Typography variant="h5">Send Feedback</Typography>
       </DialogTitle>
       <DialogContent>
-        <Grid container direction="row" justify="space-around" alignItems="center">
+        <Grid container direction="row" justify="center" spacing={5} alignItems="center">
           <Grid item>
-            <Card className={classes.root} variant="outlined">
+            <Paper elevation={4}>
               <CardContent>
                 <Grid
                   container
@@ -115,7 +125,7 @@ function FeedbackForm(props) {
                     </Typography>
                   </div>
 
-                  <Grid container direction="row">
+                  <Grid className={classes.imageSlider} container direction="row">
                     <IconButton
                       onClick={() => handleNavigateBefore()}
                       className={classes.navigationButton}
@@ -144,7 +154,7 @@ function FeedbackForm(props) {
                   </Grid>
                 </Grid>
               </CardContent>
-            </Card>
+            </Paper>
           </Grid>
           <Grid item>
             <Grid container direction="row" justify="space-between" alignItems="center">

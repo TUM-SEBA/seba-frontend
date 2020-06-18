@@ -14,8 +14,10 @@ let initialState = {
   searchValue: "",
   isOfferDialogOpen: false,
   offerFields: {
-    biddingAmount: "",
-    remarks: "",
+    category: "pet",
+    startDate: "",
+    endDate: "",
+    description: "",
   },
   biddingRequestSelectedFilterBy: "-1",
   biddingRequestSearchValue: "",

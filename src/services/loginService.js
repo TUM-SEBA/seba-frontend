@@ -1,8 +1,10 @@
 import {authURL} from "../constants";
+import {setLoginAlertText, showSnackBar} from "../actions/loginPage";
 
-export let invalidRequest = () => {
+export let invalidRequest = async (response) => {
   let error = new Error();
-  error.name = "Invalid Request";
+  const res = await response.json();
+  error.message = res.message;
   return error;
 };
 
@@ -17,6 +19,7 @@ export function signUpCustomer(signUpFields) {
     name: signUpFields.name,
     phoneNumber: signUpFields.phoneNumber,
     address: signUpFields.address,
+    email: signUpFields.email,
   };
   return fetch(authURL + "/register", {
     method: "POST",
@@ -27,13 +30,12 @@ export function signUpCustomer(signUpFields) {
   })
     .then((response) => {
       if (response.status === 200) return response.json();
-      else throw invalidRequest();
+      else throw invalidRequest(response);
     })
     .then(() => {
       return true;
     })
-    .catch(() => {
-      console.log("Invalid Request");
+    .catch((err) => {
       return false;
     });
 }
@@ -43,26 +45,29 @@ export function loginCustomer(username, password) {
     username: username,
     password: password,
   };
-  return fetch(authURL + "/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  })
-    .then((response) => {
-      if (response.status === 200) return response.json();
-      else throw invalidRequest();
+  return (dispatch) => {
+    return fetch(authURL + "/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
     })
-    .then((result) => {
-      localStorage["token"] = result.token;
-      localStorage["username"] = username;
-      return true;
-    })
-    .catch(() => {
-      console.log("Invalid Request");
-      return false;
-    });
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        else throw invalidRequest(response);
+      })
+      .then((result) => {
+        localStorage["token"] = result.token;
+        localStorage["username"] = username;
+        return true;
+      })
+      .catch(async (err) => {
+        const errorMessage = await err.then((err) => err.message);
+        dispatch(setLoginAlertText(errorMessage));
+        return false;
+      });
+  };
 }
 
 export function logout() {
@@ -78,7 +83,6 @@ export function logout() {
       if (response.status !== 200) throw invalidRequest();
     })
     .then(() => {
-      console.log("Hello World");
       localStorage.removeItem("token");
       localStorage.removeItem("username");
       return true;
@@ -87,4 +91,32 @@ export function logout() {
       console.log("Invalid Request");
       return false;
     });
+}
+
+export function forgotPassword(email) {
+  const body = {
+    email: email,
+  };
+  return (dispatch) => {
+    return fetch(authURL + "/forgotPass", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        else throw invalidRequest(response);
+      })
+      .then((result) => {
+        dispatch(showSnackBar(true, result.message, "success"));
+        return true;
+      })
+      .catch(async (err) => {
+        const errorMessage = await err.then((error) => error.message);
+        dispatch(showSnackBar(true, errorMessage, "error"));
+        return false;
+      });
+  };
 }

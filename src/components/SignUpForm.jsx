@@ -46,8 +46,9 @@ const CustomTextField = withStyles({
 
 const keyNameMap = {
   name: "Name",
-  username: "Email or Username",
+  username: "Username",
   phoneNumber: "Phone Number",
+  email: "Email Address",
   address: "Address",
   password: "Password",
   confirmPassword: "Confirm Password",

@@ -28,3 +28,28 @@ export async function getOffersByUsername() {
       });
   });
 }
+
+export function insertOffer(offer) {
+  const body = {
+    owner: offer.owner,
+    description: offer.description,
+    startDate: offer.startDate,
+    endDate: offer.endDate,
+  };
+  return new Promise((resolve, reject) => {
+    fetch(offerURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+      body: JSON.stringify(body),
+    }).then((response) => {
+      if (response.status === 201) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}

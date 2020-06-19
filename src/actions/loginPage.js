@@ -1,7 +1,9 @@
 export const CHANGEUSERID = "CHANGEUSERID";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const SETLOGINALERT = "SETLOGINALERT";
+export const SETLOGINALERTTEXT = "SETLOGINALERTTEXT";
 export const SETISSIGNUPDIALOGOPEN = "SETISSIGNUPDIALOGOPEN";
+export const SETFORGOTPASSWORDDIALOGOPEN = "SETFORGOTPASSWORDDIALOGOPEN";
 export const SETISSIGNUPFIELDVALUE = "SETISSIGNUPFIELDVALUE";
 export const SHOWSNACKBAR = "SHOWSNACKBAR";
 
@@ -23,9 +25,21 @@ export const setLoginAlert = (value) => (dispatch) =>
     value,
   });
 
+export const setLoginAlertText = (value) => (dispatch) =>
+  dispatch({
+    type: SETLOGINALERTTEXT,
+    value,
+  });
+
 export const setIsSignUpDialogOpen = (value) => (dispatch) =>
   dispatch({
     type: SETISSIGNUPDIALOGOPEN,
+    value,
+  });
+
+export const setForgotPasswordDialogOpen = (value) => (dispatch) =>
+  dispatch({
+    type: SETFORGOTPASSWORDDIALOGOPEN,
     value,
   });
 

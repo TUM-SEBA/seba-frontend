@@ -17,11 +17,13 @@ import {
   changePassword,
   setLoginAlert,
   setIsSignUpDialogOpen,
+  setForgotPasswordDialogOpen,
   showSnackBar,
 } from "../actions/loginPage";
 import {loginCustomer} from "../services/loginService";
 import SignUpForm from "../components/SignUpForm";
 import SnackbarAlert from "../components/SnackbarAlert";
+import ForgotPasswordDialog from "../components/ForgotPasswordDialog";
 import {loginSuccess} from "../constants";
 
 const styles = (theme) => ({
@@ -40,7 +42,7 @@ const styles = (theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(2, 0, 2),
+    margin: theme.spacing(1, 0, 1),
   },
   alert: {
     margin: theme.spacing(1),
@@ -49,6 +51,10 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "baseline",
+  },
+  forgotPass: {
+    display: "flex",
+    justifyContent: "flex-end",
   },
 });
 
@@ -70,16 +76,18 @@ const CustomTextField = withStyles({
 
 function LoginPage(props) {
   const {
-    history,
     classes,
     selectedUserId,
     selectedPassword,
     showAlert,
+    loginAlertText,
     changeUserId,
     changePassword,
     setLoginAlert,
     setIsSignUpDialogOpen,
+    setForgotPasswordDialogOpen,
     showSnackBar,
+    loginCustomer,
   } = props;
 
   function handleLoginSuccess() {
@@ -133,13 +141,22 @@ function LoginPage(props) {
                 changePassword(event.target.value);
               }}
             />
+            <div className={classes.forgotPass}>
+              <Button
+                color="secondary"
+                style={{backgroundColor: "transparent", textTransform: "none"}}
+                onClick={() => setForgotPasswordDialogOpen(true)}
+              >
+                <Typography variant="body2">Forgot Password?</Typography>
+              </Button>
+            </div>
             <Collapse in={showAlert}>
               <Alert
                 severity="error"
                 className={classes.alert}
                 onClose={() => setLoginAlert(false)}
               >
-                Invalid username or password
+                {loginAlertText}
               </Alert>
             </Collapse>
             <Button
@@ -164,16 +181,20 @@ function LoginPage(props) {
           </div>
         </div>
       </Container>
-      <SignUpForm history={history} />
+      <SignUpForm />
+      <ForgotPasswordDialog />
       <SnackbarAlert />
     </div>
   );
 }
 
-const mapStateToProps = ({loginPage: {selectedUserId, selectedPassword, showAlert}}) => ({
+const mapStateToProps = ({
+  loginPage: {selectedUserId, selectedPassword, showAlert, loginAlertText},
+}) => ({
   selectedUserId,
   selectedPassword,
   showAlert,
+  loginAlertText,
 });
 
 const mapDispatchToProps = {
@@ -182,6 +203,8 @@ const mapDispatchToProps = {
   setLoginAlert: setLoginAlert,
   setIsSignUpDialogOpen: setIsSignUpDialogOpen,
   showSnackBar: showSnackBar,
+  loginCustomer: loginCustomer,
+  setForgotPasswordDialogOpen: setForgotPasswordDialogOpen,
 };
 
 export default connect(

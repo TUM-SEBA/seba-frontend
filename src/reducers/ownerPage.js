@@ -22,7 +22,7 @@ let initialState = {
   biddingRequestSelectedFilterBy: "-1",
   biddingRequestSearchValue: "",
   isBiddingRequestDialogOpen: true,
-  offerId: "",
+  offerId: "5ee0956e97529563045c4912",
   isAcceptCaretakerConfirmationDialogOpen: false,
   biddingRequestId: "",
 };

@@ -24,3 +24,61 @@ export function insertBiddingRequest(biddingRequest) {
     });
   });
 }
+
+export function getBiddingRequestByOffer(offerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${biddingRequestURL}/offer/${offerId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((_) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}
+
+export function getBiddingRequest(biddingRequestId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${biddingRequestURL}/${biddingRequestId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}

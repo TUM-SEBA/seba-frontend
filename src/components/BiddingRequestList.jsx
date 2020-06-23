@@ -6,10 +6,15 @@ import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
   setIsAcceptCaretakerConfirmationDialogOpen,
+  setIsBiddingRequestDialogOpen,
 } from "../actions/ownerPage";
-import {setIsBiddingRequestDialogOpen} from "../actions/ownerPage";
 import AcceptCaretakerConfirmation from "./AcceptCaretakerConfirmation";
 import FilterSearch from "./FilterSearch";
+import {fetchFailed} from "../constants";
+import {getBiddingRequestByOffer} from "../services/biddingRequestService";
+import {showSnackBar} from "../actions/loginPage";
+import {getOffer} from "../services/offerService";
+import SnackbarAlert from "./SnackbarAlert";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -27,12 +32,6 @@ const styles = (theme) => ({
   },
   offerNumber: {
     marginBottom: theme.spacing(3),
-  },
-  filter: {
-    width: "100%",
-  },
-  search: {
-    width: "100%",
   },
   biddingRequestImage: {
     width: theme.spacing(10),
@@ -114,6 +113,7 @@ const initialOffer = {
 function BiddingRequestList(props) {
   const {
     classes,
+    history,
     offerId,
     selectedFilterBy,
     changeFilterBy,
@@ -122,81 +122,36 @@ function BiddingRequestList(props) {
     isBiddingRequestDialogOpen,
     setIsBiddingRequestDialogOpen,
     setIsAcceptCaretakerConfirmationDialogOpen,
+    showSnackBar,
   } = props;
   const [biddingRequests, setBiddingRequests] = useState([]);
   const [offer, setOffer] = useState(initialOffer);
   useEffect(() => {
-    // TODO: modify this when backend is connected
-    function getBiddingRequestList(offerId) {
-      const biddingRequests = [];
-      for (let i = 0; i < 5; i++) {
-        biddingRequests.push({
-          _id: "1",
-          offer: {},
-          caretaker: {
-            _id: "1",
-            username: "Username",
-            password: "Password",
-            name: "Name",
-            phoneNumber: "Phone Number",
-            address: "Address",
-            feedbacksGiven: 0,
-            starsRecieved: 0,
-            badgesEarned: {
-              name: "Badge",
-              description: "Desscription",
-              image: "Image",
-            },
-            type: "Type",
-            interestedOffers: [],
-          },
-          createdDate: "",
-          price: (i + 1) * 100,
-          remarks: "Remarks " + (i + 1),
+    if (offerId !== "") {
+      getBiddingRequestByOffer(offerId)
+        .then((biddingRequests) => {
+          setBiddingRequests(biddingRequests);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, fetchFailed, "error");
         });
-      }
-      setBiddingRequests(biddingRequests);
+      getOffer(offerId)
+        .then((offer) => {
+          setOffer(offer);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, fetchFailed, "error");
+        });
     }
-    // TODO: modify this when backend is connected
-    function getOffer(offerId) {
-      const offer = {
-        _id: "1",
-        owner: "Owner",
-        approveBiddingRequest: {
-          _id: "1",
-          offer: {},
-          caretaker: initialCustomer,
-          createdDate: "2020-01-01",
-          price: 0,
-          remarks: "Remarks",
-        },
-        entity: {
-          _id: "1",
-          owner: initialCustomer,
-          description: "Description",
-          images: [],
-          breed: "Breed",
-        },
-        review: {
-          _id: "1",
-          offer: {},
-          owner: initialCustomer,
-          caretaker: initialCustomer,
-          text: "Text",
-          rating: 0,
-        },
-        status: "Status",
-        description: "Description",
-        createdDate: "2020-01-01",
-        startDate: "Start Date",
-        endDate: "End Date",
-        insurance: false,
-      };
-      setOffer(offer);
-    }
-    getBiddingRequestList(offerId);
-    getOffer(offerId);
-  }, [offerId]);
+  }, [offerId, history, showSnackBar]);
   function getGridItem(index, biddingRequest) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
@@ -260,10 +215,10 @@ function BiddingRequestList(props) {
     >
       <Grid container className={classes.header}>
         <Grid item xs={12} sm={4} md={3} lg={3} className={classes.offerNumber}>
-          Offer Number: {offer.offerId}
+          Offer Number: {offer.offerNumber}
         </Grid>
-        <Grid item xs={"auto"} sm={2} md={6} lg={5} />
-        <Grid item xs={12} sm={6} md={3} lg={4}>
+        <Grid item xs={"auto"} sm={"auto"} md={4} lg={4} />
+        <Grid item xs={12} sm={8} md={5} lg={5}>
           <FilterSearch
             filterOptions={filterByOptions}
             changeFilterCallback={(value) => changeFilterBy(value)}
@@ -307,6 +262,7 @@ function BiddingRequestList(props) {
         </Grid>
       </div>
       <AcceptCaretakerConfirmation />
+      <SnackbarAlert />
     </Dialog>
   );
 }
@@ -330,6 +286,7 @@ const mapDispatchToProps = {
   changeSearch: biddingRequestChangeSearch,
   setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
   setIsAcceptCaretakerConfirmationDialogOpen: setIsAcceptCaretakerConfirmationDialogOpen,
+  showSnackBar: showSnackBar,
 };
 
 export default connect(

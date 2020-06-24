@@ -1,8 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {setIsAcceptCaretakerConfirmationDialogOpen} from "../actions/ownerPage";
-import {Dialog, Grid, FormControlLabel, Checkbox, Button} from "@material-ui/core";
+import {
+  setIsAcceptCaretakerConfirmationDialogOpen,
+  setIsBiddingRequestDialogOpen,
+} from "../actions/ownerPage";
+import {Button, Checkbox, Dialog, FormControlLabel, Grid} from "@material-ui/core";
+import {fetchFailed, saveFailed, saveSuccess} from "../constants";
+import {showSnackBar} from "../actions/loginPage";
+import {getBiddingRequest} from "../services/biddingRequestService";
+import {acceptOffer} from "../services/offerService";
 
 const dummyBiddingRequest = {
   image:
@@ -64,39 +71,51 @@ const styles = (theme) => ({
 function AcceptCaretakerConfirmation(props) {
   const {
     classes,
+    history,
     biddingRequestId,
     isAcceptCaretakerConfirmationDialogOpen,
+    setIsBiddingRequestDialogOpen,
     setIsAcceptCaretakerConfirmationDialogOpen,
+    showSnackBar,
   } = props;
   const [biddingRequest, setBiddingRequest] = useState(initialBiddingRequest);
   const [isInsuranceChecked, setIsInsuranceChecked] = useState(false);
   useEffect(() => {
-    // TODO: modify this when backend is connected
-    function getBiddingRequest(biddingRequestId) {
-      const biddingRequest = {
-        _id: "",
-        offer: {
-          startDate: "2020-01-01",
-          endDate: "2020-02-01",
-        },
-        caretaker: {
-          username: "Username",
-        },
-        createdDate: "",
-        price: 100,
-        remarks: "",
-      };
-      setBiddingRequest(biddingRequest);
+    if (biddingRequestId !== "") {
+      getBiddingRequest(biddingRequestId)
+        .then((biddingRequest) => {
+          setBiddingRequest(biddingRequest);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, fetchFailed, "error");
+        });
     }
-    getBiddingRequest(biddingRequestId);
-  }, [biddingRequestId]);
-
+  }, [biddingRequestId, history, showSnackBar]);
+  function handleAccept() {
+    acceptOffer(biddingRequest.offer._id, biddingRequest._id, isInsuranceChecked)
+      .then(() => {
+        showSnackBar(true, saveSuccess, "success");
+        setIsAcceptCaretakerConfirmationDialogOpen(false, "");
+        setIsBiddingRequestDialogOpen(false, "");
+      })
+      .catch((status) => {
+        if (status === 401) {
+          history.push("/");
+          window.location.reload();
+        }
+        showSnackBar(true, saveFailed, "error");
+      });
+  }
   return (
     <Dialog
       fullWidth
       maxWidth="sm"
       open={isAcceptCaretakerConfirmationDialogOpen}
-      onClose={() => setIsAcceptCaretakerConfirmationDialogOpen(false)}
+      onClose={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
     >
       <Grid container className={classes.container}>
         <Grid item xs={4}>
@@ -136,6 +155,7 @@ function AcceptCaretakerConfirmation(props) {
                 className={classes.button}
                 color="secondary"
                 size="small"
+                onClick={() => handleAccept()}
               >
                 Accept
               </Button>
@@ -146,7 +166,7 @@ function AcceptCaretakerConfirmation(props) {
                 className={classes.button}
                 color="secondary"
                 size="small"
-                onClick={() => setIsAcceptCaretakerConfirmationDialogOpen(false)}
+                onClick={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
               >
                 Cancel
               </Button>
@@ -167,6 +187,8 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = {
   setIsAcceptCaretakerConfirmationDialogOpen: setIsAcceptCaretakerConfirmationDialogOpen,
+  setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
+  showSnackBar: showSnackBar,
 };
 
 export default connect(

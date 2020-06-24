@@ -6,6 +6,7 @@ import ErrorPage from "./pages/ErrorPage";
 import {createBrowserHistory} from "history";
 import LoginPage from "./pages/LoginPage";
 import CaretakerPage from "./pages/CaretakerPage";
+import OwnerPage from "./pages/OwnerPage";
 import WelcomePage from "./pages/WelcomePage";
 import {isAuthenticated} from "../src/services/loginService";
 
@@ -28,6 +29,7 @@ function App() {
           />
           <Route exact path="/error" render={() => <ErrorPage history={history} />} />
           <Route path="/caretaker" render={() => <CaretakerPage history={history} />} />
+          <Route path="/owner" render={() => <OwnerPage history={history} />} />
           <Route path="*" render={() => <ErrorPage history={history} />} />
         </Switch>
       </Router>

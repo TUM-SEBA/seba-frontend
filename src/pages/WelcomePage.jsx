@@ -8,7 +8,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ViewBadges from "../components/ViewBadges";
 import ViewFeedbackForm from "../components/FeedbackForm";
-import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   large: {
@@ -30,11 +29,24 @@ const useStyles = makeStyles((theme) => ({
   navStyle: {
     color: "#000000",
     textDecoration: "none",
+    cursor: "pointer",
   },
 }));
 
 export default function WelcomePage(props) {
   const classes = useStyles();
+
+  const {history} = props;
+
+  function gotoOwnerPage() {
+    history.push("/owner");
+    window.location.reload();
+  }
+
+  function gotoCaretakerPage() {
+    history.push("/caretaker");
+    window.location.reload();
+  }
 
   return (
     <div>
@@ -58,19 +70,19 @@ export default function WelcomePage(props) {
           </Typography>
 
           <Grid container direction="row" justify="space-around" alignItems="center">
-            <Link className={classes.navStyle} to="/caretaker">
+            <div className={classes.navStyle} onClick={gotoCaretakerPage}>
               <Button>
                 <Avatar src={caretakerImage} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Caretaker</Typography>
-            </Link>
+            </div>
 
-            <Link className={classes.navStyle} to="/owner">
+            <div onClick={gotoOwnerPage} className={classes.navStyle}>
               <Button>
                 <Avatar src={ownerImage} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Owner</Typography>
-            </Link>
+            </div>
           </Grid>
         </Grid>
       </Grid>

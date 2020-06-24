@@ -57,6 +57,9 @@ function FeedbackForm(props) {
     imageSlider: {
       marginTop: "25px",
     },
+    typographyRating: {
+      paddingRight: "15px",
+    },
   }));
 
   const classes = useStyles();
@@ -116,7 +119,7 @@ function FeedbackForm(props) {
                   container
                   direction="column"
                   justify="flex-start"
-                  alignItems="flex-start"
+                  alignItems="center"
                 >
                   <div>
                     <Avatar src={caretakerImage} className={classes.caretakerImage} />
@@ -157,12 +160,12 @@ function FeedbackForm(props) {
             </Paper>
           </Grid>
           <Grid item>
-            <Grid container direction="row" justify="space-between" alignItems="center">
-              <Typography>Give Rating:</Typography>
+            <Grid container direction="row" justify="flex-start" alignItems="center">
+              <Typography className={classes.typographyRating}>Give Rating:</Typography>
               <Rating name="size-large" defaultValue={2} size="large" />
             </Grid>
 
-            <Grid container direction="row" justify="space-between" alignItems="center">
+            <Grid container direction="row" justify="flex-start" alignItems="center">
               <Typography>Description:</Typography>
               <div className={classes.textFields}>
                 <CustomTextField

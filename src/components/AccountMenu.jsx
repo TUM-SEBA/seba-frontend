@@ -11,8 +11,9 @@ import {withStyles} from "@material-ui/styles";
 import {
   setIsViewBadgesDialogOpen,
   setIsChangePasswordDialogOpen,
+  setUserProfileDialogOpen,
 } from "../actions/welcomePage";
-import {getMyBadges} from "../services/customerService";
+import {getMyBadges, getUserProfile} from "../services/customerService";
 
 const styles = (theme) => ({
   menuList: {
@@ -37,6 +38,8 @@ function MenuPopupState(props) {
     setIsViewBadgesDialogOpen,
     getMyBadges,
     setIsChangePasswordDialogOpen,
+    getUserProfile,
+    setUserProfileDialogOpen,
   } = props;
 
   return (
@@ -60,7 +63,15 @@ function MenuPopupState(props) {
             }}
             {...bindMenu(popupState)}
           >
-            <MyMenuItem onClick={popupState.close}>View Profile</MyMenuItem>
+            <MyMenuItem
+              onClick={async () => {
+                await getUserProfile();
+                setUserProfileDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              View Profile
+            </MyMenuItem>
             <MyMenuItem
               onClick={() => {
                 setIsChangePasswordDialogOpen(true);
@@ -93,6 +104,8 @@ const mapDispatchToProps = {
   setIsViewBadgesDialogOpen: setIsViewBadgesDialogOpen,
   getMyBadges: getMyBadges,
   setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
+  getUserProfile: getUserProfile,
+  setUserProfileDialogOpen: setUserProfileDialogOpen,
 };
 
 export default connect(

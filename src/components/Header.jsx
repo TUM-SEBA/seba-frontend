@@ -7,6 +7,7 @@ import logo from "../logoSEBA.png";
 import Button from "@material-ui/core/Button";
 import {logout} from "../services/loginService";
 import AccountMenu from "./AccountMenu";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,14 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = () => {
+const Header = (props) => {
   const classes = useStyles();
-
-  async function signout() {
-    await logout().then((status) =>
-      status ? window.location.reload() : console.log("Handle Invalid token")
-    );
-  }
+  const {logout} = props;
 
   return (
     <div className={classes.headerColor}>
@@ -54,7 +50,7 @@ const Header = () => {
               <AccountMenu />
             </Grid>
             <Grid item xs={4} md={2} sm={2} lg={1}>
-              <Button onClick={signout}>
+              <Button onClick={logout}>
                 <Typography className={classes.sentenceCase}>Sign Out</Typography>
                 <ExitToAppOutlinedIcon />
               </Button>
@@ -66,4 +62,10 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  logout: logout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

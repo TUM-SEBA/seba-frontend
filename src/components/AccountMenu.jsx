@@ -8,7 +8,10 @@ import PopupState, {bindTrigger, bindMenu} from "material-ui-popup-state";
 import theme from "../themes";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {setIsViewBadgesDialogOpen} from "../actions/welcomePage";
+import {
+  setIsViewBadgesDialogOpen,
+  setIsChangePasswordDialogOpen,
+} from "../actions/welcomePage";
 import {getMyBadges} from "../services/customerService";
 
 const styles = (theme) => ({
@@ -29,7 +32,12 @@ const MyMenuItem = withStyles({
 })(MenuItem);
 
 function MenuPopupState(props) {
-  const {classes, setIsViewBadgesDialogOpen, getMyBadges} = props;
+  const {
+    classes,
+    setIsViewBadgesDialogOpen,
+    getMyBadges,
+    setIsChangePasswordDialogOpen,
+  } = props;
 
   return (
     <PopupState variant="popover" popupId="account-menu">
@@ -53,7 +61,14 @@ function MenuPopupState(props) {
             {...bindMenu(popupState)}
           >
             <MyMenuItem onClick={popupState.close}>View Profile</MyMenuItem>
-            <MyMenuItem onClick={popupState.close}>Update Profile</MyMenuItem>
+            <MyMenuItem
+              onClick={() => {
+                setIsChangePasswordDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              Change Password
+            </MyMenuItem>
             <MyMenuItem
               onClick={() => {
                 getMyBadges();
@@ -77,6 +92,7 @@ const mapStateToProps = ({loginPage: {snackBarData}}) => ({
 const mapDispatchToProps = {
   setIsViewBadgesDialogOpen: setIsViewBadgesDialogOpen,
   getMyBadges: getMyBadges,
+  setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
 };
 
 export default connect(

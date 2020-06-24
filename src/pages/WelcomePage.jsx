@@ -1,15 +1,19 @@
 import React from "react";
+import {connect} from "react-redux";
 import {Grid, Typography} from "@material-ui/core";
 import Header from "../components/Header";
 import {Avatar} from "@material-ui/core";
 import caretakerImage from "../assets/caretaker.png";
 import ownerImage from "../assets/owner.png";
-import {makeStyles} from "@material-ui/core/styles";
+import {withStyles} from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import ViewBadges from "../components/ViewBadges";
 import {Link} from "react-router-dom";
+import ChangePassword from "../components/ChangePassword";
+import SnackbarAlert from "../components/SnackbarAlert";
+import {setIsChangePasswordDialogOpen} from "../actions/welcomePage";
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   large: {
     width: theme.spacing(50),
     height: theme.spacing(50),
@@ -30,10 +34,14 @@ const useStyles = makeStyles((theme) => ({
     color: "#000000",
     textDecoration: "none",
   },
-}));
+});
 
-export default function WelcomePage(props) {
-  const classes = useStyles();
+function WelcomePage(props) {
+  const {classes, setIsChangePasswordDialogOpen} = props;
+
+  React.useEffect(() => {
+    if (localStorage.getItem("shouldChangePassword")) setIsChangePasswordDialogOpen(true);
+  }, [setIsChangePasswordDialogOpen]);
 
   return (
     <div>
@@ -74,6 +82,19 @@ export default function WelcomePage(props) {
         </Grid>
       </Grid>
       <ViewBadges />
+      <ChangePassword />
+      <SnackbarAlert />
     </div>
   );
 }
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, {withTheme: true})(WelcomePage));

@@ -1,8 +1,13 @@
-import {ISVIEWBADGESDIALOGOPEN, SAVEMYBADGES} from "../actions/welcomePage";
+import {
+  ISVIEWBADGESDIALOGOPEN,
+  SAVEMYBADGES,
+  CHANGEPASSWORD,
+} from "../actions/welcomePage";
 
 let initialState = {
   isViewBadgesDialogOpen: false,
   myBadges: {},
+  isChangePasswordDialogOpen: false,
 };
 
 export default function welcomePage(state = initialState, action) {
@@ -16,6 +21,11 @@ export default function welcomePage(state = initialState, action) {
       return {
         ...state,
         myBadges: action.value,
+      };
+    case CHANGEPASSWORD:
+      return {
+        ...state,
+        isChangePasswordDialogOpen: action.value,
       };
     default:
       return {

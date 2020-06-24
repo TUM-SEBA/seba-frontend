@@ -11,6 +11,7 @@ import ViewBadges from "../components/ViewBadges";
 import ChangePassword from "../components/ChangePassword";
 import SnackbarAlert from "../components/SnackbarAlert";
 import BadgeNotification from "../components/BadgeNotification";
+import ViewEditCustomerProfile from "../components/ViewEditCustomerProfile";
 import {setIsChangePasswordDialogOpen} from "../actions/welcomePage";
 import {checkNewBadge} from "../services/customerService";
 
@@ -100,6 +101,7 @@ function WelcomePage(props) {
       <ChangePassword />
       <SnackbarAlert />
       <BadgeNotification badge={newBadge} />
+      <ViewEditCustomerProfile />
     </div>
   );
 }

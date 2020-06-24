@@ -3,6 +3,9 @@ import {
   SAVEMYBADGES,
   CHANGEPASSWORD,
   NEWBADGEAVAILABLE,
+  SAVEMYPROFILE,
+  SETUSERPROFILEDIALOGOPEN,
+  SETPROFILEFIELDVALUE,
 } from "../actions/welcomePage";
 
 let initialState = {
@@ -11,6 +14,12 @@ let initialState = {
   isChangePasswordDialogOpen: false,
   newBadge: null,
   newBadgeDialog: false,
+  profileFields: {
+    name: "",
+    phoneNumber: "",
+    address: "",
+  },
+  userProfileDialogOpen: false,
 };
 
 export default function welcomePage(state = initialState, action) {
@@ -35,6 +44,21 @@ export default function welcomePage(state = initialState, action) {
         ...state,
         newBadge: action.value,
         newBadgeDialog: action.isOpen,
+      };
+    case SAVEMYPROFILE:
+      return {
+        ...state,
+        profileFields: action.value,
+      };
+    case SETUSERPROFILEDIALOGOPEN:
+      return {
+        ...state,
+        userProfileDialogOpen: action.value,
+      };
+    case SETPROFILEFIELDVALUE:
+      return {
+        ...state,
+        profileFields: {...state.profileFields, [action.fieldName]: action.value},
       };
     default:
       return {

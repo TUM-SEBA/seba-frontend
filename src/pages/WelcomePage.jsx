@@ -8,7 +8,6 @@ import ownerImage from "../assets/owner.png";
 import {withStyles} from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import ViewBadges from "../components/ViewBadges";
-import {Link} from "react-router-dom";
 import ChangePassword from "../components/ChangePassword";
 import SnackbarAlert from "../components/SnackbarAlert";
 import BadgeNotification from "../components/BadgeNotification";
@@ -35,6 +34,7 @@ const styles = (theme) => ({
   navStyle: {
     color: "#000000",
     textDecoration: "none",
+    cursor: "pointer",
   },
 });
 
@@ -45,6 +45,18 @@ function WelcomePage(props) {
     if (localStorage.getItem("shouldChangePassword")) setIsChangePasswordDialogOpen(true);
     checkNewBadge();
   }, [checkNewBadge, setIsChangePasswordDialogOpen]);
+
+  const {history} = props;
+
+  function gotoOwnerPage() {
+    history.push("/owner");
+    window.location.reload();
+  }
+
+  function gotoCaretakerPage() {
+    history.push("/caretaker");
+    window.location.reload();
+  }
 
   return (
     <div>
@@ -68,19 +80,19 @@ function WelcomePage(props) {
           </Typography>
 
           <Grid container direction="row" justify="space-around" alignItems="center">
-            <Link className={classes.navStyle} to="/caretaker">
+            <div className={classes.navStyle} onClick={gotoCaretakerPage}>
               <Button>
                 <Avatar src={caretakerImage} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Caretaker</Typography>
-            </Link>
+            </div>
 
-            <Link className={classes.navStyle} to="/owner">
+            <div onClick={gotoOwnerPage} className={classes.navStyle}>
               <Button>
                 <Avatar src={ownerImage} className={classes.large} />
               </Button>
               <Typography className={classes.centerText}>Owner</Typography>
-            </Link>
+            </div>
           </Grid>
         </Grid>
       </Grid>

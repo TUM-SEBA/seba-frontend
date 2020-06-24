@@ -60,6 +60,9 @@ function FeedbackForm(props) {
     typographyRating: {
       paddingRight: "15px",
     },
+    typographyDescription: {
+      paddingTop: "16px",
+    },
   }));
 
   const classes = useStyles();
@@ -111,7 +114,7 @@ function FeedbackForm(props) {
         <Typography variant="h5">Send Feedback</Typography>
       </DialogTitle>
       <DialogContent>
-        <Grid container direction="row" justify="space-evenly" alignItems="center">
+        <Grid container direction="row" justify="space-evenly" alignItems="flex-start">
           <Grid item>
             <Paper elevation={4}>
               <CardContent>
@@ -165,15 +168,17 @@ function FeedbackForm(props) {
               <Rating name="size-large" defaultValue={2} size="large" />
             </Grid>
 
-            <Grid container direction="row" justify="flex-start" alignItems="center">
-              <Typography>Description:</Typography>
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start">
+              <Typography className={classes.typographyDescription}>
+                Description:
+              </Typography>
               <div className={classes.textFields}>
                 <CustomTextField
                   fullWidth
                   required={true}
                   variant="outlined"
                   multiline={true}
-                  rows={10}
+                  rows={16}
                 />
               </div>
             </Grid>

@@ -1,6 +1,10 @@
 import {authURL} from "../constants";
 import {invalidRequest} from "./loginService";
-import {saveMyBadges, setIsChangePasswordDialogOpen} from "../actions/welcomePage";
+import {
+  saveMyBadges,
+  setIsChangePasswordDialogOpen,
+  setNewBadgeAvailable,
+} from "../actions/welcomePage";
 import {showSnackBar} from "../actions/loginPage";
 
 export function getMyBadges() {
@@ -21,6 +25,29 @@ export function getMyBadges() {
       .catch(() => {
         console.log("Invalid Request");
         return false;
+      });
+  };
+}
+
+export function checkNewBadge() {
+  return (dispatch) => {
+    return fetch(authURL + "/newBadge", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        else throw invalidRequest(response);
+      })
+      .then((result) => {
+        if (result) dispatch(setNewBadgeAvailable(result, true));
+      })
+      .catch(async (err) => {
+        const errorMessage = await err.then((error) => error.message);
+        dispatch(showSnackBar(true, errorMessage, "error"));
       });
   };
 }

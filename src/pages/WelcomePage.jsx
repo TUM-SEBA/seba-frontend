@@ -11,7 +11,9 @@ import ViewBadges from "../components/ViewBadges";
 import {Link} from "react-router-dom";
 import ChangePassword from "../components/ChangePassword";
 import SnackbarAlert from "../components/SnackbarAlert";
+import BadgeNotification from "../components/BadgeNotification";
 import {setIsChangePasswordDialogOpen} from "../actions/welcomePage";
+import {checkNewBadge} from "../services/customerService";
 
 const styles = (theme) => ({
   large: {
@@ -37,11 +39,12 @@ const styles = (theme) => ({
 });
 
 function WelcomePage(props) {
-  const {classes, setIsChangePasswordDialogOpen} = props;
+  const {classes, setIsChangePasswordDialogOpen, checkNewBadge, newBadge} = props;
 
   React.useEffect(() => {
     if (localStorage.getItem("shouldChangePassword")) setIsChangePasswordDialogOpen(true);
-  }, [setIsChangePasswordDialogOpen]);
+    checkNewBadge();
+  }, [checkNewBadge, setIsChangePasswordDialogOpen]);
 
   return (
     <div>
@@ -84,14 +87,16 @@ function WelcomePage(props) {
       <ViewBadges />
       <ChangePassword />
       <SnackbarAlert />
+      <BadgeNotification badge={newBadge} />
     </div>
   );
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({welcomePage: {newBadge}}) => ({newBadge});
 
 const mapDispatchToProps = {
   setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
+  checkNewBadge: checkNewBadge,
 };
 
 export default connect(

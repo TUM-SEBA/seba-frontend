@@ -86,6 +86,11 @@ function SignUpForm(props) {
     else return false;
   }
 
+  function validEmailCheck() {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(signUpFields["email"]);
+  }
+
   async function handleSave() {
     const emptyField = Object.keys(signUpFields).find(
       (keyName) => signUpFields[keyName] === ""
@@ -93,11 +98,13 @@ function SignUpForm(props) {
 
     passwordsMatch
       ? passwordStringCheck()
-        ? emptyField
-          ? showSnackBar(true, requiredFieldsEmpty, "error")
-          : await signUpCustomer(signUpFields).then((signUpSuccessful) =>
-              signUpSuccessful ? handleSuccessfulSignUp() : alert("Invalid Request")
-            )
+        ? validEmailCheck()
+          ? emptyField
+            ? showSnackBar(true, requiredFieldsEmpty, "error")
+            : await signUpCustomer(signUpFields).then((signUpSuccessful) =>
+                signUpSuccessful ? handleSuccessfulSignUp() : alert("Invalid Request")
+              )
+          : showSnackBar(true, "Not a Valid Email format", "error")
         : showSnackBar(true, passwordStringCheckAlert, "error")
       : showSnackBar(true, passwordMismatch, "error");
   }

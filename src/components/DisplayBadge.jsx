@@ -22,10 +22,13 @@ const styles = (theme) => ({
 
 function DisplayBadge(props) {
   const {classes, mybadge} = props;
-
+  const badgeDate = () => {
+    const date = new Date(mybadge.date);
+    return date.toDateString();
+  };
   return (
     <Card className={classes.root}>
-      <CardHeader title={mybadge.badge.name} subheader="September 14, 2016" />
+      <CardHeader title={mybadge.badge.name} subheader={badgeDate()} />
       <CardMedia
         component="img"
         height="125"

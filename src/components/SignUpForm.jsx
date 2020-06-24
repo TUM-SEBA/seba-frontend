@@ -17,7 +17,12 @@ import {
   showSnackBar,
 } from "../actions/loginPage";
 import {signUpCustomer} from "../services/loginService";
-import {userSignUpSuccessMsg, passwordMismatch, requiredFieldsEmpty} from "../constants";
+import {
+  userSignUpSuccessMsg,
+  passwordMismatch,
+  requiredFieldsEmpty,
+  passwordStringCheckAlert,
+} from "../constants";
 
 const styles = (theme) => ({
   textFields: {
@@ -75,16 +80,32 @@ function SignUpForm(props) {
     showSnackBar(true, userSignUpSuccessMsg, "success");
   }
 
+  function passwordStringCheck() {
+    var passCheck = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/;
+    if (signUpFields["password"].match(passCheck)) return true;
+    else return false;
+  }
+
+  function validEmailCheck() {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(signUpFields["email"]);
+  }
+
   async function handleSave() {
     const emptyField = Object.keys(signUpFields).find(
       (keyName) => signUpFields[keyName] === ""
     );
+
     passwordsMatch
-      ? emptyField
-        ? showSnackBar(true, requiredFieldsEmpty, "error")
-        : await signUpCustomer(signUpFields).then((signUpSuccessful) =>
-            signUpSuccessful ? handleSuccessfulSignUp() : alert("Invalid Request")
-          )
+      ? passwordStringCheck()
+        ? validEmailCheck()
+          ? emptyField
+            ? showSnackBar(true, requiredFieldsEmpty, "error")
+            : await signUpCustomer(signUpFields).then((signUpSuccessful) =>
+                signUpSuccessful ? handleSuccessfulSignUp() : alert("Invalid Request")
+              )
+          : showSnackBar(true, "Not a Valid Email format", "error")
+        : showSnackBar(true, passwordStringCheckAlert, "error")
       : showSnackBar(true, passwordMismatch, "error");
   }
 

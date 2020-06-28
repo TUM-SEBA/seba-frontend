@@ -18,6 +18,7 @@ import {getOffersByUsername} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
+import Header from "../components/Header";
 
 const filterByOptions = ["ID", "Description"];
 const dummyImage =
@@ -164,80 +165,88 @@ function OfferPage(props) {
   }
   if (isAuthenticated()) {
     return (
-      <div className={classes.container}>
-        <div>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={3}>
-              Hello, Owner
-            </Grid>
-            <Grid item xs={"auto"} md={2} lg={4} />
-            <Grid container item xs={12} md={7} lg={5} spacing={2}>
-              <Grid item xs={12} sm={4} md={5}>
-                <FormControl className={classes.filter}>
-                  <InputLabel htmlFor="filter-by">Filter by</InputLabel>
-                  <Select
-                    native
-                    value={selectedFilterBy}
+      <div>
+        <Grid container direction="column" justify="flex-start" alignItems="stretch">
+          <Grid item>
+            <Header />
+          </Grid>
+        </Grid>
+
+        <div className={classes.container}>
+          <div>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={3}>
+                Hello, Owner
+              </Grid>
+              <Grid item xs={"auto"} md={2} lg={4} />
+              <Grid container item xs={12} md={7} lg={5} spacing={2}>
+                <Grid item xs={12} sm={4} md={5}>
+                  <FormControl className={classes.filter}>
+                    <InputLabel htmlFor="filter-by">Filter by</InputLabel>
+                    <Select
+                      native
+                      value={selectedFilterBy}
+                      onChange={(event) => {
+                        changeFilterBy(event.target.value);
+                      }}
+                      inputProps={{
+                        id: "filter-by",
+                      }}
+                      color="secondary"
+                    >
+                      <option key="-1" aria-label="None" value="-1" />
+                      {filterByOptions.map((value, index) => (
+                        <option key={index} value={index}>
+                          {value}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={7}>
+                  <TextField
+                    className={classes.search}
+                    value={searchValue}
                     onChange={(event) => {
-                      changeFilterBy(event.target.value);
-                    }}
-                    inputProps={{
-                      id: "filter-by",
+                      changeSearch(event.target.value);
                     }}
                     color="secondary"
-                  >
-                    <option key="-1" aria-label="None" value="-1" />
-                    {filterByOptions.map((value, index) => (
-                      <option key={index} value={index}>
-                        {value}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
+                    label="Search"
+                  />
+                </Grid>
+                <Grid item xs={"auto"} sm={2} md={"auto"} />
               </Grid>
-              <Grid item xs={12} sm={6} md={7}>
-                <TextField
-                  className={classes.search}
-                  value={searchValue}
-                  onChange={(event) => {
-                    changeSearch(event.target.value);
-                  }}
-                  color="secondary"
-                  label="Search"
-                />
-              </Grid>
-              <Grid item xs={"auto"} sm={2} md={"auto"} />
             </Grid>
-          </Grid>
-        </div>
-        <div className={classes.body}>
-          <Grid container spacing={2}>
-            {getCreateOffer()}
-            {offers
-              .filter((offer) => {
-                var searchRegex = new RegExp(searchValue, "gi");
-                // todo only show user's own offers
-                if (searchValue === "") {
-                  return true;
-                }
-                if (selectedFilterBy === "0") {
-                  if (searchRegex.test(offer._id.toString())) {
+          </div>
+          <div className={classes.body}>
+            <Grid container spacing={2}>
+              {getCreateOffer()}
+              {offers
+                .filter((offer) => {
+                  var searchRegex = new RegExp(searchValue, "gi");
+                  // todo only show user's own offers
+                  if (searchValue === "") {
                     return true;
                   }
-                } else if (selectedFilterBy === "1") {
-                  if (searchRegex.test(offer.description)) {
+                  if (selectedFilterBy === "0") {
+                    if (searchRegex.test(offer._id.toString())) {
+                      return true;
+                    }
+                  } else if (selectedFilterBy === "1") {
+                    if (searchRegex.test(offer.description)) {
+                      return true;
+                    }
+                  } else if (selectedFilterBy === "-1") {
                     return true;
                   }
-                } else if (selectedFilterBy === "-1") {
-                  return true;
-                }
-                return false;
-              })
-              .map((offer, index) => getGridItem(index, offer))}
-          </Grid>
+                  return false;
+                })
+                .map((offer, index) => getGridItem(index, offer))}
+            </Grid>
+          </div>
+          <OfferForm history={history} />
+          <SnackbarAlert />
         </div>
-        <OfferForm history={history} />
-        <SnackbarAlert />
       </div>
     );
   } else {

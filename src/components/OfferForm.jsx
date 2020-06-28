@@ -8,6 +8,7 @@ import {
   Button,
   ButtonGroup,
   Grid,
+  Input,
 } from "@material-ui/core";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
@@ -37,6 +38,9 @@ const styles = (theme) => ({
   categoryGridObject: {
     marginTop: theme.spacing(3),
   },
+  titleText: {
+    width: "100",
+  },
   descriptionText: {
     width: "100",
   },
@@ -65,6 +69,8 @@ function OfferForm(props) {
         description: offerFields["description"],
         startDate: offerFields["startDate"],
         endDate: offerFields["endDate"],
+        createdDate: new Date(),
+        title: offerFields["title"],
       };
       insertOffer(offer)
         .then(() => {
@@ -169,6 +175,28 @@ function OfferForm(props) {
                       }}
                       onChange={(event) => {
                         setOfferFieldValue("endDate", event.target.value);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.categoryGridObject}
+                >
+                  <Grid item xs={12} md={6}>
+                    <div>Title:</div>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Input
+                      className={classes.titleText}
+                      id="title"
+                      placeholder="Title"
+                      fullWidth
+                      onChange={(event) => {
+                        setOfferFieldValue("title", event.target.value);
                       }}
                     />
                   </Grid>

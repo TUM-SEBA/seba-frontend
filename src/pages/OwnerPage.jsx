@@ -49,7 +49,7 @@ const styles = (theme) => ({
     color: "rgba(0, 0, 0, 0.4)",
     fontSize: "10pt",
   },
-  offerCardOwner: {
+  offerCardTitle: {
     marginLeft: theme.spacing(3),
     height: theme.spacing(3),
     textAlign: "justify",
@@ -113,6 +113,18 @@ function OfferPage(props) {
 
   const [offers, setOffers] = useState([]);
 
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [day, month, year].join("/");
+  }
+
   useEffect(() => {
     function getOffers() {
       getOffersByUsername()
@@ -152,13 +164,17 @@ function OfferPage(props) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
         <Card variant="outlined">
-          <div className={classes.offerCardId}>{offer._id}</div>
+          <div className={classes.offerCardId}>
+            Created on: {formatDate(offer.createdDate)}
+          </div>
           <CardContent className={classes.offerCardContent}>
             <img className={classes.offerImage} src={dummyImage} alt={"Pet"} />
           </CardContent>
-          <div className={classes.offerCardOwner}>{offer.owner}</div>
+          <div className={classes.offerCardTitle}>{offer.title}</div>
           <div className={classes.offerCardDescription}>{offer.description}</div>
-          <div className={classes.offerCreatedDate}>{offer.createdDate}</div>
+          <div className={classes.offerCreatedDate}>
+            Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
+          </div>
         </Card>
       </Grid>
     );
@@ -176,7 +192,7 @@ function OfferPage(props) {
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
-                Hello, Owner
+                Hello, Owner {localStorage["username"]}
               </Grid>
               <Grid item xs={"auto"} md={2} lg={4} />
               <Grid container item xs={12} md={7} lg={5} spacing={2}>

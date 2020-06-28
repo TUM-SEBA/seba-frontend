@@ -64,6 +64,8 @@ export function insertOffer(offer) {
     description: offer.description,
     startDate: offer.startDate,
     endDate: offer.endDate,
+    createdDate: offer.createdDate,
+    title: offer.title,
   };
   return new Promise((resolve, reject) => {
     fetch(offerURL, {

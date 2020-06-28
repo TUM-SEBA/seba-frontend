@@ -19,6 +19,7 @@ import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
 import Header from "../components/Header";
+import AddIcon from "@material-ui/icons/Add";
 
 const filterByOptions = ["ID", "Description"];
 const dummyImage =
@@ -152,7 +153,7 @@ function OfferPage(props) {
               className={classes.createOfferButton}
               onClick={() => setIsOfferDialogOpen(true)}
             >
-              +
+              <AddIcon fontSize="large" />
             </Button>
           </CardContent>
           <div className={classes.createOfferText}>Create New Offer</div>

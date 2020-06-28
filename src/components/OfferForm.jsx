@@ -6,10 +6,10 @@ import {
   TextField,
   DialogActions,
   Button,
-  ButtonGroup,
   Grid,
   Input,
 } from "@material-ui/core";
+import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {setOfferFieldValue, setIsOfferDialogOpen} from "../actions/ownerPage";
@@ -17,6 +17,8 @@ import {showSnackBar} from "../actions/loginPage";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
 import {insertOffer} from "../services/offerService";
+import PetsIcon from "@material-ui/icons/Pets";
+import NatureIcon from "@material-ui/icons/Nature";
 
 const styles = (theme) => ({
   textFields: {
@@ -44,6 +46,10 @@ const styles = (theme) => ({
   descriptionText: {
     width: "100",
   },
+  iconPetandPlant: {
+    width: "30",
+    height: "30",
+  },
 });
 
 function OfferForm(props) {
@@ -61,8 +67,11 @@ function OfferForm(props) {
     const emptyField = Object.keys(offerFields).find(
       (keyName) => offerFields[keyName] === ""
     );
+
     if (emptyField) {
-      showSnackBar(true, requiredFieldsEmpty, "error");
+      showSnackBar(true, requiredFieldsEmpty + " " + emptyField, "error");
+    } else if (offerFields["endDate"] <= offerFields["startDate"]) {
+      showSnackBar(true, "Start time cannot be after End time.", "error");
     } else {
       let offer = {
         owner: localStorage["id"],
@@ -96,24 +105,28 @@ function OfferForm(props) {
       open={isOfferDialogOpen}
       onClose={() => setIsOfferDialogOpen(true)}
     >
-      <DialogTitle id="form-dialog-title">Offer</DialogTitle>
+      <DialogTitle id="form-dialog-title">New Offer</DialogTitle>
       <form className={classes.form} noValidate>
         <DialogContent>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6}>
-              <div>Select Category:</div>
+              <div align="center">Category</div>
               <div align="center" className={classes.categoryGridObject}>
-                <ButtonGroup
-                  color="secondary"
-                  aria-label="outlined secondary button group"
-                  id="category"
-                  onChange={(event) => {
-                    setOfferFieldValue("category", event.target.value);
+                <ToggleButtonGroup
+                  value={offerFields["category"]}
+                  exclusive
+                  onChange={(event, value) => {
+                    setOfferFieldValue("category", value);
                   }}
+                  size="large"
                 >
-                  <Button>Pets</Button>
-                  <Button>Plants</Button>
-                </ButtonGroup>
+                  <ToggleButton value="Pet">
+                    <PetsIcon />
+                  </ToggleButton>
+                  <ToggleButton value="Plant">
+                    <NatureIcon />
+                  </ToggleButton>
+                </ToggleButtonGroup>
               </div>
               <div align="center" className={classes.categoryGridObject}>
                 <Button
@@ -142,7 +155,6 @@ function OfferForm(props) {
                     <TextField
                       id="startDate"
                       type="datetime-local"
-                      defaultValue="2020-01-01T12:30"
                       className={classes.textField}
                       InputLabelProps={{
                         shrink: true,
@@ -168,7 +180,6 @@ function OfferForm(props) {
                     <TextField
                       id="endDate"
                       type="datetime-local"
-                      defaultValue="2020-01-01T12:30"
                       className={classes.textField}
                       InputLabelProps={{
                         shrink: true,

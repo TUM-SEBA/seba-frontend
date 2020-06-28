@@ -14,10 +14,11 @@ let initialState = {
   searchValue: "",
   isOfferDialogOpen: false,
   offerFields: {
-    category: "pet",
+    category: "Pet",
     startDate: "",
     endDate: "",
-    description: "",
+    description: " ",
+    title: "",
   },
   biddingRequestSelectedFilterBy: "-1",
   biddingRequestSearchValue: "",

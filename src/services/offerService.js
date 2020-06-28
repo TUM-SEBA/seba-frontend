@@ -107,3 +107,32 @@ export function acceptOffer(offerId, approveBiddingRequestId, insurance) {
     });
   });
 }
+
+export function getOffersByOwnerId(ownerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/user/${ownerId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}

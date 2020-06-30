@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(10),
     height: theme.spacing(10),
   },
+  switchDiv: {
+    textAlign: "right",
+  },
 
   headerColor: {
     background: "#DCEFDE",
@@ -32,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
   sentenceCase: {
     textTransform: "none",
+    fontSize: "13px",
   },
 }));
 
@@ -63,7 +67,7 @@ const Header = (props) => {
       <AppBar className={classes.headerColor} position="static">
         <Toolbar>
           <Grid container direction="row" justify="space-around" alignItems="center">
-            <Grid item xs={3} md={8} sm={8} lg={9}>
+            <Grid xs={6} sm={6} md={6} lg={9}>
               <Avatar
                 onClick={gotoHome}
                 alt="Home"
@@ -71,18 +75,19 @@ const Header = (props) => {
                 className={classes.large}
               />
             </Grid>
-            <Grid item xs={3} md={2} sm={2} lg={1}>
-              {currentUrl !== "/" && (
+            <Grid xs={6} sm={2} md={2} lg={1}>
+              <AccountMenu />
+            </Grid>
+            {currentUrl !== "/" && (
+              <Grid className={classes.switchDiv} xs={6} sm={2} md={2} lg={1}>
                 <Button onClick={switchUser}>
                   <Typography className={classes.sentenceCase}>Switch</Typography>
                   <LoopIcon />
                 </Button>
-              )}
-            </Grid>
-            <Grid item xs={3} md={2} sm={2} lg={1}>
-              <AccountMenu />
-            </Grid>
-            <Grid item xs={3} md={2} sm={2} lg={1}>
+              </Grid>
+            )}
+
+            <Grid xs={6} sm={2} md={2} lg={1}>
               <Button onClick={logout}>
                 <Typography className={classes.sentenceCase}>Sign Out</Typography>
                 <ExitToAppOutlinedIcon />

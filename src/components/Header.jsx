@@ -39,6 +39,20 @@ const Header = (props) => {
   const classes = useStyles();
   const {logout} = props;
 
+  const {history} = props;
+
+  const currentUrl = window.location.pathname;
+
+  function switchUser() {
+    if (currentUrl === "/owner") {
+      history.push("/caretaker");
+      window.location.reload();
+    } else if (currentUrl === "/caretaker") {
+      history.push("/owner");
+      window.location.reload();
+    }
+  }
+
   return (
     <div className={classes.headerColor}>
       <AppBar className={classes.headerColor} position="static">
@@ -48,10 +62,12 @@ const Header = (props) => {
               <Avatar alt="Home" src={logo} className={classes.large} />
             </Grid>
             <Grid item xs={3} md={2} sm={2} lg={1}>
-              <Button>
-                <Typography className={classes.sentenceCase}>Switch User</Typography>
-                <LoopIcon />
-              </Button>
+              {currentUrl !== "/" && (
+                <Button onClick={switchUser}>
+                  <Typography className={classes.sentenceCase}>Switch</Typography>
+                  <LoopIcon />
+                </Button>
+              )}
             </Grid>
             <Grid item xs={3} md={2} sm={2} lg={1}>
               <AccountMenu />

@@ -5,7 +5,6 @@ import {
   Typography,
   DialogActions,
   DialogContent,
-  Card,
   CardContent,
   IconButton,
   TextField,
@@ -48,6 +47,8 @@ function FeedbackForm(props) {
     },
     textFields: {
       margin: theme.spacing(2),
+      marginLeft: 0,
+      width: "100%",
     },
     navigationButton: {
       width: theme.spacing(6),
@@ -62,6 +63,10 @@ function FeedbackForm(props) {
     },
     typographyDescription: {
       paddingTop: "16px",
+    },
+    rightGrid: {
+      flex: 1,
+      marginLeft: "32px",
     },
   }));
 
@@ -115,7 +120,7 @@ function FeedbackForm(props) {
       </DialogTitle>
       <DialogContent>
         <Grid container direction="row" justify="space-evenly" alignItems="flex-start">
-          <Grid item>
+          <Grid>
             <Paper elevation={4}>
               <CardContent>
                 <Grid
@@ -162,13 +167,18 @@ function FeedbackForm(props) {
               </CardContent>
             </Paper>
           </Grid>
-          <Grid item>
+          <Grid className={classes.rightGrid}>
             <Grid container direction="row" justify="flex-start" alignItems="center">
               <Typography className={classes.typographyRating}>Give Rating:</Typography>
               <Rating name="size-large" defaultValue={2} size="large" />
             </Grid>
 
-            <Grid container direction="row" justify="flex-start" alignItems="flex-start">
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="flex-start"
+            >
               <Typography className={classes.typographyDescription}>
                 Description:
               </Typography>
@@ -178,7 +188,7 @@ function FeedbackForm(props) {
                   required={true}
                   variant="outlined"
                   multiline={true}
-                  rows={16}
+                  rows={8}
                 />
               </div>
             </Grid>

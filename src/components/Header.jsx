@@ -21,9 +21,10 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(5),
     height: theme.spacing(5),
   },
-  large: {
+  logo: {
     width: theme.spacing(10),
     height: theme.spacing(10),
+    cursor: "pointer",
   },
   switchDiv: {
     textAlign: "right",
@@ -68,12 +69,7 @@ const Header = (props) => {
         <Toolbar>
           <Grid container direction="row" justify="space-around" alignItems="center">
             <Grid xs={6} sm={6} md={6} lg={9}>
-              <Avatar
-                onClick={gotoHome}
-                alt="Home"
-                src={logo}
-                className={classes.large}
-              />
+              <Avatar onClick={gotoHome} alt="Home" src={logo} className={classes.logo} />
             </Grid>
             <Grid xs={6} sm={2} md={2} lg={1}>
               <AccountMenu />

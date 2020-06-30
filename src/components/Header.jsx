@@ -53,13 +53,23 @@ const Header = (props) => {
     }
   }
 
+  function gotoHome() {
+    history.push("/");
+    window.location.reload();
+  }
+
   return (
     <div className={classes.headerColor}>
       <AppBar className={classes.headerColor} position="static">
         <Toolbar>
           <Grid container direction="row" justify="space-around" alignItems="center">
             <Grid item xs={3} md={8} sm={8} lg={9}>
-              <Avatar alt="Home" src={logo} className={classes.large} />
+              <Avatar
+                onClick={gotoHome}
+                alt="Home"
+                src={logo}
+                className={classes.large}
+              />
             </Grid>
             <Grid item xs={3} md={2} sm={2} lg={1}>
               {currentUrl !== "/" && (

@@ -8,9 +8,13 @@ import PopupState, {bindTrigger, bindMenu} from "material-ui-popup-state";
 import theme from "../themes";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {setIsViewBadgesDialogOpen} from "../actions/welcomePage";
-import {setIsViewFeedbackDialogOpen} from "../actions/welcomePage";
-import {getMyBadges} from "../services/customerService";
+import {
+  setIsViewFeedbackDialogOpen,
+  setIsViewBadgesDialogOpen,
+  setIsChangePasswordDialogOpen,
+  setUserProfileDialogOpen,
+} from "../actions/welcomePage";
+import {getMyBadges, getUserProfile} from "../services/customerService";
 
 const styles = (theme) => ({
   menuList: {
@@ -30,7 +34,14 @@ const MyMenuItem = withStyles({
 })(MenuItem);
 
 function MenuPopupState(props) {
-  const {classes, setIsViewBadgesDialogOpen, getMyBadges} = props;
+  const {
+    classes,
+    setIsViewBadgesDialogOpen,
+    getMyBadges,
+    setIsChangePasswordDialogOpen,
+    getUserProfile,
+    setUserProfileDialogOpen,
+  } = props;
 
   return (
     <PopupState variant="popover" popupId="account-menu">
@@ -53,8 +64,23 @@ function MenuPopupState(props) {
             }}
             {...bindMenu(popupState)}
           >
-            <MyMenuItem onClick={popupState.close}>View Profile</MyMenuItem>
-            <MyMenuItem onClick={popupState.close}>Update Profile</MyMenuItem>
+            <MyMenuItem
+              onClick={async () => {
+                await getUserProfile();
+                setUserProfileDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              View Profile
+            </MyMenuItem>
+            <MyMenuItem
+              onClick={() => {
+                setIsChangePasswordDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              Change Password
+            </MyMenuItem>
             <MyMenuItem
               onClick={() => {
                 getMyBadges();
@@ -87,6 +113,9 @@ const mapDispatchToProps = {
   setIsViewBadgesDialogOpen: setIsViewBadgesDialogOpen,
   setIsViewFeedbackDialogOpen: setIsViewFeedbackDialogOpen,
   getMyBadges: getMyBadges,
+  setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
+  getUserProfile: getUserProfile,
+  setUserProfileDialogOpen: setUserProfileDialogOpen,
 };
 
 export default connect(

@@ -20,3 +20,5 @@ export const forgotPasswordConfirmationText =
   "We have sent a new password to your email. Please set a new password on logging in again";
 export const resendMailText =
   "Didnt recieve the mail yet? Please check your spam folder or ";
+export const passwordStringCheckAlert =
+  "Password must be between 6 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";

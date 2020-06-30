@@ -60,6 +60,8 @@ export function loginCustomer(username, password) {
       .then((result) => {
         localStorage["token"] = result.token;
         localStorage["username"] = username;
+        localStorage["id"] = result.id;
+        if (result.shouldChangePassword) localStorage["shouldChangePassword"] = true;
         return true;
       })
       .catch(async (err) => {
@@ -71,26 +73,28 @@ export function loginCustomer(username, password) {
 }
 
 export function logout() {
-  return fetch(authURL + "/logout", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${localStorage["token"]}`,
-    },
-  })
-    .then((response) => {
-      console.log(response.status);
-      if (response.status !== 200) throw invalidRequest();
+  return (dispatch) => {
+    return fetch(authURL + "/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
     })
-    .then(() => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      return true;
-    })
-    .catch(() => {
-      console.log("Invalid Request");
-      return false;
-    });
+      .then((response) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        if (response.status !== 200) throw invalidRequest(response);
+      })
+      .then(() => {
+        dispatch(showSnackBar(true, "Logout Successful", "success"));
+        window.location.reload();
+      })
+      .catch(() => {
+        dispatch(showSnackBar(true, "Invalid Session", "error"));
+        window.location.reload();
+      });
+  };
 }
 
 export function forgotPassword(email) {

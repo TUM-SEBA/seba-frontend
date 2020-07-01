@@ -3,10 +3,11 @@ import {createMuiTheme} from "@material-ui/core/styles";
 const theme = createMuiTheme({
   palette: {
     primary: {main: "#ffffff", contrastText: "#000000"},
-    secondary: {main: "#306fb3", contrastText: "#ffffff"},
+    secondary: {main: "#009688", contrastText: "#ffffff"},
   },
   typography: {
     fontFamily: [
+      '"Quicksand"',
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',

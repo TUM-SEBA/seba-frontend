@@ -82,7 +82,7 @@ const styles = (theme) => ({
     fontSize: "10pt",
     overflowY: "scroll",
   },
-  button: {
+  interestedButton: {
     width: "100%",
   },
   createOfferButton: {

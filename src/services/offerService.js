@@ -1,8 +1,66 @@
 import {offerURL} from "../constants";
 
-export function getOffersByUsername() {
+export function getAvailableOffers() {
   return new Promise((resolve, reject) => {
-    fetch(`${offerURL}/caretaker/${localStorage["username"]}`, {
+    fetch(`${offerURL}/available`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((_) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}
+
+export function getInterestedOffers() {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/interested`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((_) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}
+
+export function getNotInterestedOffers() {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/not-interested`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -98,6 +156,24 @@ export function acceptOffer(offerId, approveBiddingRequestId, insurance) {
         authorization: `Bearer ${localStorage["token"]}`,
       },
       body: JSON.stringify(body),
+    }).then((response) => {
+      if (response.status === 200) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}
+
+export function updateNotInterested(offerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/not-interested/${offerId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
     }).then((response) => {
       if (response.status === 200) {
         resolve();

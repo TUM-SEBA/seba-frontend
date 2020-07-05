@@ -1,4 +1,5 @@
 export const ISVIEWBADGESDIALOGOPEN = "ISVIEWBADGESDIALOGOPEN";
+export const ISVIEWFEEDBACKDIALOGOPEN = "ISVIEWFEEDBACKDIALOGOPEN";
 export const SAVEMYBADGES = "SAVEMYBADGES";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const NEWBADGEAVAILABLE = "NEWBADGEAVAILABLE";
@@ -18,6 +19,11 @@ export const saveMyBadges = (value) => (dispatch) =>
     value,
   });
 
+export const setIsViewFeedbackDialogOpen = (value) => (dispatch) =>
+  dispatch({
+    type: ISVIEWFEEDBACKDIALOGOPEN,
+    value,
+  });
 export const setIsChangePasswordDialogOpen = (value) => (dispatch) =>
   dispatch({
     type: CHANGEPASSWORD,

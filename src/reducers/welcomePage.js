@@ -1,6 +1,7 @@
 import {
   ISVIEWBADGESDIALOGOPEN,
   SAVEMYBADGES,
+  ISVIEWFEEDBACKDIALOGOPEN,
   CHANGEPASSWORD,
   NEWBADGEAVAILABLE,
   SAVEMYPROFILE,
@@ -10,6 +11,7 @@ import {
 
 let initialState = {
   isViewBadgesDialogOpen: false,
+  isViewFeedbackDialogOpen: true,
   myBadges: {},
   isChangePasswordDialogOpen: false,
   newBadge: null,
@@ -28,6 +30,11 @@ export default function welcomePage(state = initialState, action) {
       return {
         ...state,
         isViewBadgesDialogOpen: action.value,
+      };
+    case ISVIEWFEEDBACKDIALOGOPEN:
+      return {
+        ...state,
+        isViewFeedbackDialogOpen: action.value,
       };
     case SAVEMYBADGES:
       return {

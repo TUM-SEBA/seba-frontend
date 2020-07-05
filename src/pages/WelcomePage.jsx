@@ -8,6 +8,7 @@ import ownerImage from "../assets/owner.png";
 import {withStyles} from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import ViewBadges from "../components/ViewBadges";
+import ViewFeedbackForm from "../components/FeedbackForm";
 import ChangePassword from "../components/ChangePassword";
 import SnackbarAlert from "../components/SnackbarAlert";
 import BadgeNotification from "../components/BadgeNotification";
@@ -98,6 +99,7 @@ function WelcomePage(props) {
         </Grid>
       </Grid>
       <ViewBadges />
+      <ViewFeedbackForm />
       <ChangePassword />
       <SnackbarAlert />
       <BadgeNotification badge={newBadge} />

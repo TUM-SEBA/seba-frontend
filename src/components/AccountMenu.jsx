@@ -9,6 +9,7 @@ import theme from "../themes";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
+  setIsViewFeedbackDialogOpen,
   setIsViewBadgesDialogOpen,
   setIsChangePasswordDialogOpen,
   setUserProfileDialogOpen,
@@ -90,6 +91,14 @@ function MenuPopupState(props) {
             >
               View Badges
             </MyMenuItem>
+            <MyMenuItem
+              onClick={() => {
+                setIsViewFeedbackDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              Feedbacks
+            </MyMenuItem>
           </Menu>
         </React.Fragment>
       )}
@@ -103,6 +112,7 @@ const mapStateToProps = ({loginPage: {snackBarData}}) => ({
 
 const mapDispatchToProps = {
   setIsViewBadgesDialogOpen: setIsViewBadgesDialogOpen,
+  setIsViewFeedbackDialogOpen: setIsViewFeedbackDialogOpen,
   getMyBadges: getMyBadges,
   setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
   getUserProfile: getUserProfile,

@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import {logout} from "../services/loginService";
 import AccountMenu from "./AccountMenu";
 import {connect} from "react-redux";
+import LoopIcon from "@material-ui/icons/Loop";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,9 +21,13 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(5),
     height: theme.spacing(5),
   },
-  large: {
+  logo: {
     width: theme.spacing(10),
     height: theme.spacing(10),
+    cursor: "pointer",
+  },
+  switchDiv: {
+    textAlign: "right",
   },
 
   headerColor: {
@@ -31,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
   sentenceCase: {
     textTransform: "none",
+    fontSize: "13px",
   },
 }));
 
@@ -38,18 +44,46 @@ const Header = (props) => {
   const classes = useStyles();
   const {logout} = props;
 
+  const {history} = props;
+
+  const currentUrl = window.location.pathname;
+
+  function switchUser() {
+    if (currentUrl === "/owner") {
+      history.push("/caretaker");
+      window.location.reload();
+    } else if (currentUrl === "/caretaker") {
+      history.push("/owner");
+      window.location.reload();
+    }
+  }
+
+  function gotoHome() {
+    history.push("/");
+    window.location.reload();
+  }
+
   return (
     <div className={classes.headerColor}>
       <AppBar className={classes.headerColor} position="static">
         <Toolbar>
           <Grid container direction="row" justify="space-around" alignItems="center">
-            <Grid item xs={4} md={8} sm={8} lg={10}>
-              <Avatar alt="Home" src={logo} className={classes.large} />
+            <Grid xs={6} sm={6} md={6} lg={9}>
+              <Avatar onClick={gotoHome} alt="Home" src={logo} className={classes.logo} />
             </Grid>
-            <Grid item xs={4} md={2} sm={2} lg={1}>
+            <Grid xs={6} sm={2} md={2} lg={1}>
               <AccountMenu />
             </Grid>
-            <Grid item xs={4} md={2} sm={2} lg={1}>
+            {currentUrl !== "/" && (
+              <Grid className={classes.switchDiv} xs={6} sm={2} md={2} lg={1}>
+                <Button onClick={switchUser}>
+                  <Typography className={classes.sentenceCase}>Switch</Typography>
+                  <LoopIcon />
+                </Button>
+              </Grid>
+            )}
+
+            <Grid xs={6} sm={2} md={2} lg={1}>
               <Button onClick={logout}>
                 <Typography className={classes.sentenceCase}>Sign Out</Typography>
                 <ExitToAppOutlinedIcon />

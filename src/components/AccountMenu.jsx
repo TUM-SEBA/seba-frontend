@@ -21,6 +21,7 @@ const styles = (theme) => ({
   },
   sentenceCase: {
     textTransform: "none",
+    fontSize: "13px",
   },
 });
 

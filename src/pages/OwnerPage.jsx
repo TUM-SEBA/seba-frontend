@@ -9,6 +9,8 @@ import {
   Card,
   CardContent,
   Button,
+  CardActionArea,
+  CardMedia,
   Grid,
 } from "@material-ui/core";
 import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
@@ -20,6 +22,7 @@ import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
 
 const filterByOptions = ["ID", "Description"];
 const dummyImage =
@@ -29,6 +32,17 @@ const styles = (theme) => ({
   ownerPage: {
     height: "100vh",
     overflow: "hidden",
+  },
+  root: {
+    maxWidth: 400,
+    minHeight: 250,
+  },
+  divActionArea: {
+    minHeight: 250,
+  },
+  media: {
+    height: 140,
+    objectFit: "cover",
   },
   ownerHeader: {},
   container: {
@@ -57,13 +71,13 @@ const styles = (theme) => ({
     color: "rgba(0, 0, 0, 0.4)",
     fontSize: "10pt",
   },
-  offerCardTitle: {
-    marginLeft: theme.spacing(3),
-    height: theme.spacing(3),
-    textAlign: "justify",
-    fontSize: "13pt",
-    fontWeight: "fontWeightBold",
-  },
+  // offerCardTitle: {
+  //   marginLeft: theme.spacing(3),
+  //   height: theme.spacing(3),
+  //   textAlign: "justify",
+  //   fontSize: "13pt",
+  //   fontWeight: "fontWeightBold",
+  // },
   offerCardContent: {
     height: theme.spacing(12),
     display: "flex",
@@ -77,17 +91,20 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(3),
   },
   offerCreatedDate: {
-    marginLeft: theme.spacing(3),
-    marginTop: theme.spacing(2),
-    textAlign: "justify",
-    fontSize: "10pt",
+    // marginLeft: theme.spacing(3),
+    // marginTop: theme.spacing(2),
+    // textAlign: "justify",
+    // fontSize: "10pt",
   },
   offerCardDescription: {
-    marginLeft: theme.spacing(3),
-    height: theme.spacing(4),
-    textAlign: "justify",
-    fontSize: "10pt",
-    overflowY: "scroll",
+    // marginLeft: theme.spacing(3),
+    // height: theme.spacing(4),
+    // textAlign: "justify",
+    // fontSize: "10pt",
+    overflowY: "auto",
+  },
+  offerDurationDates: {
+    color: "black",
   },
   button: {
     width: "100%",
@@ -152,7 +169,7 @@ function OfferPage(props) {
   function getCreateOffer() {
     return (
       <Grid item xs={12} md={6} lg={4} key={0}>
-        <Card variant="outlined">
+        <Card className={classes.root} variant="outlined">
           <CardContent className={classes.createOfferContent}>
             <Button
               variant="contained"
@@ -171,7 +188,43 @@ function OfferPage(props) {
   function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
-        <Card variant="outlined">
+        <Card className={classes.root} variant="outlined">
+          <CardActionArea className={classes.divActionArea}>
+            <CardMedia
+              className={classes.media}
+              image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
+              title="Contemplative Reptile"
+            />
+
+            <CardContent>
+              <Typography
+                className={classes.offerCardTitle}
+                gutterBottom
+                variant="h5"
+                component="h2"
+              >
+                {offer.title}
+              </Typography>
+              <Typography
+                className={classes.offerDurationDates}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
+              </Typography>
+
+              <Typography
+                className={classes.offerCardDescription}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                {offer.description}
+              </Typography>
+            </CardContent>
+
+            {/*           
           <div className={classes.offerCardId}>
             Created on: {formatDate(offer.createdDate)}
           </div>
@@ -182,7 +235,8 @@ function OfferPage(props) {
           <div className={classes.offerCardDescription}>{offer.description}</div>
           <div className={classes.offerCreatedDate}>
             Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
-          </div>
+          </div> */}
+          </CardActionArea>
         </Card>
       </Grid>
     );

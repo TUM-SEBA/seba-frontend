@@ -175,7 +175,7 @@ function CaretakerPage(props) {
   return (
     <div>
       <div>
-        <Header />
+        <Header history={history} />
       </div>
       <div className={classes.container}>
         <div>

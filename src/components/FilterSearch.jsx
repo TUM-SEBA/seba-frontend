@@ -1,6 +1,13 @@
 import React, {useState} from "react";
 import {withStyles} from "@material-ui/styles";
-import {FormControl, Grid, InputLabel, Select, TextField} from "@material-ui/core";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  Select,
+  TextField,
+  MenuItem,
+} from "@material-ui/core";
 
 const styles = (theme) => ({
   filter: {
@@ -29,21 +36,18 @@ function FilterSearch(props) {
     <Grid container spacing={2}>
       <Grid item xs={12} sm={4} md={5}>
         <FormControl className={classes.filter}>
-          <InputLabel htmlFor="filter-by">Filter by</InputLabel>
+          <InputLabel id="filter-by-label">Filter by</InputLabel>
           <Select
-            native
+            labelId="filter-by-label"
+            id="filter-by"
             value={filterValue}
             onChange={handleChangeFilter}
-            inputProps={{
-              id: "filter-by",
-            }}
             color="secondary"
           >
-            <option key="-1" aria-label="None" value="-1" />
             {filterOptions.map((value, index) => (
-              <option key={index} value={index}>
+              <MenuItem key={index} value={index}>
                 {value}
-              </option>
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

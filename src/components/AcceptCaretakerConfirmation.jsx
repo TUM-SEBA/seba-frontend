@@ -63,7 +63,7 @@ const styles = (theme) => ({
     height: theme.spacing(10),
     borderRadius: "100%",
   },
-  button: {
+  interestedButton: {
     width: "100%",
   },
 });
@@ -152,7 +152,7 @@ function AcceptCaretakerConfirmation(props) {
             <Grid item xs={12} sm={3}>
               <Button
                 variant="contained"
-                className={classes.button}
+                className={classes.interestedButton}
                 color="secondary"
                 size="small"
                 onClick={() => handleAccept()}
@@ -163,7 +163,7 @@ function AcceptCaretakerConfirmation(props) {
             <Grid item xs={12} sm={3}>
               <Button
                 variant="contained"
-                className={classes.button}
+                className={classes.interestedButton}
                 color="secondary"
                 size="small"
                 onClick={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}

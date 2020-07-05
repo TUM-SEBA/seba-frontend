@@ -30,7 +30,7 @@ const styles = (theme) => ({
     minWidth: "400px",
     margin: "0 auto",
   },
-  button: {},
+  interestedButton: {},
   photoButton: {
     borderRadius: "100%",
     width: "200px",

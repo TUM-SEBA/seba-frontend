@@ -28,7 +28,16 @@ function App() {
             }
           />
           <Route exact path="/error" render={() => <ErrorPage history={history} />} />
-          <Route path="/caretaker" render={() => <CaretakerPage history={history} />} />
+          <Route
+            path="/caretaker"
+            render={() =>
+              !isAuthenticated() ? (
+                <LoginPage history={history} />
+              ) : (
+                <CaretakerPage history={history} />
+              )
+            }
+          />
           <Route path="/owner" render={() => <OwnerPage history={history} />} />
           <Route path="*" render={() => <ErrorPage history={history} />} />
         </Switch>

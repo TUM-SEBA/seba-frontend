@@ -109,7 +109,7 @@ const styles = (theme) => ({
   offerDurationDates: {
     color: "black",
   },
-  button: {
+  interestedButton: {
     width: "100%",
   },
   createOfferButton: {

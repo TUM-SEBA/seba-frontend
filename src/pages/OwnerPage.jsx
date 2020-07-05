@@ -94,8 +94,8 @@ const styles = (theme) => ({
   },
   createOfferButton: {
     borderRadius: "100%",
-    width: "50%",
-    height: "100%",
+    width: "176px",
+    height: "176px",
     fontSize: "5rem",
     size: "large",
   },

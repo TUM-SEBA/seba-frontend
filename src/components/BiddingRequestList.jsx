@@ -38,7 +38,7 @@ const styles = (theme) => ({
     height: theme.spacing(10),
     borderRadius: "100%",
   },
-  button: {
+  interestedButton: {
     width: "100%",
   },
   gridContainer: {
@@ -175,7 +175,7 @@ function BiddingRequestList(props) {
                   <Grid item xs={12} sm={4} md={5} lg={6}>
                     <Button
                       variant="contained"
-                      className={classes.button}
+                      className={classes.interestedButton}
                       color="secondary"
                       size="small"
                       onClick={() => {
@@ -191,7 +191,7 @@ function BiddingRequestList(props) {
                   <Grid item xs={12} sm={4} md={5} lg={6}>
                     <Button
                       variant="contained"
-                      className={classes.button}
+                      className={classes.interestedButton}
                       color="secondary"
                       size="small"
                     >

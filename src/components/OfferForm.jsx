@@ -30,7 +30,7 @@ const styles = (theme) => ({
     minWidth: "400px",
     margin: "0 auto",
   },
-  button: {},
+  interestedButton: {},
   photoButton: {
     borderRadius: "100%",
     width: "200px",
@@ -259,14 +259,14 @@ function OfferForm(props) {
         </DialogContent>
         <DialogActions>
           <Button
-            className={classes.button}
+            className={classes.interestedButton}
             onClick={() => setIsOfferDialogOpen(false)}
             color="secondary"
           >
             Cancel
           </Button>
           <Button
-            className={classes.button}
+            className={classes.interestedButton}
             onClick={handleSave}
             color="secondary"
             variant="contained"

@@ -68,7 +68,7 @@ const styles = (theme) => ({
     minWidth: "400px",
     margin: "0 auto",
   },
-  button: {},
+  interestedButton: {},
 });
 
 const CustomTextField = withStyles({
@@ -244,14 +244,14 @@ function BiddingRequestForm(props) {
         </DialogContent>
         <DialogActions>
           <Button
-            className={classes.button}
+            className={classes.interestedButton}
             onClick={() => setIsBiddingRequestDialogOpen(false)}
             color="secondary"
           >
             Cancel
           </Button>
           <Button
-            className={classes.button}
+            className={classes.interestedButton}
             onClick={handleSave}
             color="secondary"
             variant="contained"

@@ -144,21 +144,21 @@ function BiddingRequestList(props) {
   const [offer, setOffer] = useState(initialOffer);
   useEffect(() => {
     if (offerId !== "") {
-      getBiddingRequestByOffer(offerId)
-        .then((biddingRequests) => {
-          setBiddingRequests(biddingRequests);
-        })
-        .catch((status) => {
-          if (status === 401) {
-            history.push("/");
-            window.location.reload();
-          }
-          showSnackBar(true, fetchFailed, "error");
-        });
       getOffer(offerId)
         .then((offer) => {
           const assignedOffer = Object.assign(initialOffer, offer);
           setOffer(assignedOffer);
+          getBiddingRequestByOffer(offerId)
+            .then((biddingRequests) => {
+              setBiddingRequests(biddingRequests);
+            })
+            .catch((status) => {
+              if (status === 401) {
+                history.push("/");
+                window.location.reload();
+              }
+              showSnackBar(true, fetchFailed, "error");
+            });
         })
         .catch((status) => {
           if (status === 401) {
@@ -223,16 +223,17 @@ function BiddingRequestList(props) {
       </Grid>
     );
   }
+  const createdDate = new Date(offer.createdDate);
   return (
     <Dialog
       fullWidth
       maxWidth="md"
       open={isBiddingRequestDialogOpen}
-      onClose={() => setIsBiddingRequestDialogOpen(false)}
+      onClose={() => setIsBiddingRequestDialogOpen(false, "")}
     >
       <Grid container className={classes.header}>
         <Grid item xs={12} sm={4} md={3} lg={3} className={classes.offerNumber}>
-          Offer Number: {offer.offerNumber}
+          Offer Title: {offer.title}
         </Grid>
         <Grid item xs={"auto"} sm={"auto"} md={4} lg={4} />
         <Grid item xs={12} sm={8} md={5} lg={5}>
@@ -248,7 +249,9 @@ function BiddingRequestList(props) {
           <Grid item xs={12} sm={4}>
             <div className={classes.line}>{offer.entity._id}</div>
             <div className={classes.line}>{offer.entity.description}</div>
-            <div className={classes.line}>Created on: {offer.createdDate}</div>
+            <div className={classes.line}>
+              Created on: {createdDate.toLocaleString("default")}
+            </div>
           </Grid>
           <Grid item xs={"auto"} sm={5} md={6} lg={6} />
           <Grid item xs={12} sm={3} md={2} lg={2}>

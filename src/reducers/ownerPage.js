@@ -22,8 +22,8 @@ let initialState = {
   },
   biddingRequestSelectedFilterBy: "-1",
   biddingRequestSearchValue: "",
-  isBiddingRequestDialogOpen: true,
-  offerId: "5ee0956e97529563045c4912",
+  isBiddingRequestDialogOpen: false,
+  offerId: "",
   isAcceptCaretakerConfirmationDialogOpen: false,
   biddingRequestId: "",
 };

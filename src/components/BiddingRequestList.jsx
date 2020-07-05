@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Button, Card, CardActions, Dialog, Grid} from "@material-ui/core";
+import {Button, Card, CardActions, Dialog, Grid, Typography} from "@material-ui/core";
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
@@ -15,6 +15,7 @@ import {getBiddingRequestByOffer} from "../services/biddingRequestService";
 import {showSnackBar} from "../actions/loginPage";
 import {getOffer} from "../services/offerService";
 import SnackbarAlert from "./SnackbarAlert";
+import noDataFoundImage from "../assets/no-data-found.png";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -49,6 +50,21 @@ const styles = (theme) => ({
   },
   line: {
     margin: `${theme.spacing(1)}px 0`,
+  },
+  noDataFound: {
+    margin: "25px auto",
+  },
+  noDataFoundImageContainer: {
+    textAlign: "center",
+  },
+  noDataFoundImage: {
+    width: "250px",
+  },
+  noDataFoundTextContainer: {
+    textAlign: "center",
+  },
+  noDataFoundText: {
+    fontSize: "14pt",
   },
 });
 
@@ -128,20 +144,21 @@ function BiddingRequestList(props) {
   const [offer, setOffer] = useState(initialOffer);
   useEffect(() => {
     if (offerId !== "") {
-      getBiddingRequestByOffer(offerId)
-        .then((biddingRequests) => {
-          setBiddingRequests(biddingRequests);
-        })
-        .catch((status) => {
-          if (status === 401) {
-            history.push("/");
-            window.location.reload();
-          }
-          showSnackBar(true, fetchFailed, "error");
-        });
       getOffer(offerId)
         .then((offer) => {
-          setOffer(offer);
+          const assignedOffer = Object.assign(initialOffer, offer);
+          setOffer(assignedOffer);
+          getBiddingRequestByOffer(offerId)
+            .then((biddingRequests) => {
+              setBiddingRequests(biddingRequests);
+            })
+            .catch((status) => {
+              if (status === 401) {
+                history.push("/");
+                window.location.reload();
+              }
+              showSnackBar(true, fetchFailed, "error");
+            });
         })
         .catch((status) => {
           if (status === 401) {
@@ -206,16 +223,17 @@ function BiddingRequestList(props) {
       </Grid>
     );
   }
+  const createdDate = new Date(offer.createdDate);
   return (
     <Dialog
       fullWidth
       maxWidth="md"
       open={isBiddingRequestDialogOpen}
-      onClose={() => setIsBiddingRequestDialogOpen(false)}
+      onClose={() => setIsBiddingRequestDialogOpen(false, "")}
     >
       <Grid container className={classes.header}>
         <Grid item xs={12} sm={4} md={3} lg={3} className={classes.offerNumber}>
-          Offer Number: {offer.offerNumber}
+          Offer Title: {offer.title}
         </Grid>
         <Grid item xs={"auto"} sm={"auto"} md={4} lg={4} />
         <Grid item xs={12} sm={8} md={5} lg={5}>
@@ -231,7 +249,9 @@ function BiddingRequestList(props) {
           <Grid item xs={12} sm={4}>
             <div className={classes.line}>{offer.entity._id}</div>
             <div className={classes.line}>{offer.entity.description}</div>
-            <div className={classes.line}>Created on: {offer.createdDate}</div>
+            <div className={classes.line}>
+              Created on: {createdDate.toLocaleString("default")}
+            </div>
           </Grid>
           <Grid item xs={"auto"} sm={5} md={6} lg={6} />
           <Grid item xs={12} sm={3} md={2} lg={2}>
@@ -239,26 +259,43 @@ function BiddingRequestList(props) {
           </Grid>
         </Grid>
         <Grid container className={classes.gridContainer} spacing={2}>
-          {biddingRequests
-            .filter((biddingRequest) => {
-              var searchRegex = new RegExp(searchValue, "gi");
-              if (searchValue === "") {
-                return true;
-              }
-              if (selectedFilterBy === "0") {
-                if (searchRegex.test(biddingRequest._id.toString())) {
+          {biddingRequests.length > 0 ? (
+            biddingRequests
+              .filter((biddingRequest) => {
+                const searchRegex = new RegExp(searchValue, "gi");
+                if (searchValue === "") {
                   return true;
                 }
-              } else if (selectedFilterBy === "1") {
-                if (searchRegex.test(biddingRequest.description)) {
+                if (selectedFilterBy === 1) {
+                  if (searchRegex.test(biddingRequest._id.toString())) {
+                    return true;
+                  }
+                } else if (selectedFilterBy === 2) {
+                  if (searchRegex.test(biddingRequest.description)) {
+                    return true;
+                  }
+                } else if (selectedFilterBy === "") {
                   return true;
                 }
-              } else if (selectedFilterBy === "-1") {
-                return true;
-              }
-              return false;
-            })
-            .map((biddingRequest, index) => getGridItem(index, biddingRequest))}
+                return false;
+              })
+              .map((biddingRequest, index) => getGridItem(index, biddingRequest))
+          ) : (
+            <div key={"noDataFound"} className={classes.noDataFound}>
+              <div className={classes.noDataFoundImageContainer}>
+                <img
+                  className={classes.noDataFoundImage}
+                  src={noDataFoundImage}
+                  alt={"No Data Found"}
+                />
+              </div>
+              <div className={classes.noDataFoundTextContainer}>
+                <Typography className={classes.noDataFoundText}>
+                  No bidding request is available for now. Please check again later.
+                </Typography>
+              </div>
+            </div>
+          )}
         </Grid>
       </div>
       <AcceptCaretakerConfirmation />

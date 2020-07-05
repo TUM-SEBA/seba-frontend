@@ -35,10 +35,10 @@ const styles = (theme) => ({
   },
   root: {
     maxWidth: 400,
-    minHeight: 250,
+    minHeight: 262,
   },
   divActionArea: {
-    minHeight: 250,
+    minHeight: 262,
   },
   media: {
     height: 140,
@@ -70,6 +70,9 @@ const styles = (theme) => ({
     padding: `${theme.spacing(1)}px ${theme.spacing(2)}px 0 0`,
     color: "rgba(0, 0, 0, 0.4)",
     fontSize: "10pt",
+  },
+  divCardContentText: {
+    minHeight: "90px",
   },
   // offerCardTitle: {
   //   marginLeft: theme.spacing(3),
@@ -196,7 +199,7 @@ function OfferPage(props) {
               title="Contemplative Reptile"
             />
 
-            <CardContent>
+            <CardContent className={classes.divCardContentText}>
               <Typography
                 className={classes.offerCardTitle}
                 gutterBottom

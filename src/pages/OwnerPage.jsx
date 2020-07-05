@@ -23,8 +23,9 @@ import {fetchFailed} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
+import FilterSearch from "../components/FilterSearch";
 
-const filterByOptions = ["ID", "Description"];
+const filterByOptions = ["Title", "Description"];
 const dummyImage =
   "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg";
 
@@ -227,7 +228,7 @@ function OfferPage(props) {
               </Typography>
             </CardContent>
 
-            {/*           
+            {/*
           <div className={classes.offerCardId}>
             Created on: {formatDate(offer.createdDate)}
           </div>
@@ -260,42 +261,12 @@ function OfferPage(props) {
                 Hello, Owner {localStorage["username"]}
               </Grid>
               <Grid item xs={"auto"} md={2} lg={4} />
-              <Grid container item xs={12} md={7} lg={5} spacing={2}>
-                <Grid item xs={12} sm={4} md={5}>
-                  <FormControl className={classes.filter}>
-                    <InputLabel htmlFor="filter-by">Filter by</InputLabel>
-                    <Select
-                      native
-                      value={selectedFilterBy}
-                      onChange={(event) => {
-                        changeFilterBy(event.target.value);
-                      }}
-                      inputProps={{
-                        id: "filter-by",
-                      }}
-                      color="secondary"
-                    >
-                      <option key="-1" aria-label="None" value="-1" />
-                      {filterByOptions.map((value, index) => (
-                        <option key={index} value={index}>
-                          {value}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6} md={7}>
-                  <TextField
-                    className={classes.search}
-                    value={searchValue}
-                    onChange={(event) => {
-                      changeSearch(event.target.value);
-                    }}
-                    color="secondary"
-                    label="Search"
-                  />
-                </Grid>
-                <Grid item xs={"auto"} sm={2} md={"auto"} />
+              <Grid item xs={12} md={7} lg={5}>
+                <FilterSearch
+                  filterOptions={filterByOptions}
+                  changeFilterCallback={(value) => changeFilterBy(value)}
+                  changeSearchQueryCallback={(value) => changeSearch(value)}
+                />
               </Grid>
             </Grid>
           </div>
@@ -309,15 +280,15 @@ function OfferPage(props) {
                   if (searchValue === "") {
                     return true;
                   }
-                  if (selectedFilterBy === "0") {
-                    if (searchRegex.test(offer._id.toString())) {
+                  if (selectedFilterBy === 1) {
+                    if (searchRegex.test(offer.title)) {
                       return true;
                     }
-                  } else if (selectedFilterBy === "1") {
+                  } else if (selectedFilterBy === 2) {
                     if (searchRegex.test(offer.description)) {
                       return true;
                     }
-                  } else if (selectedFilterBy === "-1") {
+                  } else if (selectedFilterBy === "") {
                     return true;
                   }
                   return false;

@@ -82,7 +82,7 @@ const styles = (theme) => ({
     fontSize: "10pt",
     overflowY: "scroll",
   },
-  button: {
+  interestedButton: {
     width: "100%",
   },
   createOfferButton: {
@@ -185,7 +185,7 @@ function OfferPage(props) {
       <div>
         <Grid container direction="column" justify="flex-start" alignItems="stretch">
           <Grid item>
-            <Header />
+            <Header history={history} />
           </Grid>
         </Grid>
 

@@ -2,10 +2,6 @@ import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
-  FormControl,
-  InputLabel,
-  Select,
-  TextField,
   Card,
   CardContent,
   Button,
@@ -13,7 +9,12 @@ import {
   CardMedia,
   Grid,
 } from "@material-ui/core";
-import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
+import {
+  changeFilterBy,
+  changeSearch,
+  setIsBiddingRequestDialogOpen,
+  setIsOfferDialogOpen,
+} from "../actions/ownerPage";
 import SnackbarAlert from "../components/SnackbarAlert";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
@@ -24,10 +25,9 @@ import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import FilterSearch from "../components/FilterSearch";
+import BiddingRequestList from "../components/BiddingRequestList";
 
 const filterByOptions = ["Title", "Description"];
-const dummyImage =
-  "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg";
 
 const styles = (theme) => ({
   ownerPage: {
@@ -137,6 +137,7 @@ function OfferPage(props) {
     changeFilterBy,
     changeSearch,
     setIsOfferDialogOpen,
+    setIsBiddingRequestDialogOpen,
     showSnackBar,
   } = props;
 
@@ -189,11 +190,19 @@ function OfferPage(props) {
       </Grid>
     );
   }
+
+  function handleCardClick(offerId) {
+    setIsBiddingRequestDialogOpen(true, offerId);
+  }
+
   function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
         <Card className={classes.root} variant="outlined">
-          <CardActionArea className={classes.divActionArea}>
+          <CardActionArea
+            className={classes.divActionArea}
+            onClick={() => handleCardClick(offer._id)}
+          >
             <CardMedia
               className={classes.media}
               image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
@@ -297,6 +306,7 @@ function OfferPage(props) {
             </Grid>
           </div>
           <OfferForm history={history} />
+          <BiddingRequestList history={history} />
           <SnackbarAlert />
         </div>
       </div>
@@ -315,6 +325,7 @@ const mapDispatchToProps = {
   changeFilterBy: changeFilterBy,
   changeSearch: changeSearch,
   setIsOfferDialogOpen: setIsOfferDialogOpen,
+  setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
   showSnackBar: showSnackBar,
 };
 

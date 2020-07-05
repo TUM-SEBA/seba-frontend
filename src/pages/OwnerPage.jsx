@@ -9,6 +9,8 @@ import {
   Card,
   CardContent,
   Button,
+  CardActionArea,
+  CardMedia,
   Grid,
 } from "@material-ui/core";
 import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
@@ -20,14 +22,31 @@ import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
 
 const filterByOptions = ["ID", "Description"];
 const dummyImage =
   "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg";
 
 const styles = (theme) => ({
+  ownerPage: {
+    height: "100vh",
+    overflow: "hidden",
+  },
+  root: {
+    maxWidth: 400,
+    minHeight: 262,
+  },
+  divActionArea: {
+    minHeight: 262,
+  },
+  media: {
+    height: 140,
+    objectFit: "cover",
+  },
+  ownerHeader: {},
   container: {
-    margin: `${theme.spacing(10)}px auto 0 auto`,
+    margin: "40px auto",
     width: "80%",
   },
   filter: {
@@ -38,6 +57,8 @@ const styles = (theme) => ({
   },
   body: {
     marginTop: theme.spacing(5),
+    height: "calc(100vh - 208px)",
+    overflowY: "auto",
   },
   offerImage: {
     width: theme.spacing(10),
@@ -50,13 +71,16 @@ const styles = (theme) => ({
     color: "rgba(0, 0, 0, 0.4)",
     fontSize: "10pt",
   },
-  offerCardTitle: {
-    marginLeft: theme.spacing(3),
-    height: theme.spacing(3),
-    textAlign: "justify",
-    fontSize: "13pt",
-    fontWeight: "fontWeightBold",
+  divCardContentText: {
+    minHeight: "90px",
   },
+  // offerCardTitle: {
+  //   marginLeft: theme.spacing(3),
+  //   height: theme.spacing(3),
+  //   textAlign: "justify",
+  //   fontSize: "13pt",
+  //   fontWeight: "fontWeightBold",
+  // },
   offerCardContent: {
     height: theme.spacing(12),
     display: "flex",
@@ -70,25 +94,28 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(3),
   },
   offerCreatedDate: {
-    marginLeft: theme.spacing(3),
-    marginTop: theme.spacing(2),
-    textAlign: "justify",
-    fontSize: "10pt",
+    // marginLeft: theme.spacing(3),
+    // marginTop: theme.spacing(2),
+    // textAlign: "justify",
+    // fontSize: "10pt",
   },
   offerCardDescription: {
-    marginLeft: theme.spacing(3),
-    height: theme.spacing(4),
-    textAlign: "justify",
-    fontSize: "10pt",
-    overflowY: "scroll",
+    // marginLeft: theme.spacing(3),
+    // height: theme.spacing(4),
+    // textAlign: "justify",
+    // fontSize: "10pt",
+    overflowY: "auto",
+  },
+  offerDurationDates: {
+    color: "black",
   },
   interestedButton: {
     width: "100%",
   },
   createOfferButton: {
     borderRadius: "100%",
-    width: "50%",
-    height: "100%",
+    width: "176px",
+    height: "176px",
     fontSize: "5rem",
     size: "large",
   },
@@ -145,7 +172,7 @@ function OfferPage(props) {
   function getCreateOffer() {
     return (
       <Grid item xs={12} md={6} lg={4} key={0}>
-        <Card variant="outlined">
+        <Card className={classes.root} variant="outlined">
           <CardContent className={classes.createOfferContent}>
             <Button
               variant="contained"
@@ -164,7 +191,43 @@ function OfferPage(props) {
   function getGridItem(index, offer) {
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
-        <Card variant="outlined">
+        <Card className={classes.root} variant="outlined">
+          <CardActionArea className={classes.divActionArea}>
+            <CardMedia
+              className={classes.media}
+              image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
+              title="Contemplative Reptile"
+            />
+
+            <CardContent className={classes.divCardContentText}>
+              <Typography
+                className={classes.offerCardTitle}
+                gutterBottom
+                variant="h5"
+                component="h2"
+              >
+                {offer.title}
+              </Typography>
+              <Typography
+                className={classes.offerDurationDates}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
+              </Typography>
+
+              <Typography
+                className={classes.offerCardDescription}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                {offer.description}
+              </Typography>
+            </CardContent>
+
+            {/*           
           <div className={classes.offerCardId}>
             Created on: {formatDate(offer.createdDate)}
           </div>
@@ -175,14 +238,15 @@ function OfferPage(props) {
           <div className={classes.offerCardDescription}>{offer.description}</div>
           <div className={classes.offerCreatedDate}>
             Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
-          </div>
+          </div> */}
+          </CardActionArea>
         </Card>
       </Grid>
     );
   }
   if (isAuthenticated()) {
     return (
-      <div>
+      <div className={classes.ownerPage}>
         <Grid container direction="column" justify="flex-start" alignItems="stretch">
           <Grid item>
             <Header history={history} />
@@ -190,7 +254,7 @@ function OfferPage(props) {
         </Grid>
 
         <div className={classes.container}>
-          <div>
+          <div className={classes.ownerHeader}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 Hello, Owner {localStorage["username"]}

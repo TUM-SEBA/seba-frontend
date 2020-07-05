@@ -6,7 +6,7 @@ import {
 } from "../actions/caretakerPage";
 
 let initialState = {
-  selectedFilterBy: "-1",
+  selectedFilterBy: "",
   searchValue: "",
   isBiddingRequestDialogOpen: false,
   biddingRequestFields: {

@@ -35,7 +35,7 @@ const noOfferMessages = [
   "You do not have any interesting offers yet.",
   "There is no offers that is not interested for you.",
 ];
-const filterByOptions = ["ID", "Description"];
+const filterByOptions = ["Owner", "Description"];
 const styles = (theme) => ({
   container: {
     margin: `${theme.spacing(10)}px auto 0 auto`,
@@ -154,7 +154,24 @@ function CaretakerPage(props) {
         showSnackBar(true, saveFailed, "error");
       });
   }
-
+  const filteredOffers = offers.filter((offer) => {
+    var searchRegex = new RegExp(searchValue, "gi");
+    if (searchValue === "") {
+      return true;
+    }
+    if (selectedFilterBy === 1) {
+      if (searchRegex.test(offer.owner.username.toString())) {
+        return true;
+      }
+    } else if (selectedFilterBy === 2) {
+      if (searchRegex.test(offer.description)) {
+        return true;
+      }
+    } else if (selectedFilterBy === "") {
+      return true;
+    }
+    return false;
+  });
   return (
     <div>
       <div>
@@ -192,26 +209,8 @@ function CaretakerPage(props) {
         <div className={classes.body}>
           <Grid container spacing={2}>
             {offers.length > 0 ? (
-              offers
-                .filter((offer) => {
-                  var searchRegex = new RegExp(searchValue, "gi");
-                  if (searchValue === "") {
-                    return true;
-                  }
-                  if (selectedFilterBy === "0") {
-                    if (searchRegex.test(offer._id.toString())) {
-                      return true;
-                    }
-                  } else if (selectedFilterBy === "1") {
-                    if (searchRegex.test(offer.description)) {
-                      return true;
-                    }
-                  } else if (selectedFilterBy === "-1") {
-                    return true;
-                  }
-                  return false;
-                })
-                .map((offer, index) => {
+              filteredOffers.length > 0 ? (
+                filteredOffers.map((offer, index) => {
                   // TODO: remove this when image has been implemented on the backend
                   offer.image = dummyDogImage;
                   return (
@@ -226,6 +225,22 @@ function CaretakerPage(props) {
                     />
                   );
                 })
+              ) : (
+                <div key={"noDataFound"} className={classes.noDataFound}>
+                  <div className={classes.noDataFoundImageContainer}>
+                    <img
+                      className={classes.noDataFoundImage}
+                      src={noDataFoundImage}
+                      alt={"No Data Found"}
+                    />
+                  </div>
+                  <div className={classes.noDataFoundTextContainer}>
+                    <Typography className={classes.noDataFoundText}>
+                      There is no offer based on your search.
+                    </Typography>
+                  </div>
+                </div>
+              )
             ) : (
               <div key={"noDataFound"} className={classes.noDataFound}>
                 <div className={classes.noDataFoundImageContainer}>

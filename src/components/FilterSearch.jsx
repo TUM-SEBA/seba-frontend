@@ -45,7 +45,7 @@ function FilterSearch(props) {
             color="secondary"
           >
             {filterOptions.map((value, index) => (
-              <MenuItem key={index} value={index}>
+              <MenuItem key={index} value={index + 1}>
                 {value}
               </MenuItem>
             ))}

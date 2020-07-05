@@ -26,8 +26,13 @@ const dummyImage =
   "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg";
 
 const styles = (theme) => ({
+  ownerPage: {
+    height: "100vh",
+    overflow: "hidden",
+  },
+  ownerHeader: {},
   container: {
-    margin: `${theme.spacing(10)}px auto 0 auto`,
+    margin: "40px auto",
     width: "80%",
   },
   filter: {
@@ -38,6 +43,8 @@ const styles = (theme) => ({
   },
   body: {
     marginTop: theme.spacing(5),
+    height: "calc(100vh - 208px)",
+    overflowY: "auto",
   },
   offerImage: {
     width: theme.spacing(10),
@@ -182,7 +189,7 @@ function OfferPage(props) {
   }
   if (isAuthenticated()) {
     return (
-      <div>
+      <div className={classes.ownerPage}>
         <Grid container direction="column" justify="flex-start" alignItems="stretch">
           <Grid item>
             <Header history={history} />
@@ -190,7 +197,7 @@ function OfferPage(props) {
         </Grid>
 
         <div className={classes.container}>
-          <div>
+          <div className={classes.ownerHeader}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 Hello, Owner {localStorage["username"]}

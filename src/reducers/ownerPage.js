@@ -10,7 +10,7 @@ import {
 } from "../actions/ownerPage";
 
 let initialState = {
-  selectedFilterBy: "-1",
+  selectedFilterBy: "",
   searchValue: "",
   isOfferDialogOpen: false,
   offerFields: {

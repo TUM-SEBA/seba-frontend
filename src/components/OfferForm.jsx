@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import {
   Dialog,
   DialogTitle,
@@ -69,11 +69,13 @@ function OfferForm(props) {
     setOfferFieldValue,
   } = props;
 
+  const inputFileRef = useRef(null);
+  let images = [];
+
   async function handleSave() {
     const emptyField = Object.keys(offerFields).find(
       (keyName) => offerFields[keyName] === ""
     );
-
     if (emptyField) {
       showSnackBar(true, requiredFieldsEmpty + " " + emptyField, "error");
     } else if (offerFields["endDate"] <= offerFields["startDate"]) {
@@ -82,12 +84,13 @@ function OfferForm(props) {
       let offer = {
         owner: localStorage["id"],
         description: offerFields["description"],
+        category: offerFields["category"],
         startDate: offerFields["startDate"],
         endDate: offerFields["endDate"],
         createdDate: new Date(),
         title: offerFields["title"],
       };
-      insertOffer(offer)
+      insertOffer(offer, images)
         .then(() => {
           showSnackBar(true, saveSuccess, "success");
           setIsOfferDialogOpen(false);
@@ -102,6 +105,14 @@ function OfferForm(props) {
           showSnackBar(true, saveFailed, "error");
         });
     }
+  }
+
+  function handleBrowseClick() {
+    inputFileRef.current.click();
+  }
+
+  function handleFileChange(event) {
+    images = event.target.files;
   }
 
   return (
@@ -257,7 +268,19 @@ function OfferForm(props) {
                       <div>Upload Files:</div>
                     </Grid>
                     <Grid item xs={12} md={9}>
-                      <Button variant="contained" color="primary">
+                      <input
+                        type="file"
+                        name="file"
+                        multiple={true}
+                        style={{display: "none"}}
+                        ref={inputFileRef}
+                        onChange={handleFileChange}
+                      />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleBrowseClick}
+                      >
                         Browse
                       </Button>
                     </Grid>

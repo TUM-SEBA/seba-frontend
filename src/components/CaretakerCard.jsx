@@ -2,6 +2,7 @@ import React from "react";
 import {withStyles} from "@material-ui/styles";
 import {Button, Card, CardActions, CardContent, CardMedia, Grid} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import {publicURL} from "../constants";
 
 const styles = (theme) => {
   return {
@@ -67,13 +68,14 @@ const styles = (theme) => {
 
 function CaretakerCard(props) {
   const {classes, offer, showAction, interestedCallback, notInterestedCallback} = props;
+
   return (
     <Card variant="outlined">
       {/*<div className={classes.offerCardId}>{offer._id}</div>*/}
       <CardContent className={classes.offerCardContent}>
         <CardMedia
           className={classes.media}
-          image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
+          image={`${publicURL}/${offer.entity.images[0]}`}
           title="Contemplative Reptile"
         />
         <div className={classes.offerCardTextContent}>
@@ -91,7 +93,7 @@ function CaretakerCard(props) {
             <Typography
               className={classes.username}
               gutterBottom
-              variant="p"
+              variant="body1"
               component="p"
             >
               by @{offer.owner.username}

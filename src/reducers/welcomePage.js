@@ -11,7 +11,7 @@ import {
 
 let initialState = {
   isViewBadgesDialogOpen: false,
-  isViewFeedbackDialogOpen: true,
+  isViewFeedbackDialogOpen: false,
   myBadges: {},
   isChangePasswordDialogOpen: false,
   newBadge: null,

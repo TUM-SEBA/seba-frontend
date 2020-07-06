@@ -175,7 +175,6 @@ function BiddingRequestList(props) {
       <div className={classes.content}>
         <Grid container>
           <Grid item xs={12} sm={4}>
-            <div className={classes.line}>{offer.entity._id}</div>
             <div className={classes.line}>{offer.entity.description}</div>
             <div className={classes.line}>
               Created on: {createdDate.toLocaleString("default")}

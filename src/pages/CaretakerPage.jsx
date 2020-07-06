@@ -13,7 +13,7 @@ import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
 import {fetchFailed, saveFailed, saveSuccess} from "../constants";
 import FilterSearch from "../components/FilterSearch";
-import CaretakerGrid from "../components/CaretakerGrid";
+import CaretakerCard from "../components/CaretakerCard";
 import Header from "../components/Header";
 import noDataFoundImage from "../assets/no-data-found.png";
 import dummyDogImage from "../assets/dummy-dog.jpeg";
@@ -214,15 +214,19 @@ function CaretakerPage(props) {
                   // TODO: remove this when image has been implemented on the backend
                   offer.image = dummyDogImage;
                   return (
-                    <CaretakerGrid
-                      key={index}
-                      offer={offer}
-                      showAction={activeTab === 0}
-                      interestedCallback={() =>
-                        setIsBiddingRequestDialogOpen(true, offer._id)
-                      }
-                      notInterestedCallback={() => handleNotInterestedCallback(offer._id)}
-                    />
+                    <Grid item xs={12} md={6} lg={4} key={offer._id}>
+                      <CaretakerCard
+                        key={index}
+                        offer={offer}
+                        showAction={activeTab === 0}
+                        interestedCallback={() =>
+                          setIsBiddingRequestDialogOpen(true, offer._id)
+                        }
+                        notInterestedCallback={() =>
+                          handleNotInterestedCallback(offer._id)
+                        }
+                      />
+                    </Grid>
                   );
                 })
               ) : (

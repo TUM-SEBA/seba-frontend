@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Button, Card, CardActions, Dialog, Grid, Typography} from "@material-ui/core";
+import {Dialog, Grid, Typography} from "@material-ui/core";
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
@@ -16,6 +16,7 @@ import {showSnackBar} from "../actions/loginPage";
 import {getOffer} from "../services/offerService";
 import SnackbarAlert from "./SnackbarAlert";
 import noDataFoundImage from "../assets/no-data-found.png";
+import BiddingRequestCard from "./BiddingRequestCard";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -34,22 +35,8 @@ const styles = (theme) => ({
   offerNumber: {
     marginBottom: theme.spacing(3),
   },
-  biddingRequestImage: {
-    width: theme.spacing(10),
-    height: theme.spacing(10),
-    borderRadius: "100%",
-  },
-  interestedButton: {
-    width: "100%",
-  },
   gridContainer: {
     marginTop: theme.spacing(2),
-  },
-  gridItem: {
-    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
-  },
-  line: {
-    margin: `${theme.spacing(1)}px 0`,
   },
   noDataFound: {
     margin: "25px auto",
@@ -67,11 +54,6 @@ const styles = (theme) => ({
     fontSize: "14pt",
   },
 });
-
-const dummyBiddingRequest = {
-  image:
-    "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
-};
 
 const initialCustomer = {
   _id: "",
@@ -169,60 +151,6 @@ function BiddingRequestList(props) {
         });
     }
   }, [offerId, history, showSnackBar]);
-  function getGridItem(index, biddingRequest) {
-    return (
-      <Grid item xs={12} md={6} lg={4} key={index}>
-        <Card variant="outlined" className={classes.gridItem}>
-          <Grid container>
-            <Grid item xs={5}>
-              <div>
-                <img
-                  className={classes.biddingRequestImage}
-                  src={dummyBiddingRequest.image}
-                  alt={"Caretaker"}
-                />
-              </div>
-              <div>{biddingRequest.caretaker.username}</div>
-            </Grid>
-            <Grid item xs={7}>
-              <div className={classes.line}>Price per hr: {biddingRequest.price}</div>
-              <div className={classes.line}>Total price: {biddingRequest.price}</div>
-              <CardActions>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={4} md={5} lg={6}>
-                    <Button
-                      variant="contained"
-                      className={classes.interestedButton}
-                      color="secondary"
-                      size="small"
-                      onClick={() => {
-                        setIsAcceptCaretakerConfirmationDialogOpen(
-                          true,
-                          biddingRequest._id
-                        );
-                      }}
-                    >
-                      Accept
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={4} md={5} lg={6}>
-                    <Button
-                      variant="contained"
-                      className={classes.interestedButton}
-                      color="secondary"
-                      size="small"
-                    >
-                      Reject
-                    </Button>
-                  </Grid>
-                </Grid>
-              </CardActions>
-            </Grid>
-          </Grid>
-        </Card>
-      </Grid>
-    );
-  }
   const createdDate = new Date(offer.createdDate);
   return (
     <Dialog
@@ -279,7 +207,19 @@ function BiddingRequestList(props) {
                 }
                 return false;
               })
-              .map((biddingRequest, index) => getGridItem(index, biddingRequest))
+              .map((biddingRequest, index) => (
+                <Grid item xs={12} md={6} lg={4} key={index}>
+                  <BiddingRequestCard
+                    biddingRequest={biddingRequest}
+                    acceptCallback={() => {
+                      setIsAcceptCaretakerConfirmationDialogOpen(
+                        true,
+                        biddingRequest._id
+                      );
+                    }}
+                  />
+                </Grid>
+              ))
           ) : (
             <div key={"noDataFound"} className={classes.noDataFound}>
               <div className={classes.noDataFoundImageContainer}>

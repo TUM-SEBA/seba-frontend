@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Dialog,
   DialogTitle,
@@ -18,10 +18,70 @@ import {
   setBiddingRequestFieldValue,
   setIsBiddingRequestDialogOpen,
 } from "../actions/caretakerPage";
-import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
+import {
+  fetchFailed,
+  publicURL,
+  requiredFieldsEmpty,
+  saveFailed,
+  saveSuccess,
+} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 import {NavigateBefore, NavigateNext} from "@material-ui/icons";
 import {insertBiddingRequest} from "../services/biddingRequestService";
+import {getOffer} from "../services/offerService";
+
+const initialCustomer = {
+  _id: "",
+  username: "",
+  password: "",
+  name: "",
+  phoneNumber: "",
+  address: "",
+  feedbacksGiven: 0,
+  starsRecieved: 0,
+  badgesEarned: {
+    _id: "",
+    name: "",
+    description: "",
+    image: "",
+  },
+  type: "",
+  interestedOffers: [],
+};
+
+const initialOffer = {
+  _id: "",
+  owner: "",
+  approveBiddingRequest: {
+    _id: "",
+    offer: {},
+    caretaker: initialCustomer,
+    createdDate: "",
+    price: 0,
+    remarks: "",
+  },
+  entity: {
+    _id: "",
+    owner: initialCustomer,
+    description: "",
+    images: [],
+    breed: "",
+  },
+  review: {
+    _id: "",
+    offer: {},
+    owner: initialCustomer,
+    caretaker: initialCustomer,
+    text: "",
+    rating: 0,
+  },
+  status: "",
+  description: "",
+  createdDate: "",
+  startDate: "",
+  endDate: "",
+  insurance: false,
+};
 
 const styles = (theme) => ({
   textFields: {
@@ -49,18 +109,19 @@ const styles = (theme) => ({
   petImageContainer: {
     position: "relative",
     width: "240px",
-    height: theme.spacing(10),
+    height: "150px",
     overflow: "hidden",
   },
   petImage: {
     position: "absolute",
-    width: "60px",
+    width: "100%",
+    height: "100%",
     transition: "all 500ms",
   },
   navigationButton: {
     width: theme.spacing(6),
     height: theme.spacing(6),
-    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
+    margin: `${theme.spacing(6)}px ${theme.spacing(1)}px`,
   },
   content: {
     height: "100%",
@@ -103,13 +164,6 @@ const keyMap = {
   },
 };
 
-// TODO: remove this when backend is connected
-const dummyOffer = {
-  image:
-    "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
-  length: 10,
-};
-
 function BiddingRequestForm(props) {
   const {
     history,
@@ -124,6 +178,24 @@ function BiddingRequestForm(props) {
   } = props;
 
   const [imageShow, setImageShow] = React.useState(0);
+  const [offer, setOffer] = React.useState(initialOffer);
+
+  useEffect(() => {
+    if (offerId) {
+      getOffer(offerId)
+        .then((offer) => {
+          setOffer(offer);
+          console.log(offer);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, fetchFailed, "error");
+        });
+    }
+  }, [offerId, history, showSnackBar]);
 
   async function handleSave() {
     const emptyField = Object.keys(biddingRequestFields).find(
@@ -159,7 +231,7 @@ function BiddingRequestForm(props) {
     }
   }
   function handleNavigateNext() {
-    if (imageShow < dummyOffer.length - 3) {
+    if (imageShow < offer.entity.images.length - 1) {
       setImageShow(imageShow + 1);
     }
   }
@@ -176,16 +248,7 @@ function BiddingRequestForm(props) {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card variant="outlined" className={classes.content}>
-                <div className={classes.offerId}>{offerId}</div>
                 <CardContent className={classes.offerCardContent}>
-                  <div>
-                    <img
-                      className={classes.ownerImage}
-                      src={dummyOffer.image}
-                      alt={"Owner"}
-                    />
-                  </div>
-                  <div className={classes.ownerName}>Owner</div>
                   <div className={classes.petImageContent}>
                     <IconButton
                       onClick={() => handleNavigateBefore()}
@@ -194,15 +257,17 @@ function BiddingRequestForm(props) {
                       <NavigateBefore />
                     </IconButton>
                     <div className={classes.petImageContainer}>
-                      {Array.from(Array(dummyOffer.length).keys()).map((index) => (
-                        <img
-                          key={index}
-                          className={classes.petImage}
-                          src={dummyOffer.image}
-                          alt={"Pet"}
-                          style={{left: `${(index - imageShow) * 90}px`}}
-                        />
-                      ))}
+                      {Array.from(Array(offer.entity.images.length).keys()).map(
+                        (index) => (
+                          <img
+                            key={index}
+                            className={classes.petImage}
+                            src={`${publicURL}/${offer.entity.images[index]}`}
+                            alt={"Entity"}
+                            style={{left: `${(index - imageShow) * 240}px`}}
+                          />
+                        )
+                      )}
                     </div>
                     <IconButton
                       onClick={() => handleNavigateNext()}

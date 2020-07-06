@@ -3,6 +3,7 @@ export const serverURL = "http://localhost:5000";
 export const authURL = `${serverURL}/auth`;
 export const offerURL = `${serverURL}/offer`;
 export const biddingRequestURL = `${serverURL}/biddingrequest`;
+export const publicURL = `${serverURL}/public`;
 
 //Messages
 export const userSignUpSuccessMsg =

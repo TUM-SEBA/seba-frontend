@@ -15,7 +15,6 @@ import {
   setIsBiddingRequestDialogOpen,
   setIsOfferDialogOpen,
 } from "../actions/ownerPage";
-import SnackbarAlert from "../components/SnackbarAlert";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
@@ -26,6 +25,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import FilterSearch from "../components/FilterSearch";
 import BiddingRequestList from "../components/BiddingRequestList";
+import MenuDialog from "../components/MenuDialog";
 
 const filterByOptions = ["Title", "Description"];
 
@@ -307,7 +307,7 @@ function OfferPage(props) {
           </div>
           <OfferForm history={history} />
           <BiddingRequestList history={history} />
-          <SnackbarAlert />
+          <MenuDialog />
         </div>
       </div>
     );

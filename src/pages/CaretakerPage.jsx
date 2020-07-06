@@ -7,7 +7,6 @@ import {
   changeSearch,
   setIsBiddingRequestDialogOpen,
 } from "../actions/caretakerPage";
-import SnackbarAlert from "../components/SnackbarAlert";
 import BiddingRequestForm from "../components/BiddingRequestForm";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
@@ -23,6 +22,7 @@ import {
   getNotInterestedOffers,
   updateNotInterested,
 } from "../services/offerService";
+import MenuDialog from "../components/MenuDialog";
 
 const tabs = ["Available", "Interested", "Not Intereted"];
 const getOfferServices = [
@@ -264,7 +264,7 @@ function CaretakerPage(props) {
           </Grid>
         </div>
         <BiddingRequestForm history={history} successCallback={saveSuccessCallback} />
-        <SnackbarAlert />
+        <MenuDialog />
       </div>
     </div>
   );

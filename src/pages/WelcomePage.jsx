@@ -1,20 +1,15 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Grid, Typography} from "@material-ui/core";
+import {Avatar, Grid, Typography} from "@material-ui/core";
 import Header from "../components/Header";
-import {Avatar} from "@material-ui/core";
 import caretakerImage from "../assets/caretaker.png";
 import ownerImage from "../assets/owner.png";
 import {withStyles} from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
-import ViewBadges from "../components/ViewBadges";
-import ViewFeedbackForm from "../components/FeedbackForm";
-import ChangePassword from "../components/ChangePassword";
-import SnackbarAlert from "../components/SnackbarAlert";
 import BadgeNotification from "../components/BadgeNotification";
-import ViewEditCustomerProfile from "../components/ViewEditCustomerProfile";
 import {setIsChangePasswordDialogOpen} from "../actions/welcomePage";
 import {checkNewBadge} from "../services/customerService";
+import MenuDialog from "../components/MenuDialog";
 
 const styles = (theme) => ({
   large: {
@@ -98,12 +93,8 @@ function WelcomePage(props) {
           </Grid>
         </Grid>
       </Grid>
-      <ViewBadges />
-      <ViewFeedbackForm />
-      <ChangePassword />
-      <SnackbarAlert />
+      <MenuDialog />
       <BadgeNotification badge={newBadge} />
-      <ViewEditCustomerProfile />
     </div>
   );
 }

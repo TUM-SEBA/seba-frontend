@@ -19,13 +19,14 @@ import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
-import {fetchFailed} from "../constants";
+import {fetchFailed, publicURL} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import FilterSearch from "../components/FilterSearch";
 import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
+import ViewFeedbackForm from "../components/FeedbackForm";
 
 const filterByOptions = ["Title", "Description"];
 
@@ -42,7 +43,7 @@ const styles = (theme) => ({
     minHeight: 262,
   },
   media: {
-    height: 140,
+    height: theme.spacing(20),
     objectFit: "cover",
   },
   ownerHeader: {},
@@ -205,7 +206,7 @@ function OfferPage(props) {
           >
             <CardMedia
               className={classes.media}
-              image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
+              image={`${publicURL}/${offer.entity.images[0]}`}
               title="Contemplative Reptile"
             />
 
@@ -254,66 +255,63 @@ function OfferPage(props) {
       </Grid>
     );
   }
-  if (isAuthenticated()) {
-    return (
-      <div className={classes.ownerPage}>
-        <Grid container direction="column" justify="flex-start" alignItems="stretch">
-          <Grid item>
-            <Header history={history} />
-          </Grid>
+  return (
+    <div className={classes.ownerPage}>
+      <Grid container direction="column" justify="flex-start" alignItems="stretch">
+        <Grid item>
+          <Header history={history} />
         </Grid>
+      </Grid>
 
-        <div className={classes.container}>
-          <div className={classes.ownerHeader}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={3}>
-                Hello, Owner {localStorage["username"]}
-              </Grid>
-              <Grid item xs={"auto"} md={2} lg={4} />
-              <Grid item xs={12} md={7} lg={5}>
-                <FilterSearch
-                  filterOptions={filterByOptions}
-                  changeFilterCallback={(value) => changeFilterBy(value)}
-                  changeSearchQueryCallback={(value) => changeSearch(value)}
-                />
-              </Grid>
+      <div className={classes.container}>
+        <div className={classes.ownerHeader}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={3}>
+              Hello, Owner {localStorage["username"]}
             </Grid>
-          </div>
-          <div className={classes.body}>
-            <Grid container spacing={2}>
-              {getCreateOffer()}
-              {offers
-                .filter((offer) => {
-                  var searchRegex = new RegExp(searchValue, "gi");
-                  // todo only show user's own offers
-                  if (searchValue === "") {
-                    return true;
-                  }
-                  if (selectedFilterBy === 1) {
-                    if (searchRegex.test(offer.title)) {
-                      return true;
-                    }
-                  } else if (selectedFilterBy === 2) {
-                    if (searchRegex.test(offer.description)) {
-                      return true;
-                    }
-                  } else if (selectedFilterBy === "") {
-                    return true;
-                  }
-                  return false;
-                })
-                .map((offer, index) => getGridItem(index, offer))}
+            <Grid item xs={"auto"} md={2} lg={4} />
+            <Grid item xs={12} md={7} lg={5}>
+              <FilterSearch
+                filterOptions={filterByOptions}
+                changeFilterCallback={(value) => changeFilterBy(value)}
+                changeSearchQueryCallback={(value) => changeSearch(value)}
+              />
             </Grid>
-          </div>
-          <OfferForm history={history} />
-          <BiddingRequestList history={history} />
-          <MenuDialog />
+          </Grid>
         </div>
+        <div className={classes.body}>
+          <Grid container spacing={2}>
+            {getCreateOffer()}
+            {offers
+              .filter((offer) => {
+                var searchRegex = new RegExp(searchValue, "gi");
+                // todo only show user's own offers
+                if (searchValue === "") {
+                  return true;
+                }
+                if (selectedFilterBy === 1) {
+                  if (searchRegex.test(offer.title)) {
+                    return true;
+                  }
+                } else if (selectedFilterBy === 2) {
+                  if (searchRegex.test(offer.description)) {
+                    return true;
+                  }
+                } else if (selectedFilterBy === "") {
+                  return true;
+                }
+                return false;
+              })
+              .map((offer, index) => getGridItem(index, offer))}
+          </Grid>
+        </div>
+        <OfferForm history={history} />
+        <BiddingRequestList history={history} />
+        <MenuDialog />
+        <ViewFeedbackForm history={history} />
       </div>
-    );
-  } else {
-    return <div></div>;
-  }
+    </div>
+  );
 }
 
 const mapStateToProps = ({ownerPage: {selectedFilterBy, searchValue}}) => ({

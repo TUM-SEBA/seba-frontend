@@ -125,7 +125,7 @@ function BiddingRequestList(props) {
   const [biddingRequests, setBiddingRequests] = useState([]);
   const [offer, setOffer] = useState(initialOffer);
   useEffect(() => {
-    if (offerId !== "") {
+    if (offerId) {
       getOffer(offerId)
         .then((offer) => {
           const assignedOffer = Object.assign(initialOffer, offer);
@@ -207,7 +207,7 @@ function BiddingRequestList(props) {
                 return false;
               })
               .map((biddingRequest, index) => (
-                <Grid item xs={12} md={6} lg={4} key={index}>
+                <Grid item xs={12} md={6} lg={6} key={index}>
                   <BiddingRequestCard
                     biddingRequest={biddingRequest}
                     acceptCallback={() => {

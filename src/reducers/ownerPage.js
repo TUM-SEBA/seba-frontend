@@ -7,6 +7,8 @@ import {
   BIDDINGREQUESTLISTCHANGESEARCH,
   SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN,
   SETISBIDDINGREQUESTDIALOGOPEN,
+  SETFEEDBACKFIELDVALUE,
+  ISVIEWFEEDBACKDIALOGOPEN,
 } from "../actions/ownerPage";
 
 let initialState = {
@@ -26,6 +28,11 @@ let initialState = {
   offerId: "",
   isAcceptCaretakerConfirmationDialogOpen: false,
   biddingRequestId: "",
+  isViewFeedbackDialogOpen: false,
+  feedbackFields: {
+    description: "",
+    rating: 3,
+  },
 };
 
 export default function ownerPage(state = initialState, action) {
@@ -76,6 +83,20 @@ export default function ownerPage(state = initialState, action) {
         ...state,
         isAcceptCaretakerConfirmationDialogOpen: action.isOpen,
         biddingRequestId: action.biddingRequestId,
+      };
+    case SETFEEDBACKFIELDVALUE:
+      return {
+        ...state,
+        feedbackFields: {
+          ...state.feedbackFields,
+          [action.fieldName]: action.value,
+        },
+      };
+    case ISVIEWFEEDBACKDIALOGOPEN:
+      return {
+        ...state,
+        isViewFeedbackDialogOpen: action.value,
+        offerId: action.offerId,
       };
     default:
       return state;

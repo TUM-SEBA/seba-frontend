@@ -185,7 +185,6 @@ function BiddingRequestForm(props) {
       getOffer(offerId)
         .then((offer) => {
           setOffer(offer);
-          console.log(offer);
         })
         .catch((status) => {
           if (status === 401) {
@@ -197,7 +196,7 @@ function BiddingRequestForm(props) {
     }
   }, [offerId, history, showSnackBar]);
 
-  async function handleSave() {
+  function handleSave() {
     const emptyField = Object.keys(biddingRequestFields).find(
       (keyName) => biddingRequestFields[keyName] === ""
     );

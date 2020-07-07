@@ -56,6 +56,9 @@ const styles = (theme) => {
     username: {
       marginTop: theme.spacing(1),
     },
+    status: {
+      marginTop: theme.spacing(1),
+    },
     media: {
       height: theme.spacing(20),
       objectFit: "cover",
@@ -68,7 +71,6 @@ const styles = (theme) => {
 
 function CaretakerCard(props) {
   const {classes, offer, showAction, interestedCallback, notInterestedCallback} = props;
-  console.log(offer);
   function formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -79,6 +81,16 @@ function CaretakerCard(props) {
     if (day.length < 2) day = "0" + day;
 
     return [day, month, year].join("/");
+  }
+  let status = "";
+  if (offer.status === "Not Assigned") {
+    status = "Not assigned yet";
+  } else if (offer.status === "Assigned") {
+    if (offer.owner.username === localStorage["username"]) {
+      status = "The offer has been assigned to you.";
+    } else {
+      status = "The offer has been assigned to other caretaker.";
+    }
   }
   return (
     <Card variant="outlined">
@@ -113,6 +125,14 @@ function CaretakerCard(props) {
             component="p"
           >
             Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
+          </Typography>
+          <Typography
+            className={classes.status}
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
+            Status: {status}
           </Typography>
           <Typography
             className={classes.offerCardDescription}

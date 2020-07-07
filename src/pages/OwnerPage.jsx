@@ -19,7 +19,7 @@ import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
-import {fetchFailed} from "../constants";
+import {fetchFailed, publicURL} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
@@ -206,7 +206,7 @@ function OfferPage(props) {
           >
             <CardMedia
               className={classes.media}
-              image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
+              image={`${publicURL}/${offer.entity.images[0]}`}
               title="Contemplative Reptile"
             />
 

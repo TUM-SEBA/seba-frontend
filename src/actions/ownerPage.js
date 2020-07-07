@@ -7,6 +7,8 @@ export const BIDDINGREQUESTLISTCHANGESEARCH = "BIDDINGREQUESTLISTCHANGESEARCH";
 export const SETISBIDDINGREQUESTDIALOGOPEN = "SETISBIDDINGREQUESTDIALOGOPEN";
 export const SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN =
   "SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN";
+export const SETFEEDBACKFIELDVALUE = "SETFEEDBACKFIELDVALUE";
+export const ISVIEWFEEDBACKDIALOGOPEN = "ISVIEWFEEDBACKDIALOGOPEN";
 
 export const changeFilterBy = (value) => (dispatch) =>
   dispatch({
@@ -59,4 +61,18 @@ export const setIsAcceptCaretakerConfirmationDialogOpen = (isOpen, biddingReques
     type: SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN,
     isOpen,
     biddingRequestId,
+  });
+
+export const setFeedbackFieldValue = (fieldName, value) => (dispatch) =>
+  dispatch({
+    type: SETFEEDBACKFIELDVALUE,
+    fieldName,
+    value,
+  });
+
+export const setIsViewFeedbackDialogOpen = (value, offerId) => (dispatch) =>
+  dispatch({
+    type: ISVIEWFEEDBACKDIALOGOPEN,
+    value,
+    offerId,
   });

@@ -12,81 +12,90 @@ import {
   Avatar,
   Paper,
 } from "@material-ui/core";
-import {setIsViewFeedbackDialogOpen} from "../actions/welcomePage";
 import {connect} from "react-redux";
 import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
 import caretakerImage from "../assets/caretaker.png";
 import {NavigateBefore, NavigateNext} from "@material-ui/icons";
 import Rating from "@material-ui/lab/Rating";
 import {withStyles} from "@material-ui/styles";
+import {setFeedbackFieldValue, setIsViewFeedbackDialogOpen} from "../actions/ownerPage";
+import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
+import {showSnackBar} from "../actions/loginPage";
+import {insertReview} from "../services/reviewService";
+
+const styles = (theme) => ({
+  caretakerImage: {
+    width: theme.spacing(25),
+    height: theme.spacing(25),
+  },
+  petImageContainer: {
+    position: "relative",
+    width: "240px",
+    height: theme.spacing(10),
+    overflow: "hidden",
+  },
+  petImage: {
+    position: "absolute",
+    width: "60px",
+    transition: "all 500ms",
+  },
+  textCaretaker: {
+    width: theme.spacing(25),
+    textAlign: "center",
+    paddingTop: "16px",
+  },
+  textFields: {
+    margin: theme.spacing(2),
+    marginLeft: 0,
+    width: "100%",
+  },
+  navigationButton: {
+    width: theme.spacing(6),
+    height: theme.spacing(6),
+    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
+  },
+  imageSlider: {
+    marginTop: "25px",
+  },
+  typographyRating: {
+    paddingRight: "15px",
+  },
+  typographyDescription: {
+    paddingTop: "16px",
+  },
+  rightGrid: {
+    flex: 1,
+    marginLeft: "32px",
+  },
+});
+
+const CustomTextField = withStyles({
+  root: {
+    "& label.Mui-focused": {
+      color: "black",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "black",
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "black",
+      },
+    },
+  },
+})(TextField);
 
 function FeedbackForm(props) {
-  const {isViewFeedbackDialogOpen, setIsViewFeedbackDialogOpen} = props;
-
-  const useStyles = makeStyles((theme) => ({
-    caretakerImage: {
-      width: theme.spacing(25),
-      height: theme.spacing(25),
-    },
-    petImageContainer: {
-      position: "relative",
-      width: "240px",
-      height: theme.spacing(10),
-      overflow: "hidden",
-    },
-    petImage: {
-      position: "absolute",
-      width: "60px",
-      transition: "all 500ms",
-    },
-    textCaretaker: {
-      width: theme.spacing(25),
-      textAlign: "center",
-      paddingTop: "16px",
-    },
-    textFields: {
-      margin: theme.spacing(2),
-      marginLeft: 0,
-      width: "100%",
-    },
-    navigationButton: {
-      width: theme.spacing(6),
-      height: theme.spacing(6),
-      margin: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
-    },
-    imageSlider: {
-      marginTop: "25px",
-    },
-    typographyRating: {
-      paddingRight: "15px",
-    },
-    typographyDescription: {
-      paddingTop: "16px",
-    },
-    rightGrid: {
-      flex: 1,
-      marginLeft: "32px",
-    },
-  }));
-
-  const classes = useStyles();
-
-  const CustomTextField = withStyles({
-    root: {
-      "& label.Mui-focused": {
-        color: "black",
-      },
-      "& .MuiInput-underline:after": {
-        borderBottomColor: "black",
-      },
-      "& .MuiOutlinedInput-root": {
-        "&.Mui-focused fieldset": {
-          borderColor: "black",
-        },
-      },
-    },
-  })(TextField);
+  const {
+    history,
+    classes,
+    offerId,
+    isViewFeedbackDialogOpen,
+    feedbackFields,
+    setIsViewFeedbackDialogOpen,
+    setFeedbackFieldValue,
+    showSnackBar,
+  } = props;
 
   // TODO: remove this when backend is connected
   const dummyOffer = {
@@ -107,6 +116,33 @@ function FeedbackForm(props) {
   }
 
   const [imageShow, setImageShow] = React.useState(0);
+
+  function handleSubmitButton() {
+    const emptyField = Object.keys(feedbackFields).find(
+      (keyName) => feedbackFields[keyName] === ""
+    );
+    if (emptyField) {
+      showSnackBar(true, requiredFieldsEmpty, "error");
+    } else {
+      let review = {
+        offer: offerId,
+        text: feedbackFields["description"],
+        rating: feedbackFields["rating"],
+      };
+      insertReview(review)
+        .then(() => {
+          showSnackBar(true, saveSuccess, "success");
+          setIsViewFeedbackDialogOpen(false);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, saveFailed, "error");
+        });
+    }
+  }
 
   return (
     <Dialog
@@ -170,7 +206,16 @@ function FeedbackForm(props) {
           <Grid className={classes.rightGrid}>
             <Grid container direction="row" justify="flex-start" alignItems="center">
               <Typography className={classes.typographyRating}>Give Rating:</Typography>
-              <Rating name="size-large" defaultValue={2} size="large" />
+              <Rating
+                name="size-large"
+                defaultValue={3}
+                size="large"
+                onClick={(event) => {
+                  if (event.target.value) {
+                    setFeedbackFieldValue("rating", event.target.value);
+                  }
+                }}
+              />
             </Grid>
 
             <Grid
@@ -189,6 +234,9 @@ function FeedbackForm(props) {
                   variant="outlined"
                   multiline={true}
                   rows={8}
+                  onChange={(event) => {
+                    setFeedbackFieldValue("description", event.target.value);
+                  }}
                 />
               </div>
             </Grid>
@@ -196,8 +244,15 @@ function FeedbackForm(props) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary">Cancel</Button>
-        <Button color="secondary" variant="contained">
+        <Button
+          color="secondary"
+          onClick={() => {
+            setIsViewFeedbackDialogOpen(false);
+          }}
+        >
+          Cancel
+        </Button>
+        <Button color="secondary" variant="contained" onClick={handleSubmitButton}>
           Submit
         </Button>
       </DialogActions>
@@ -205,12 +260,23 @@ function FeedbackForm(props) {
   );
 }
 
-const mapStateToProps = ({welcomePage: {isViewFeedbackDialogOpen}}) => ({
-  isViewFeedbackDialogOpen,
-});
+const mapStateToProps = ({
+  ownerPage: {isViewFeedbackDialogOpen, offerId, feedbackFields},
+}) => {
+  return {
+    isViewFeedbackDialogOpen,
+    offerId,
+    feedbackFields,
+  };
+};
 
 const mapDispatchToProps = {
   setIsViewFeedbackDialogOpen: setIsViewFeedbackDialogOpen,
+  setFeedbackFieldValue: setFeedbackFieldValue,
+  showSnackBar: showSnackBar,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, {withTheme: true})(FeedbackForm));

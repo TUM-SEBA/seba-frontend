@@ -9,12 +9,12 @@ import theme from "../themes";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
-  setIsViewFeedbackDialogOpen,
   setIsViewBadgesDialogOpen,
   setIsChangePasswordDialogOpen,
   setUserProfileDialogOpen,
 } from "../actions/welcomePage";
 import {getMyBadges, getUserProfile} from "../services/customerService";
+import {setIsViewFeedbackDialogOpen} from "../actions/ownerPage";
 
 const styles = (theme) => ({
   menuList: {

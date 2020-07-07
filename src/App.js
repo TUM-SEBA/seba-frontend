@@ -38,7 +38,16 @@ function App() {
               )
             }
           />
-          <Route path="/owner" render={() => <OwnerPage history={history} />} />
+          <Route
+            path="/owner"
+            render={() =>
+              !isAuthenticated() ? (
+                <LoginPage history={history} />
+              ) : (
+                <OwnerPage history={history} />
+              )
+            }
+          />
           <Route path="*" render={() => <ErrorPage history={history} />} />
         </Switch>
       </Router>

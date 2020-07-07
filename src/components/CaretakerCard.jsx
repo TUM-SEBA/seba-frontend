@@ -24,7 +24,7 @@ const styles = (theme) => {
       margin: `${theme.spacing(1)}px 0`,
     },
     offerCardDescription: {
-      height: theme.spacing(20),
+      height: theme.spacing(10),
       overflow: "scroll",
       margin: `${theme.spacing(1)}px 0`,
       textAlign: "justify",
@@ -57,7 +57,7 @@ const styles = (theme) => {
       marginTop: theme.spacing(1),
     },
     media: {
-      height: 140,
+      height: theme.spacing(20),
       objectFit: "cover",
     },
     offerCardTextContent: {
@@ -68,7 +68,18 @@ const styles = (theme) => {
 
 function CaretakerCard(props) {
   const {classes, offer, showAction, interestedCallback, notInterestedCallback} = props;
+  console.log(offer);
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
 
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [day, month, year].join("/");
+  }
   return (
     <Card variant="outlined">
       {/*<div className={classes.offerCardId}>{offer._id}</div>*/}
@@ -79,36 +90,38 @@ function CaretakerCard(props) {
           title="Contemplative Reptile"
         />
         <div className={classes.offerCardTextContent}>
-          <div>
-            <Typography
-              className={classes.offerCardTitle}
-              gutterBottom
-              variant="h5"
-              component="h2"
-            >
-              {offer.title}
-            </Typography>
-          </div>
-          <div>
-            <Typography
-              className={classes.username}
-              gutterBottom
-              variant="body1"
-              component="p"
-            >
-              by @{offer.owner.username}
-            </Typography>
-          </div>
-          <div>
-            <Typography
-              className={classes.offerCardDescription}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              {offer.description}
-            </Typography>
-          </div>
+          <Typography
+            className={classes.offerCardTitle}
+            gutterBottom
+            variant="h5"
+            component="h2"
+          >
+            {offer.title}
+          </Typography>
+          <Typography
+            className={classes.username}
+            gutterBottom
+            variant="body1"
+            component="p"
+          >
+            by @{offer.owner.username}
+          </Typography>
+          <Typography
+            className={classes.offerDurationDates}
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
+            Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
+          </Typography>
+          <Typography
+            className={classes.offerCardDescription}
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
+            {offer.description}
+          </Typography>
         </div>
       </CardContent>
       {showAction && (

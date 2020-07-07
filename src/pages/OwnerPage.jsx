@@ -43,7 +43,7 @@ const styles = (theme) => ({
     minHeight: 262,
   },
   media: {
-    height: 140,
+    height: theme.spacing(20),
     objectFit: "cover",
   },
   ownerHeader: {},

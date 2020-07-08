@@ -10,6 +10,7 @@ import {fetchFailed, saveFailed, saveSuccess} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 import {getBiddingRequest} from "../services/biddingRequestService";
 import {acceptOffer} from "../services/offerService";
+import PaypalButton from "./PaypalButton";
 
 const dummyBiddingRequest = {
   image:
@@ -41,6 +42,8 @@ const initialBiddingRequest = {
   caretaker: initialCustomer,
   createdDate: "",
   price: 0,
+  prepaymentPrice: 0,
+  postpaymentPrice: 0,
   remarks: "",
 };
 
@@ -69,6 +72,7 @@ const styles = (theme) => ({
 });
 
 function AcceptCaretakerConfirmation(props) {
+  console.log("Hello");
   const {
     classes,
     history,
@@ -78,8 +82,10 @@ function AcceptCaretakerConfirmation(props) {
     setIsAcceptCaretakerConfirmationDialogOpen,
     showSnackBar,
   } = props;
+
   const [biddingRequest, setBiddingRequest] = useState(initialBiddingRequest);
   const [isInsuranceChecked, setIsInsuranceChecked] = useState(false);
+
   useEffect(() => {
     if (biddingRequestId !== "") {
       getBiddingRequest(biddingRequestId)
@@ -95,7 +101,8 @@ function AcceptCaretakerConfirmation(props) {
         });
     }
   }, [biddingRequestId, history, showSnackBar]);
-  function handleAccept() {
+
+  function handlePrePaymentCompleted() {
     acceptOffer(biddingRequest.offer._id, biddingRequest._id, isInsuranceChecked)
       .then(() => {
         showSnackBar(true, saveSuccess, "success");
@@ -110,6 +117,13 @@ function AcceptCaretakerConfirmation(props) {
         showSnackBar(true, saveFailed, "error");
       });
   }
+
+  const paymentDetails = {
+    price: biddingRequest.price * 0.2,
+    description: biddingRequest.remarks,
+    currency: "EUR",
+  };
+
   return (
     <Dialog
       fullWidth
@@ -129,10 +143,13 @@ function AcceptCaretakerConfirmation(props) {
           <div>{biddingRequest.caretaker.username}</div>
         </Grid>
         <Grid item xs={8}>
-          <div className={classes.question}>
-            Are you sure you want to accept this caretaker?
+          <div className={classes.question}>Initiate pre payment</div>
+          <div className={classes.line}>
+            Pre Payment Amount: {biddingRequest.price * 0.2} euro
           </div>
-          <div className={classes.line}>Price per hr: {biddingRequest.price} euro</div>
+          <div className={classes.line}>
+            Post Payment Amount: {biddingRequest.price * 0.8} euro
+          </div>
           <div className={classes.line}>Total Price: {biddingRequest.price} euro</div>
           <div className={classes.line}>Start Date: {biddingRequest.offer.startDate}</div>
           <div className={classes.line}>End Date: {biddingRequest.offer.endDate}</div>
@@ -149,17 +166,11 @@ function AcceptCaretakerConfirmation(props) {
             />
           </div>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={3}>
-              <Button
-                variant="contained"
-                className={classes.interestedButton}
-                color="secondary"
-                size="small"
-                onClick={() => handleAccept()}
-              >
-                Accept
-              </Button>
-            </Grid>
+            <PaypalButton
+              paymentDetails={paymentDetails}
+              handlePrePaymentCompleted={handlePrePaymentCompleted}
+            />
+
             <Grid item xs={12} sm={3}>
               <Button
                 variant="contained"

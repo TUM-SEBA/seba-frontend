@@ -1,15 +1,9 @@
 import React from "react";
 
 function PaypalButton(props) {
+  const {paymentDetails, handlePrePaymentCompleted} = props;
   const paypalRef = React.useRef();
-
-  //TODO: Replace this demo data with real data passed as a prop
-  const service = {
-    price: 120,
-    name: "Plant care",
-    description: "Taking care of Devil's Ivy plant for 12 days",
-    currency: "EUR",
-  };
+  const [paidFor, setPaidFor] = React.useState(false);
 
   React.useEffect(() => {
     window.paypal
@@ -21,10 +15,10 @@ function PaypalButton(props) {
           return actions.order.create({
             purchase_units: [
               {
-                description: service.description,
+                description: paymentDetails.description,
                 amount: {
-                  currency_code: service.currency,
-                  value: service.price,
+                  currency_code: paymentDetails.currency,
+                  value: paymentDetails.price,
                 },
               },
             ],
@@ -33,19 +27,20 @@ function PaypalButton(props) {
         onApprove: async (data, actions) => {
           const order = await actions.order.capture();
           console.log(order);
+          setPaidFor(true);
         },
         onError: (err) => {
           console.error(err);
         },
       })
       .render(paypalRef.current);
-  }, [service.currency, service.description, service.price]);
+  }, [paymentDetails.currency, paymentDetails.description, paymentDetails.price]);
 
-  return (
-    <div>
-      <div ref={paypalRef} />
-    </div>
-  );
+  if (paidFor) {
+    handlePrePaymentCompleted();
+  }
+
+  return <div ref={paypalRef} />;
 }
 
 export default PaypalButton;

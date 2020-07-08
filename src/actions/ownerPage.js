@@ -13,6 +13,7 @@ export const SETISENTITYLISTDIALOGOPEN = "SETISENTITYLISTDIALOGOPEN";
 export const SETISENTITYFORMDIALOGOPEN = "SETISENTITYFORMDIALOGOPEN";
 export const ENTITYLISTCHANGEFILTERBY = "ENTITYLISTCHANGEFILTERBY";
 export const ENTITYLISTCHANGESEARCH = "ENTITYLISTCHANGESEARCH";
+export const SETENTITYFIELDVALUE = "SETENTITYFIELDVALUE";
 
 export const changeFilterBy = (value) => (dispatch) =>
   dispatch({
@@ -87,20 +88,29 @@ export const setIsEntityListDialogOpen = (isOpen) => (dispatch) =>
     isOpen,
   });
 
-export const setIsEntityFormDialogOpen = (isOpen) => (dispatch) =>
+export const setIsEntityFormDialogOpen = (isOpen, isInsert, entityId) => (dispatch) =>
   dispatch({
     type: SETISENTITYFORMDIALOGOPEN,
     isOpen,
+    isInsert,
+    entityId,
   });
 
 export const entityListChangeFilterBy = (value) => (dispatch) =>
   dispatch({
-    type: BIDDINGREQUESTLISTCHANGEFILTERBY,
+    type: ENTITYLISTCHANGEFILTERBY,
     value,
   });
 
 export const entityChangeSearch = (value) => (dispatch) =>
   dispatch({
-    type: BIDDINGREQUESTLISTCHANGESEARCH,
+    type: ENTITYLISTCHANGESEARCH,
+    value,
+  });
+
+export const setEntityfieldValue = (fieldName, value) => (dispatch) =>
+  dispatch({
+    type: SETENTITYFIELDVALUE,
+    fieldName,
     value,
   });

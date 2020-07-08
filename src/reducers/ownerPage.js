@@ -13,6 +13,7 @@ import {
   SETISENTITYFORMDIALOGOPEN,
   ENTITYLISTCHANGEFILTERBY,
   ENTITYLISTCHANGESEARCH,
+  SETENTITYFIELDVALUE,
 } from "../actions/ownerPage";
 
 let initialState = {
@@ -39,8 +40,15 @@ let initialState = {
   },
   isEntityListDialogOpen: false,
   isEntityFormDialogOpen: false,
-  entitySelectedFilterBy: "-1",
+  entitySelectedFilterBy: -1,
   entitySearchValue: "",
+  entityFields: {
+    category: "",
+    breed: "",
+    description: "",
+  },
+  entityId: "",
+  isInsert: false,
 };
 
 export default function ownerPage(state = initialState, action) {
@@ -115,6 +123,8 @@ export default function ownerPage(state = initialState, action) {
       return {
         ...state,
         isEntityFormDialogOpen: action.isOpen,
+        isInsert: action.isInsert,
+        entityId: action.entityId,
       };
     case ENTITYLISTCHANGEFILTERBY:
       return {
@@ -125,6 +135,14 @@ export default function ownerPage(state = initialState, action) {
       return {
         ...state,
         entitySearchValue: action.value,
+      };
+    case SETENTITYFIELDVALUE:
+      return {
+        ...state,
+        entityFields: {
+          ...state.entityFields,
+          [action.fieldName]: action.value,
+        },
       };
     default:
       return state;

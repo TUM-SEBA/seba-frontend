@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Dialog, Grid, Typography} from "@material-ui/core";
+import {Button, Dialog, Grid, Typography} from "@material-ui/core";
 import {
   entityChangeSearch,
   entityListChangeFilterBy,
+  setEntityfieldValue,
   setIsEntityFormDialogOpen,
   setIsEntityListDialogOpen,
 } from "../actions/ownerPage";
@@ -16,17 +17,17 @@ import SnackbarAlert from "./SnackbarAlert";
 import noDataFoundImage from "../assets/no-data-found.png";
 import {getEntities} from "../services/entityService";
 import EntityCard from "./EntityCard";
+import EntityForm from "./EntityForm";
 
 const filterByOptions = ["Category"];
 
 const styles = (theme) => ({
   header: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
   content: {
-    marginTop: theme.spacing(2),
     paddingBottom: theme.spacing(4),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
@@ -49,6 +50,13 @@ const styles = (theme) => ({
   noDataFoundText: {
     fontSize: "14pt",
   },
+  buttonContainer: {
+    textAlign: "right",
+  },
+  button: {
+    width: "150px",
+    marginRight: theme.spacing(2),
+  },
 });
 
 function EntityList(props) {
@@ -62,6 +70,7 @@ function EntityList(props) {
     isEntityListDialogOpen,
     setIsEntityListDialogOpen,
     setIsEntityFormDialogOpen,
+    setEntityfieldValue,
     showSnackBar,
   } = props;
   const [entities, setEntities] = useState([]);
@@ -78,6 +87,20 @@ function EntityList(props) {
         showSnackBar(true, fetchFailed, "error");
       });
   }, [history, showSnackBar]);
+  const filteredEntities = entities.filter((entity) => {
+    const searchRegex = new RegExp(searchValue, "gi");
+    if (searchValue === "") {
+      return true;
+    }
+    if (selectedFilterBy === 1) {
+      if (searchRegex.test(entity.category.toString())) {
+        return true;
+      }
+    } else if (selectedFilterBy === -1) {
+      return true;
+    }
+    return false;
+  });
   return (
     <Dialog
       fullWidth
@@ -86,7 +109,7 @@ function EntityList(props) {
       onClose={() => setIsEntityListDialogOpen(false, "")}
     >
       <Grid container className={classes.header}>
-        <Grid item xs={12} sm={4} md={7} lg={7} className={classes.offerNumber}></Grid>
+        <Grid item xs={12} sm={4} md={7} lg={7}></Grid>
         <Grid item xs={12} sm={8} md={5} lg={5}>
           <FilterSearch
             filterOptions={filterByOptions}
@@ -95,29 +118,47 @@ function EntityList(props) {
           />
         </Grid>
       </Grid>
+      <div className={classes.buttonContainer}>
+        <Button
+          variant="contained"
+          className={classes.button}
+          color="secondary"
+          size="small"
+          onClick={() => {
+            setEntityfieldValue("category", "");
+            setEntityfieldValue("breed", "");
+            setEntityfieldValue("description", "");
+            setIsEntityFormDialogOpen(true, true, "");
+          }}
+        >
+          Add Pet/Plant
+        </Button>
+      </div>
       <div className={classes.content}>
         <Grid container className={classes.gridContainer} spacing={2}>
           {entities.length > 0 ? (
-            entities
-              .filter((entity) => {
-                const searchRegex = new RegExp(searchValue, "gi");
-                if (searchValue === "") {
-                  return true;
-                }
-                if (selectedFilterBy === 1) {
-                  if (searchRegex.test(entity.category.toString())) {
-                    return true;
-                  }
-                } else if (selectedFilterBy === "") {
-                  return true;
-                }
-                return false;
-              })
-              .map((entity, index) => (
+            filteredEntities.length > 0 ? (
+              filteredEntities.map((entity, index) => (
                 <Grid item xs={12} md={6} lg={6} key={index}>
                   <EntityCard entity={entity} />
                 </Grid>
               ))
+            ) : (
+              <div key={"noDataFound"} className={classes.noDataFound}>
+                <div className={classes.noDataFoundImageContainer}>
+                  <img
+                    className={classes.noDataFoundImage}
+                    src={noDataFoundImage}
+                    alt={"No Data Found"}
+                  />
+                </div>
+                <div className={classes.noDataFoundTextContainer}>
+                  <Typography className={classes.noDataFoundText}>
+                    There is no offer based on your search.
+                  </Typography>
+                </div>
+              </div>
+            )
           ) : (
             <div key={"noDataFound"} className={classes.noDataFound}>
               <div className={classes.noDataFoundImageContainer}>
@@ -136,6 +177,7 @@ function EntityList(props) {
           )}
         </Grid>
       </div>
+      <EntityForm history={history} />
       <AcceptCaretakerConfirmation />
       <SnackbarAlert />
     </Dialog>
@@ -156,6 +198,7 @@ const mapDispatchToProps = {
   setIsEntityListDialogOpen: setIsEntityListDialogOpen,
   setIsEntityFormDialogOpen: setIsEntityFormDialogOpen,
   showSnackBar: showSnackBar,
+  setEntityfieldValue: setEntityfieldValue,
 };
 
 export default connect(

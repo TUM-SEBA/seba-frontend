@@ -2,6 +2,9 @@ import React from "react";
 import {withStyles} from "@material-ui/styles";
 import {Button, Card, CardActions, Grid} from "@material-ui/core";
 import {publicURL} from "../constants";
+import {setEntityfieldValue, setIsEntityFormDialogOpen} from "../actions/ownerPage";
+import {connect} from "react-redux";
+import {deleteEntity} from "../services/entityService";
 
 const styles = (theme) => {
   return {
@@ -29,7 +32,7 @@ const styles = (theme) => {
 };
 
 function Entity(props) {
-  const {classes, entity} = props;
+  const {classes, entity, setIsEntityFormDialogOpen, setEntityfieldValue} = props;
 
   return (
     <Card variant="outlined" className={classes.gridItem}>
@@ -56,6 +59,12 @@ function Entity(props) {
                   className={classes.button}
                   color="secondary"
                   size="small"
+                  onClick={() => {
+                    setEntityfieldValue("category", entity.category);
+                    setEntityfieldValue("breed", entity.breed);
+                    setEntityfieldValue("description", entity.description);
+                    setIsEntityFormDialogOpen(true, false, entity._id);
+                  }}
                 >
                   Update
                 </Button>
@@ -66,6 +75,7 @@ function Entity(props) {
                   className={classes.button}
                   color="secondary"
                   size="small"
+                  onClick={() => deleteEntity(entity._id)}
                 >
                   Delete
                 </Button>
@@ -77,5 +87,14 @@ function Entity(props) {
     </Card>
   );
 }
+const mapStateToProps = () => ({});
 
-export default withStyles(styles, {withTheme: true})(Entity);
+const mapDispatchToProps = {
+  setIsEntityFormDialogOpen: setIsEntityFormDialogOpen,
+  setEntityfieldValue: setEntityfieldValue,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, {withTheme: true})(Entity));

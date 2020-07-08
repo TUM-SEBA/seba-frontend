@@ -75,18 +75,20 @@ function EntityList(props) {
   } = props;
   const [entities, setEntities] = useState([]);
   useEffect(() => {
-    getEntities()
-      .then((entities) => {
-        setEntities(entities);
-      })
-      .catch((status) => {
-        if (status === 401) {
-          history.push("/");
-          window.location.reload();
-        }
-        showSnackBar(true, fetchFailed, "error");
-      });
-  }, [history, showSnackBar]);
+    if (isEntityListDialogOpen) {
+      getEntities()
+        .then((entities) => {
+          setEntities(entities);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, fetchFailed, "error");
+        });
+    }
+  }, [isEntityListDialogOpen, history, showSnackBar]);
   const filteredEntities = entities.filter((entity) => {
     const searchRegex = new RegExp(searchValue, "gi");
     if (searchValue === "") {
@@ -101,6 +103,19 @@ function EntityList(props) {
     }
     return false;
   });
+  function successCallback() {
+    getEntities()
+      .then((entities) => {
+        setEntities(entities);
+      })
+      .catch((status) => {
+        if (status === 401) {
+          history.push("/");
+          window.location.reload();
+        }
+        showSnackBar(true, fetchFailed, "error");
+      });
+  }
   return (
     <Dialog
       fullWidth
@@ -140,7 +155,11 @@ function EntityList(props) {
             filteredEntities.length > 0 ? (
               filteredEntities.map((entity, index) => (
                 <Grid item xs={12} md={6} lg={6} key={index}>
-                  <EntityCard entity={entity} />
+                  <EntityCard
+                    history={history}
+                    entity={entity}
+                    successCallback={successCallback}
+                  />
                 </Grid>
               ))
             ) : (
@@ -177,7 +196,7 @@ function EntityList(props) {
           )}
         </Grid>
       </div>
-      <EntityForm history={history} />
+      <EntityForm history={history} successCallback={successCallback} />
       <AcceptCaretakerConfirmation />
       <SnackbarAlert />
     </Dialog>

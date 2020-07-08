@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
@@ -15,7 +15,7 @@ import PetsIcon from "@material-ui/icons/Pets";
 import NatureIcon from "@material-ui/icons/Nature";
 import {setEntityfieldValue, setIsEntityFormDialogOpen} from "../actions/ownerPage";
 import {insertEntity, updateEntity} from "../services/entityService";
-import {saveFailed, saveSuccess} from "../constants";
+import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 
 const styles = (theme) => ({
@@ -36,6 +36,12 @@ const styles = (theme) => ({
     display: "inline-block",
   },
   header: {
+    margin: theme.spacing(2),
+  },
+  noOfImages: {
+    marginLeft: theme.spacing(3),
+  },
+  browseImageContainer: {
     margin: theme.spacing(2),
   },
 });
@@ -67,42 +73,66 @@ function EntityForm(props) {
     entityFields,
     setEntityfieldValue,
     showSnackBar,
+    successCallback,
   } = props;
+
+  const inputFileRef = useRef(null);
+  const [images, setImages] = useState([]);
 
   function handleClose() {
     setIsEntityFormDialogOpen(false, false, "");
   }
 
   function handleInsertOrUpdate() {
-    if (isInsert) {
-      insertEntity(entityFields)
-        .then(() => {
-          showSnackBar(true, saveSuccess, "success");
-          setIsEntityFormDialogOpen(false, false, "");
-        })
-        .catch((status) => {
-          if (status === 401) {
-            history.push("/");
-            window.location.reload();
-          }
-          showSnackBar(true, saveFailed, "error");
-        });
+    const emptyField = Object.keys(entityFields).find(
+      (keyName) => entityFields[keyName] === ""
+    );
+    if (emptyField) {
+      showSnackBar(true, requiredFieldsEmpty + " " + emptyField, "error");
+    } else if (images.length === 0) {
+      showSnackBar(true, requiredFieldsEmpty + " Images", "error");
     } else {
-      updateEntity(entityFields, entityId)
-        .then(() => {
-          showSnackBar(true, saveSuccess, "success");
-          setIsEntityFormDialogOpen(false, false, "");
-        })
-        .catch((status) => {
-          if (status === 401) {
-            history.push("/");
-            window.location.reload();
-          }
-          showSnackBar(true, saveFailed, "error");
-        });
+      if (isInsert) {
+        insertEntity(entityFields, images)
+          .then(() => {
+            showSnackBar(true, saveSuccess, "success");
+            setIsEntityFormDialogOpen(false, false, "");
+            setImages([]);
+            successCallback();
+          })
+          .catch((status) => {
+            if (status === 401) {
+              history.push("/");
+              window.location.reload();
+            }
+            showSnackBar(true, saveFailed, "error");
+          });
+      } else {
+        const entity = entityFields;
+        entity._id = entityId;
+        updateEntity(entity, images)
+          .then(() => {
+            showSnackBar(true, saveSuccess, "success");
+            setIsEntityFormDialogOpen(false, false, "");
+            setImages([]);
+            successCallback();
+          })
+          .catch((status) => {
+            if (status === 401) {
+              history.push("/");
+              window.location.reload();
+            }
+            showSnackBar(true, saveFailed, "error");
+          });
+      }
     }
   }
-
+  function handleBrowseClick() {
+    inputFileRef.current.click();
+  }
+  function handleFileChange(event) {
+    setImages(event.target.files);
+  }
   return (
     <Dialog fullWidth maxWidth="md" open={isEntityFormDialogOpen} onClose={handleClose}>
       <DialogTitle id="form-dialog-title">Pet / Plant</DialogTitle>
@@ -159,13 +189,27 @@ function EntityForm(props) {
               }}
             />
           </div>
+          <div key={"browse"} className={classes.browseImageContainer}>
+            <input
+              type="file"
+              name="file"
+              multiple={true}
+              style={{display: "none"}}
+              ref={inputFileRef}
+              onChange={handleFileChange}
+            />
+            <Button variant="contained" color="primary" onClick={handleBrowseClick}>
+              Browse
+            </Button>
+            <span className={classes.noOfImages}>{images.length} Images</span>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>
           <Button onClick={handleInsertOrUpdate} color="secondary" variant="contained">
-            {isInsert ? "Save" : "Upddate"}
+            {isInsert ? "Save" : "Update"}
           </Button>
         </DialogActions>
       </form>

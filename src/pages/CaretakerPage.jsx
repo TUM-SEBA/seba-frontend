@@ -43,6 +43,9 @@ const styles = (theme) => ({
   },
   body: {
     marginTop: theme.spacing(5),
+    height: "calc(100vh - 350px)",
+    overflowY: "auto",
+    overflowX: "hidden",
   },
   noDataFound: {
     margin: "25px auto",

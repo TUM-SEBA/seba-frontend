@@ -82,7 +82,6 @@ function OfferForm(props) {
       showSnackBar(true, "Start time cannot be after End time.", "error");
     } else {
       let offer = {
-        owner: localStorage["id"],
         description: offerFields["description"],
         category: offerFields["category"],
         startDate: offerFields["startDate"],

@@ -158,7 +158,7 @@ function OfferPage(props) {
 
   useEffect(() => {
     function getOffers() {
-      getOffersByOwnerId(localStorage["id"])
+      getOffersByOwnerId()
         .then((response) => {
           setOffers(response);
         })
@@ -285,7 +285,8 @@ function OfferPage(props) {
             {offers
               .filter((offer) => {
                 var searchRegex = new RegExp(searchValue, "gi");
-                // todo only show user's own offers
+                // todo only show user's own offers.
+                //  (I did it like that. There is no point for the owner to see other people's offers in owner page - Eray)
                 if (searchValue === "") {
                   return true;
                 }

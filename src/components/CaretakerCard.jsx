@@ -32,7 +32,7 @@ const styles = (theme) => {
     offerCardActions: {
       justifyContent: "flex-end",
     },
-    interestedButton: {
+    primaryButton: {
       width: "100%",
       fontSize: "9pt",
       fontWeight: "bold",
@@ -42,7 +42,7 @@ const styles = (theme) => {
         background: theme.palette.secondary.main,
       },
     },
-    failedButton: {
+    secondaryButton: {
       width: "100%",
       fontSize: "9pt",
       fontWeight: "bold",
@@ -70,7 +70,7 @@ const styles = (theme) => {
 };
 
 function CaretakerCard(props) {
-  const {classes, offer, showAction, interestedCallback, notInterestedCallback} = props;
+  const {classes, offer, interestedCallback, notInterestedCallback, tab} = props;
   function formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -92,6 +92,9 @@ function CaretakerCard(props) {
       status = "The offer has been assigned to other caretaker.";
     }
   }
+  const endDate = new Date(offer.endDate);
+  const today = new Date();
+  const shown = today > endDate;
   return (
     <Card variant="outlined">
       {/*<div className={classes.offerCardId}>{offer._id}</div>*/}
@@ -144,14 +147,14 @@ function CaretakerCard(props) {
           </Typography>
         </div>
       </CardContent>
-      {showAction && (
+      {tab === 0 && (
         <CardActions className={classes.offerCardActions}>
           <Grid container spacing={1}>
             <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} />
             <Grid item xs={12} sm={12} md={4} lg={4}>
               <Button
                 variant="contained"
-                className={classes.interestedButton}
+                className={classes.primaryButton}
                 size="small"
                 onClick={() => interestedCallback()}
               >
@@ -161,11 +164,25 @@ function CaretakerCard(props) {
             <Grid item xs={12} sm={12} md={7} lg={7}>
               <Button
                 variant="contained"
-                className={classes.failedButton}
+                className={classes.secondaryButton}
                 size="small"
                 onClick={() => notInterestedCallback()}
               >
                 Not Interested
+              </Button>
+            </Grid>
+            <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} />
+          </Grid>
+        </CardActions>
+      )}
+
+      {tab === 1 && shown && (
+        <CardActions className={classes.offerCardActions}>
+          <Grid container spacing={1}>
+            <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} />
+            <Grid item xs={12} sm={12} md={4} lg={4}>
+              <Button variant="contained" className={classes.primaryButton} size="small">
+                Complete
               </Button>
             </Grid>
             <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} />

@@ -14,7 +14,10 @@ import {
   setUserProfileDialogOpen,
 } from "../actions/welcomePage";
 import {getMyBadges, getUserProfile} from "../services/customerService";
-import {setIsViewFeedbackDialogOpen} from "../actions/ownerPage";
+import {
+  setIsEntityListDialogOpen,
+  setIsViewFeedbackDialogOpen,
+} from "../actions/ownerPage";
 
 const styles = (theme) => ({
   menuList: {
@@ -42,8 +45,9 @@ function MenuPopupState(props) {
     setIsChangePasswordDialogOpen,
     getUserProfile,
     setUserProfileDialogOpen,
+    setIsEntityListDialogOpen,
   } = props;
-
+  const currentUrl = window.location.pathname;
   return (
     <PopupState variant="popover" popupId="account-menu">
       {(popupState) => (
@@ -82,6 +86,16 @@ function MenuPopupState(props) {
             >
               Change Password
             </MyMenuItem>
+            {currentUrl === "/owner" && (
+              <MyMenuItem
+                onClick={() => {
+                  setIsEntityListDialogOpen(true);
+                  popupState.close();
+                }}
+              >
+                View Pet/Plant
+              </MyMenuItem>
+            )}
             <MyMenuItem
               onClick={() => {
                 getMyBadges();
@@ -117,6 +131,7 @@ const mapDispatchToProps = {
   setIsChangePasswordDialogOpen: setIsChangePasswordDialogOpen,
   getUserProfile: getUserProfile,
   setUserProfileDialogOpen: setUserProfileDialogOpen,
+  setIsEntityListDialogOpen: setIsEntityListDialogOpen,
 };
 
 export default connect(

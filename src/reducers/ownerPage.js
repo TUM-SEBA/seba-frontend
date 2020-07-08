@@ -9,6 +9,10 @@ import {
   SETISBIDDINGREQUESTDIALOGOPEN,
   SETFEEDBACKFIELDVALUE,
   ISVIEWFEEDBACKDIALOGOPEN,
+  SETISENTITYLISTDIALOGOPEN,
+  SETISENTITYFORMDIALOGOPEN,
+  ENTITYLISTCHANGEFILTERBY,
+  ENTITYLISTCHANGESEARCH,
 } from "../actions/ownerPage";
 
 let initialState = {
@@ -33,6 +37,10 @@ let initialState = {
     description: "",
     rating: 3,
   },
+  isEntityListDialogOpen: false,
+  isEntityFormDialogOpen: false,
+  entitySelectedFilterBy: "-1",
+  entitySearchValue: "",
 };
 
 export default function ownerPage(state = initialState, action) {
@@ -97,6 +105,26 @@ export default function ownerPage(state = initialState, action) {
         ...state,
         isViewFeedbackDialogOpen: action.value,
         offerId: action.offerId,
+      };
+    case SETISENTITYLISTDIALOGOPEN:
+      return {
+        ...state,
+        isEntityListDialogOpen: action.isOpen,
+      };
+    case SETISENTITYFORMDIALOGOPEN:
+      return {
+        ...state,
+        isEntityFormDialogOpen: action.isOpen,
+      };
+    case ENTITYLISTCHANGEFILTERBY:
+      return {
+        ...state,
+        entitySelectedFilterBy: action.value,
+      };
+    case ENTITYLISTCHANGESEARCH:
+      return {
+        ...state,
+        entitySearchValue: action.value,
       };
     default:
       return state;

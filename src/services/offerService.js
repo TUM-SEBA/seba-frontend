@@ -118,7 +118,6 @@ export function getOffer(offerId) {
 
 export function insertOffer(offer, images) {
   const formData = new FormData();
-  formData.append("owner", offer.owner);
   formData.append("description", offer.description);
   formData.append("category", offer.category);
   formData.append("startDate", offer.startDate);
@@ -186,9 +185,9 @@ export function updateNotInterested(offerId) {
   });
 }
 
-export function getOffersByOwnerId(ownerId) {
+export function getOffersByOwnerId() {
   return new Promise((resolve, reject) => {
-    fetch(`${offerURL}/user/${ownerId}`, {
+    fetch(`${offerURL}/user/listByOwnerId`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

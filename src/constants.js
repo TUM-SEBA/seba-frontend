@@ -4,6 +4,7 @@ export const authURL = `${serverURL}/auth`;
 export const offerURL = `${serverURL}/offer`;
 export const biddingRequestURL = `${serverURL}/biddingrequest`;
 export const reviewURL = `${serverURL}/review`;
+export const entityURL = `${serverURL}/entity`;
 export const publicURL = `${serverURL}/public`;
 
 //Messages

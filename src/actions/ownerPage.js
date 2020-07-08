@@ -9,6 +9,11 @@ export const SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN =
   "SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN";
 export const SETFEEDBACKFIELDVALUE = "SETFEEDBACKFIELDVALUE";
 export const ISVIEWFEEDBACKDIALOGOPEN = "ISVIEWFEEDBACKDIALOGOPEN";
+export const SETISENTITYLISTDIALOGOPEN = "SETISENTITYLISTDIALOGOPEN";
+export const SETISENTITYFORMDIALOGOPEN = "SETISENTITYFORMDIALOGOPEN";
+export const ENTITYLISTCHANGEFILTERBY = "ENTITYLISTCHANGEFILTERBY";
+export const ENTITYLISTCHANGESEARCH = "ENTITYLISTCHANGESEARCH";
+export const SETENTITYFIELDVALUE = "SETENTITYFIELDVALUE";
 
 export const changeFilterBy = (value) => (dispatch) =>
   dispatch({
@@ -75,4 +80,37 @@ export const setIsViewFeedbackDialogOpen = (value, offerId) => (dispatch) =>
     type: ISVIEWFEEDBACKDIALOGOPEN,
     value,
     offerId,
+  });
+
+export const setIsEntityListDialogOpen = (isOpen) => (dispatch) =>
+  dispatch({
+    type: SETISENTITYLISTDIALOGOPEN,
+    isOpen,
+  });
+
+export const setIsEntityFormDialogOpen = (isOpen, isInsert, entityId) => (dispatch) =>
+  dispatch({
+    type: SETISENTITYFORMDIALOGOPEN,
+    isOpen,
+    isInsert,
+    entityId,
+  });
+
+export const entityListChangeFilterBy = (value) => (dispatch) =>
+  dispatch({
+    type: ENTITYLISTCHANGEFILTERBY,
+    value,
+  });
+
+export const entityChangeSearch = (value) => (dispatch) =>
+  dispatch({
+    type: ENTITYLISTCHANGESEARCH,
+    value,
+  });
+
+export const setEntityfieldValue = (fieldName, value) => (dispatch) =>
+  dispatch({
+    type: SETENTITYFIELDVALUE,
+    fieldName,
+    value,
   });

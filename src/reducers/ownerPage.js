@@ -9,6 +9,11 @@ import {
   SETISBIDDINGREQUESTDIALOGOPEN,
   SETFEEDBACKFIELDVALUE,
   ISVIEWFEEDBACKDIALOGOPEN,
+  SETISENTITYLISTDIALOGOPEN,
+  SETISENTITYFORMDIALOGOPEN,
+  ENTITYLISTCHANGEFILTERBY,
+  ENTITYLISTCHANGESEARCH,
+  SETENTITYFIELDVALUE,
 } from "../actions/ownerPage";
 
 let initialState = {
@@ -33,6 +38,17 @@ let initialState = {
     description: "",
     rating: 3,
   },
+  isEntityListDialogOpen: false,
+  isEntityFormDialogOpen: false,
+  entitySelectedFilterBy: -1,
+  entitySearchValue: "",
+  entityFields: {
+    category: "",
+    breed: "",
+    description: "",
+  },
+  entityId: "",
+  isInsert: false,
 };
 
 export default function ownerPage(state = initialState, action) {
@@ -97,6 +113,36 @@ export default function ownerPage(state = initialState, action) {
         ...state,
         isViewFeedbackDialogOpen: action.value,
         offerId: action.offerId,
+      };
+    case SETISENTITYLISTDIALOGOPEN:
+      return {
+        ...state,
+        isEntityListDialogOpen: action.isOpen,
+      };
+    case SETISENTITYFORMDIALOGOPEN:
+      return {
+        ...state,
+        isEntityFormDialogOpen: action.isOpen,
+        isInsert: action.isInsert,
+        entityId: action.entityId,
+      };
+    case ENTITYLISTCHANGEFILTERBY:
+      return {
+        ...state,
+        entitySelectedFilterBy: action.value,
+      };
+    case ENTITYLISTCHANGESEARCH:
+      return {
+        ...state,
+        entitySearchValue: action.value,
+      };
+    case SETENTITYFIELDVALUE:
+      return {
+        ...state,
+        entityFields: {
+          ...state.entityFields,
+          [action.fieldName]: action.value,
+        },
       };
     default:
       return state;

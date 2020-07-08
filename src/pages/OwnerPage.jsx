@@ -27,6 +27,7 @@ import FilterSearch from "../components/FilterSearch";
 import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
 import ViewFeedbackForm from "../components/FeedbackForm";
+import EntityList from "../components/EntityList";
 
 const filterByOptions = ["Title", "Description"];
 
@@ -310,6 +311,7 @@ function OfferPage(props) {
         <BiddingRequestList history={history} />
         <MenuDialog />
         <ViewFeedbackForm history={history} />
+        <EntityList history={history} />
       </div>
     </div>
   );

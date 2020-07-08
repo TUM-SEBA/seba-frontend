@@ -218,7 +218,7 @@ function CaretakerPage(props) {
                       <CaretakerCard
                         key={index}
                         offer={offer}
-                        showAction={activeTab === 0}
+                        tab={activeTab}
                         interestedCallback={() =>
                           setIsBiddingRequestDialogOpen(true, offer._id)
                         }

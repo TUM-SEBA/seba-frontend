@@ -28,7 +28,7 @@ let initialState = {
     description: " ",
     title: "",
   },
-  biddingRequestSelectedFilterBy: "-1",
+  biddingRequestSelectedFilterBy: -1,
   biddingRequestSearchValue: "",
   isBiddingRequestDialogOpen: false,
   offerId: "",

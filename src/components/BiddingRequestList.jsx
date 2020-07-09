@@ -17,6 +17,7 @@ import {getOffer} from "../services/offerService";
 import SnackbarAlert from "./SnackbarAlert";
 import noDataFoundImage from "../assets/no-data-found.png";
 import BiddingRequestCard from "./BiddingRequestCard";
+import NoData from "./NoData";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -220,20 +221,9 @@ function BiddingRequestList(props) {
                 </Grid>
               ))
           ) : (
-            <div key={"noDataFound"} className={classes.noDataFound}>
-              <div className={classes.noDataFoundImageContainer}>
-                <img
-                  className={classes.noDataFoundImage}
-                  src={noDataFoundImage}
-                  alt={"No Data Found"}
-                />
-              </div>
-              <div className={classes.noDataFoundTextContainer}>
-                <Typography className={classes.noDataFoundText}>
-                  No bidding request is available for now. Please check again later.
-                </Typography>
-              </div>
-            </div>
+            <NoData
+              text={"No bidding request is available for now. Please check again later."}
+            />
           )}
         </Grid>
       </div>

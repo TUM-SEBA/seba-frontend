@@ -23,6 +23,7 @@ import {
   updateNotInterested,
 } from "../services/offerService";
 import MenuDialog from "../components/MenuDialog";
+import NoData from "../components/NoData";
 
 const tabs = ["Available", "Interested", "Not Intereted"];
 const getOfferServices = [
@@ -38,7 +39,7 @@ const noOfferMessages = [
 const filterByOptions = ["Owner", "Description"];
 const styles = (theme) => ({
   container: {
-    margin: `${theme.spacing(10)}px auto 0 auto`,
+    margin: `${theme.spacing(5)}px auto 0 auto`,
     width: "80%",
   },
   body: {
@@ -236,36 +237,10 @@ function CaretakerPage(props) {
                   );
                 })
               ) : (
-                <div key={"noDataFound"} className={classes.noDataFound}>
-                  <div className={classes.noDataFoundImageContainer}>
-                    <img
-                      className={classes.noDataFoundImage}
-                      src={noDataFoundImage}
-                      alt={"No Data Found"}
-                    />
-                  </div>
-                  <div className={classes.noDataFoundTextContainer}>
-                    <Typography className={classes.noDataFoundText}>
-                      There is no offer based on your search.
-                    </Typography>
-                  </div>
-                </div>
+                <NoData text={"There is no offer based on your search."} />
               )
             ) : (
-              <div key={"noDataFound"} className={classes.noDataFound}>
-                <div className={classes.noDataFoundImageContainer}>
-                  <img
-                    className={classes.noDataFoundImage}
-                    src={noDataFoundImage}
-                    alt={"No Data Found"}
-                  />
-                </div>
-                <div className={classes.noDataFoundTextContainer}>
-                  <Typography className={classes.noDataFoundText}>
-                    {noOfferMessages[activeTab]}
-                  </Typography>
-                </div>
-              </div>
+              <NoData text={noOfferMessages[activeTab]} />
             )}
           </Grid>
         </div>

@@ -108,7 +108,7 @@ const styles = (theme) => ({
     borderRadius: "20%",
     width: "200px",
     height: "50px",
-    left: "40%",
+    left: "45%",
     marginTop: "10px",
     backgroundColor: "lightgreen",
   },

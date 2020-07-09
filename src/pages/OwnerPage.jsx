@@ -6,6 +6,7 @@ import {
   CardContent,
   Button,
   CardActionArea,
+  CardActions,
   CardMedia,
   Grid,
 } from "@material-ui/core";
@@ -14,6 +15,8 @@ import {
   changeSearch,
   setIsBiddingRequestDialogOpen,
   setIsOfferDialogOpen,
+  setIsViewFeedbackDialogOpen,
+  setCaretakerForFeedback,
 } from "../actions/ownerPage";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
@@ -26,7 +29,10 @@ import Typography from "@material-ui/core/Typography";
 import FilterSearch from "../components/FilterSearch";
 import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
-import ViewFeedbackForm from "../components/FeedbackForm";
+import FeedbackForm from "../components/FeedbackForm";
+import PaypalButton from "../components/PaypalButton";
+import {postPaymentCompleted} from "../services/offerService";
+import {getCaretakerFromBiddingRequest} from "../services/biddingRequestService";
 
 const filterByOptions = ["Title", "Description"];
 
@@ -140,6 +146,8 @@ function OfferPage(props) {
     setIsOfferDialogOpen,
     setIsBiddingRequestDialogOpen,
     showSnackBar,
+    setIsViewFeedbackDialogOpen,
+    setCaretakerForFeedback,
   } = props;
 
   const [offers, setOffers] = useState([]);
@@ -197,6 +205,32 @@ function OfferPage(props) {
   }
 
   function getGridItem(index, offer) {
+    const paymentDetails = {
+      price: offer.approvedPrice * 0.8,
+      description: offer.description,
+      currency: "EUR",
+    };
+
+    function handlePostPaymentCompleted() {
+      postPaymentCompleted(offer._id)
+        .then(async () => {
+          showSnackBar(true, "Payment Successful", "success");
+          await getCaretakerFromBiddingRequest(offer.approveBiddingRequestId).then(
+            (caretaker) => {
+              setCaretakerForFeedback(caretaker);
+            }
+          );
+          setIsViewFeedbackDialogOpen(true, offer._id);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, "Internal Server error", "error");
+        });
+    }
+
     return (
       <Grid item xs={12} md={6} lg={4} key={index}>
         <Card className={classes.root} variant="outlined">
@@ -237,20 +271,34 @@ function OfferPage(props) {
                 {offer.description}
               </Typography>
             </CardContent>
-
-            {/*
-          <div className={classes.offerCardId}>
-            Created on: {formatDate(offer.createdDate)}
-          </div>
-          <CardContent className={classes.offerCardContent}>
-            <img className={classes.offerImage} src={dummyImage} alt={"Pet"} />
-          </CardContent>
-          <div className={classes.offerCardTitle}>{offer.title}</div>
-          <div className={classes.offerCardDescription}>{offer.description}</div>
-          <div className={classes.offerCreatedDate}>
-            Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
-          </div> */}
           </CardActionArea>
+          {offer.status === "Payment Pending" && (
+            <CardActions>
+              <PaypalButton
+                paymentDetails={paymentDetails}
+                handlePaymentCompleted={handlePostPaymentCompleted}
+              />
+            </CardActions>
+          )}
+          {offer.status === "Completed" && (
+            <CardActions>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.interestedButton}
+                onClick={async () => {
+                  await getCaretakerFromBiddingRequest(
+                    offer.approveBiddingRequestId
+                  ).then((caretaker) => {
+                    setCaretakerForFeedback(caretaker);
+                  });
+                  setIsViewFeedbackDialogOpen(true, offer._id);
+                }}
+              >
+                Give Feedback
+              </Button>
+            </CardActions>
+          )}
         </Card>
       </Grid>
     );
@@ -308,8 +356,8 @@ function OfferPage(props) {
         </div>
         <OfferForm history={history} />
         <BiddingRequestList history={history} />
+        <FeedbackForm history={history} />
         <MenuDialog />
-        <ViewFeedbackForm history={history} />
       </div>
     </div>
   );
@@ -326,6 +374,8 @@ const mapDispatchToProps = {
   setIsOfferDialogOpen: setIsOfferDialogOpen,
   setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
   showSnackBar: showSnackBar,
+  setIsViewFeedbackDialogOpen: setIsViewFeedbackDialogOpen,
+  setCaretakerForFeedback: setCaretakerForFeedback,
 };
 
 export default connect(

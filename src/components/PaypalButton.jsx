@@ -1,7 +1,7 @@
 import React from "react";
 
 function PaypalButton(props) {
-  const {paymentDetails, handlePrePaymentCompleted} = props;
+  const {paymentDetails, handlePaymentCompleted} = props;
   const paypalRef = React.useRef();
   const [paidFor, setPaidFor] = React.useState(false);
 
@@ -37,7 +37,7 @@ function PaypalButton(props) {
   }, [paymentDetails.currency, paymentDetails.description, paymentDetails.price]);
 
   if (paidFor) {
-    handlePrePaymentCompleted();
+    handlePaymentCompleted();
   }
 
   return <div ref={paypalRef} />;

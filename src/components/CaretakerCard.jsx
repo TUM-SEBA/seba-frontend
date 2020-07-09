@@ -1,8 +1,11 @@
 import React from "react";
+import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {Button, Card, CardActions, CardContent, CardMedia, Grid} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {publicURL} from "../constants";
+import {caretakingCompleted} from "../services/offerService";
+import {showSnackBar} from "../actions/loginPage";
 
 const styles = (theme) => {
   return {
@@ -70,7 +73,8 @@ const styles = (theme) => {
 };
 
 function CaretakerCard(props) {
-  const {classes, offer, interestedCallback, notInterestedCallback, tab} = props;
+  const {classes, offer, interestedCallback, notInterestedCallback, tab, history} = props;
+
   function formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -82,6 +86,7 @@ function CaretakerCard(props) {
 
     return [day, month, year].join("/");
   }
+
   let status = "";
   if (offer.status === "Not Assigned") {
     status = "Not assigned yet";
@@ -91,13 +96,21 @@ function CaretakerCard(props) {
     } else {
       status = "The offer has been assigned to other caretaker.";
     }
+  } else if (offer.status === "Payment Pending") {
+    status = "Payment by owner is pending";
+  } else if (offer.status === "Completed") {
+    status = "Feedback by owner is pending";
+  } else {
+    status = offer.status;
   }
+
+  let showCompletedButton = false;
   const endDate = new Date(offer.endDate);
   const today = new Date();
-  const shown = today > endDate;
+  if (today > endDate && offer.status === "Assigned") showCompletedButton = true;
+
   return (
     <Card variant="outlined">
-      {/*<div className={classes.offerCardId}>{offer._id}</div>*/}
       <CardContent className={classes.offerCardContent}>
         <CardMedia
           className={classes.media}
@@ -176,12 +189,31 @@ function CaretakerCard(props) {
         </CardActions>
       )}
 
-      {tab === 1 && shown && (
+      {tab === 1 && showCompletedButton && (
         <CardActions className={classes.offerCardActions}>
           <Grid container spacing={1}>
             <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} />
             <Grid item xs={12} sm={12} md={4} lg={4}>
-              <Button variant="contained" className={classes.primaryButton} size="small">
+              <Button
+                variant="contained"
+                className={classes.primaryButton}
+                size="small"
+                onClick={() => {
+                  caretakingCompleted(offer._id)
+                    .then(() => {
+                      showSnackBar(true, "Caretaker Task Completed", "success");
+                      showCompletedButton = false;
+                      window.location.reload();
+                    })
+                    .catch((status) => {
+                      if (status === 401) {
+                        history.push("/");
+                        window.location.reload();
+                      }
+                      showSnackBar(true, "Save Failed", "error");
+                    });
+                }}
+              >
                 Complete
               </Button>
             </Grid>
@@ -193,4 +225,13 @@ function CaretakerCard(props) {
   );
 }
 
-export default withStyles(styles, {withTheme: true})(CaretakerCard);
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  showSnackBar: showSnackBar,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, {withTheme: true})(CaretakerCard));

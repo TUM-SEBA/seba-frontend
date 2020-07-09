@@ -144,9 +144,10 @@ export function insertOffer(offer, images) {
   });
 }
 
-export function acceptOffer(offerId, approveBiddingRequestId, insurance) {
+export function acceptOffer(offerId, approveBiddingRequestId, price, insurance) {
   const body = {
     approveBiddingRequestId: approveBiddingRequestId,
+    price: price,
     insurance: insurance,
   };
   return new Promise((resolve, reject) => {
@@ -157,6 +158,60 @@ export function acceptOffer(offerId, approveBiddingRequestId, insurance) {
         authorization: `Bearer ${localStorage["token"]}`,
       },
       body: JSON.stringify(body),
+    }).then((response) => {
+      if (response.status === 200) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}
+
+export function caretakingCompleted(offerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/paymentPending/${offerId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}
+
+export function postPaymentCompleted(offerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/completed/${offerId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}
+
+export function closeOffer(offerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/closed/${offerId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
     }).then((response) => {
       if (response.status === 200) {
         resolve();

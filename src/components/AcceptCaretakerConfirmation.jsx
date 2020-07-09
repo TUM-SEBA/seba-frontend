@@ -72,7 +72,6 @@ const styles = (theme) => ({
 });
 
 function AcceptCaretakerConfirmation(props) {
-  console.log("Hello");
   const {
     classes,
     history,
@@ -103,7 +102,12 @@ function AcceptCaretakerConfirmation(props) {
   }, [biddingRequestId, history, showSnackBar]);
 
   function handlePrePaymentCompleted() {
-    acceptOffer(biddingRequest.offer._id, biddingRequest._id, isInsuranceChecked)
+    acceptOffer(
+      biddingRequest.offer._id,
+      biddingRequest._id,
+      biddingRequest.price,
+      isInsuranceChecked
+    )
       .then(() => {
         showSnackBar(true, saveSuccess, "success");
         setIsAcceptCaretakerConfirmationDialogOpen(false, "");
@@ -168,7 +172,7 @@ function AcceptCaretakerConfirmation(props) {
           <Grid container spacing={1}>
             <PaypalButton
               paymentDetails={paymentDetails}
-              handlePrePaymentCompleted={handlePrePaymentCompleted}
+              handlePaymentCompleted={handlePrePaymentCompleted}
             />
 
             <Grid item xs={12} sm={3}>

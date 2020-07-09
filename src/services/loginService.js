@@ -71,7 +71,7 @@ export function loginCustomer(username, password) {
   };
 }
 
-export function logout() {
+export function logout(history) {
   return (dispatch) => {
     return fetch(authURL + "/logout", {
       method: "GET",
@@ -87,6 +87,7 @@ export function logout() {
       })
       .then(() => {
         dispatch(showSnackBar(true, "Logout Successful", "success"));
+        history.push("/");
         window.location.reload();
       })
       .catch(() => {

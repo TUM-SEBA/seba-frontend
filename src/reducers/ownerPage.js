@@ -9,6 +9,7 @@ import {
   SETISBIDDINGREQUESTDIALOGOPEN,
   SETFEEDBACKFIELDVALUE,
   ISVIEWFEEDBACKDIALOGOPEN,
+  SETCARETAKERFORFEEDBACK,
 } from "../actions/ownerPage";
 
 let initialState = {
@@ -32,6 +33,10 @@ let initialState = {
   feedbackFields: {
     description: "",
     rating: 3,
+  },
+  feedbackCaretaker: {
+    id: "",
+    username: "",
   },
 };
 
@@ -97,6 +102,11 @@ export default function ownerPage(state = initialState, action) {
         ...state,
         isViewFeedbackDialogOpen: action.value,
         offerId: action.offerId,
+      };
+    case SETCARETAKERFORFEEDBACK:
+      return {
+        ...state,
+        feedbackCaretaker: action.value,
       };
     default:
       return state;

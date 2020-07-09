@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, Toolbar, Typography, Grid} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, div} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {Avatar} from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -11,6 +11,25 @@ import {connect} from "react-redux";
 import LoopIcon from "@material-ui/icons/Loop";
 
 const useStyles = makeStyles((theme) => ({
+  rowFlex: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+  },
+  logoDiv: {
+    minWidth: "70%",
+    flexGrow: "1",
+  },
+  menuDiv: {
+    minWidth: "9%",
+  },
+  switchDiv: {
+    minWidth: "13%",
+  },
+  logoutDiv: {
+    minWidth: "7%",
+  },
   root: {
     display: "flex",
     "& > *": {
@@ -26,10 +45,6 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
     cursor: "pointer",
   },
-  switchDiv: {
-    textAlign: "right",
-  },
-
   headerColor: {
     background: "#DCEFDE",
   },
@@ -65,31 +80,31 @@ const Header = (props) => {
     <div className={classes.headerColor}>
       <AppBar className={classes.headerColor} position="static">
         <Toolbar>
-          <Grid container direction="row" justify="space-around" alignItems="center">
-            <Grid item xs={6} sm={6} md={6} lg={9}>
+          <div className={classes.rowFlex}>
+            <div className={classes.logoDiv}>
               <Avatar onClick={gotoHome} alt="Home" src={logo} className={classes.logo} />
-            </Grid>
-            <Grid item xs={6} sm={2} md={2} lg={1}>
+            </div>
+            <div className={classes.menuDiv}>
               <AccountMenu />
-            </Grid>
+            </div>
             {currentUrl !== "/" && (
-              <Grid item className={classes.switchDiv} xs={6} sm={2} md={2} lg={1}>
+              <div className={classes.switchDiv}>
                 <Button onClick={switchUser}>
                   <Typography className={classes.sentenceCase}>
                     Switch to {currentUrl === "/caretaker" ? "Owner" : "Caretaker"}
                   </Typography>
                   <LoopIcon />
                 </Button>
-              </Grid>
+              </div>
             )}
 
-            <Grid item xs={6} sm={2} md={2} lg={1}>
+            <div className={classes.logoutDiv}>
               <Button onClick={() => logout(history)}>
                 <Typography className={classes.sentenceCase}>Sign Out</Typography>
                 <ExitToAppOutlinedIcon />
               </Button>
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

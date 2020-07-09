@@ -23,15 +23,17 @@ import {
 import MenuDialog from "../components/MenuDialog";
 import NoData from "../components/NoData";
 
-const tabs = ["Available", "Interested", "Not Intereted"];
+const tabs = ["Available", "Not Assigned", "Assigned to You", "Not Intereted"];
 const getOfferServices = [
   getAvailableOffers,
+  getInterestedOffers,
   getInterestedOffers,
   getNotInterestedOffers,
 ];
 const noOfferMessages = [
   "No offer is available for now. Please check again later.",
-  "You do not have any interesting offers yet.",
+  "There is no unassigned offers.",
+  "You have no assigned offers.",
   "There is no offers that is not interested for you.",
 ];
 const filterByOptions = ["Owner", "Description"];
@@ -90,18 +92,29 @@ function CaretakerPage(props) {
     history.push("/");
     window.location.reload();
   }
-
+  function filterOffer(index, offer) {
+    if (index === 1) {
+      return offer.status === "Not Assigned";
+    } else if (index === 2) {
+      console.log(offer);
+      if (offer.approvedBiddingRequest)
+        return (
+          offer.approvedBiddingRequest.caretaker.username === localStorage["username"]
+        );
+      return false;
+    }
+    return true;
+  }
   function getOffers(index) {
     getOfferServices[index]()
       .then((offers) => {
-        setOffers(offers);
+        const displayedOffers = offers.filter((offer) => filterOffer(index, offer));
+        setOffers(displayedOffers);
       })
       .catch((status) => {
         if (status === 401) {
           history.push("/");
           window.location.reload();
-        } else {
-          setOffers([]);
         }
         showSnackBar(true, fetchFailed, "error");
       });
@@ -116,8 +129,6 @@ function CaretakerPage(props) {
         if (status === 401) {
           history.push("/");
           window.location.reload();
-        } else {
-          setOffers([]);
         }
         showSnackBar(true, saveFailed, "error");
       });

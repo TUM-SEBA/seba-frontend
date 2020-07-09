@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Card, CardContent, Button, Grid, Tabs, Tab, Typography} from "@material-ui/core";
+import {Button, Card, CardContent, Grid, Tab, Tabs} from "@material-ui/core";
 import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
@@ -16,7 +16,6 @@ import MenuDialog from "../components/MenuDialog";
 import FeedbackForm from "../components/FeedbackForm";
 import OwnerItemCard from "../components/OwnerItemCard";
 import EntityList from "../components/EntityList";
-import noDataFoundImage from "../assets/no-data-found.png";
 import NoData from "../components/NoData";
 
 const filterByOptions = ["Title", "Description"];

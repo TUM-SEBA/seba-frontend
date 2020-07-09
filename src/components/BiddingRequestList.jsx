@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Dialog, Grid, Typography} from "@material-ui/core";
+import {Dialog, Grid} from "@material-ui/core";
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
@@ -15,7 +15,6 @@ import {getBiddingRequestByOffer} from "../services/biddingRequestService";
 import {showSnackBar} from "../actions/loginPage";
 import {getOffer} from "../services/offerService";
 import SnackbarAlert from "./SnackbarAlert";
-import noDataFoundImage from "../assets/no-data-found.png";
 import BiddingRequestCard from "./BiddingRequestCard";
 import NoData from "./NoData";
 
@@ -229,7 +228,7 @@ function BiddingRequestList(props) {
           )}
         </Grid>
       </div>
-      <AcceptCaretakerConfirmation />
+      <AcceptCaretakerConfirmation history={history} />
       <SnackbarAlert />
     </Dialog>
   );

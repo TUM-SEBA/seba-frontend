@@ -226,8 +226,8 @@ function OfferPage(props) {
         </div>
         <div className={classes.body}>
           <Grid container spacing={2}>
+            {activeTab === 0 && offers.length > 0 && getCreateOffer()}
             {offers.length > 0 ? (
-              (activeTab === 0 && getCreateOffer(),
               offers
                 .filter((offer) => {
                   if (activeTab === 1) {
@@ -257,7 +257,7 @@ function OfferPage(props) {
                 })
                 .map((offer, index) => (
                   <OwnerItemCard index={index} offer={offer} key={index} />
-                )))
+                ))
             ) : (
               <div key={"noDataFound"} className={classes.noDataFound}>
                 <div className={classes.noDataFoundImageContainer}>

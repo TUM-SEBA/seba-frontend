@@ -22,6 +22,7 @@ import {setFeedbackFieldValue, setIsViewFeedbackDialogOpen} from "../actions/own
 import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 import {insertReview} from "../services/reviewService";
+import {closeOffer} from "../services/offerService";
 
 const styles = (theme) => ({
   caretakerImage: {
@@ -95,6 +96,7 @@ function FeedbackForm(props) {
     setIsViewFeedbackDialogOpen,
     setFeedbackFieldValue,
     showSnackBar,
+    feedbackCaretaker,
   } = props;
 
   // TODO: remove this when backend is connected
@@ -126,6 +128,7 @@ function FeedbackForm(props) {
     } else {
       let review = {
         offer: offerId,
+        caretaker: feedbackCaretaker.id,
         text: feedbackFields["description"],
         rating: feedbackFields["rating"],
       };
@@ -133,6 +136,7 @@ function FeedbackForm(props) {
         .then(() => {
           showSnackBar(true, saveSuccess, "success");
           setIsViewFeedbackDialogOpen(false);
+          closeOffer(offerId).then(window.location.reload());
         })
         .catch((status) => {
           if (status === 401) {
@@ -168,7 +172,7 @@ function FeedbackForm(props) {
                   <div>
                     <Avatar src={caretakerImage} className={classes.caretakerImage} />
                     <Typography className={classes.textCaretaker}>
-                      Dummy Caretaker Name
+                      {feedbackCaretaker.username}
                     </Typography>
                   </div>
 
@@ -261,12 +265,13 @@ function FeedbackForm(props) {
 }
 
 const mapStateToProps = ({
-  ownerPage: {isViewFeedbackDialogOpen, offerId, feedbackFields},
+  ownerPage: {isViewFeedbackDialogOpen, offerId, feedbackFields, feedbackCaretaker},
 }) => {
   return {
     isViewFeedbackDialogOpen,
     offerId,
     feedbackFields,
+    feedbackCaretaker,
   };
 };
 

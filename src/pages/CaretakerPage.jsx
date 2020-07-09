@@ -157,6 +157,7 @@ function CaretakerPage(props) {
         showSnackBar(true, saveFailed, "error");
       });
   }
+
   const filteredOffers = offers.filter((offer) => {
     var searchRegex = new RegExp(searchValue, "gi");
     if (searchValue === "") {
@@ -175,6 +176,7 @@ function CaretakerPage(props) {
     }
     return false;
   });
+
   return (
     <div>
       <div>
@@ -228,6 +230,7 @@ function CaretakerPage(props) {
                         notInterestedCallback={() =>
                           handleNotInterestedCallback(offer._id)
                         }
+                        history
                       />
                     </Grid>
                   );

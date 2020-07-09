@@ -1,32 +1,20 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {
-  Card,
-  CardContent,
-  Button,
-  CardActionArea,
-  CardMedia,
-  Grid,
-} from "@material-ui/core";
-import {
-  changeFilterBy,
-  changeSearch,
-  setIsBiddingRequestDialogOpen,
-  setIsOfferDialogOpen,
-} from "../actions/ownerPage";
+import {Card, CardContent, Button, Grid, Tabs, Tab, Typography} from "@material-ui/core";
+import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
-import {fetchFailed, publicURL} from "../constants";
+import {fetchFailed} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
-import Typography from "@material-ui/core/Typography";
 import FilterSearch from "../components/FilterSearch";
 import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
-import ViewFeedbackForm from "../components/FeedbackForm";
+import FeedbackForm from "../components/FeedbackForm";
+import OwnerItemCard from "../components/OwnerItemCard";
 import EntityList from "../components/EntityList";
 import noDataFoundImage from "../assets/no-data-found.png";
 
@@ -35,20 +23,16 @@ const filterByOptions = ["Title", "Description"];
 const styles = (theme) => ({
   ownerPage: {
     height: "100vh",
-    overflow: "hidden",
+  },
+  tabroot: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(5),
   },
   root: {
     maxWidth: 400,
     minHeight: 262,
   },
-  divActionArea: {
-    minHeight: 262,
-  },
-  media: {
-    height: theme.spacing(20),
-    objectFit: "cover",
-  },
-  ownerHeader: {},
   container: {
     margin: "40px auto",
     width: "80%",
@@ -75,16 +59,6 @@ const styles = (theme) => ({
     color: "rgba(0, 0, 0, 0.4)",
     fontSize: "10pt",
   },
-  divCardContentText: {
-    minHeight: "90px",
-  },
-  // offerCardTitle: {
-  //   marginLeft: theme.spacing(3),
-  //   height: theme.spacing(3),
-  //   textAlign: "justify",
-  //   fontSize: "13pt",
-  //   fontWeight: "fontWeightBold",
-  // },
   offerCardContent: {
     height: theme.spacing(12),
     display: "flex",
@@ -96,25 +70,6 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "center",
     paddingTop: theme.spacing(3),
-  },
-  offerCreatedDate: {
-    // marginLeft: theme.spacing(3),
-    // marginTop: theme.spacing(2),
-    // textAlign: "justify",
-    // fontSize: "10pt",
-  },
-  offerCardDescription: {
-    // marginLeft: theme.spacing(3),
-    // height: theme.spacing(4),
-    // textAlign: "justify",
-    // fontSize: "10pt",
-    overflowY: "auto",
-  },
-  offerDurationDates: {
-    color: "black",
-  },
-  interestedButton: {
-    width: "100%",
   },
   createOfferButton: {
     borderRadius: "100%",
@@ -130,6 +85,15 @@ const styles = (theme) => ({
     marginBottom: "10pt",
     textAlign: "center",
   },
+  tabOption: {
+    marginTop: theme.spacing(4),
+    borderBottom: `1px solid rgba(0, 0, 0, 0.3)`,
+  },
+  tabActive: {
+    color: theme.palette.secondary.contrastText,
+    background: theme.palette.secondary.main,
+    opacity: 1,
+  },
   noDataFoundImageContainer: {
     textAlign: "center",
     //width: "100%",
@@ -144,11 +108,12 @@ const styles = (theme) => ({
     borderRadius: "20%",
     width: "200px",
     height: "50px",
-    left: "40%",
+    left: "45%",
     marginTop: "10px",
     backgroundColor: "lightgreen",
   },
 });
+
 function OfferPage(props) {
   const {
     history,
@@ -158,28 +123,34 @@ function OfferPage(props) {
     changeFilterBy,
     changeSearch,
     setIsOfferDialogOpen,
-    setIsBiddingRequestDialogOpen,
     showSnackBar,
   } = props;
 
   const [offers, setOffers] = useState([]);
+  const [activeTab, setActiveTab] = React.useState(0);
+  const tabs = ["Offers", "Pending Payments", "Pending Feedbacks"];
+  const [disableTab, setDisableTab] = React.useState(false);
 
-  function formatDate(date) {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
+  const handleTabClick = (index) => {
+    setActiveTab(index);
+  };
 
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [day, month, year].join("/");
+  function pendingPaymentCheck(offers) {
+    if (offers.some((offer) => offer.status === "Payment Pending")) {
+      setDisableTab(true);
+      setActiveTab(1);
+    }
+    if (offers.some((offer) => offer.status === "Completed")) {
+      setDisableTab(true);
+      setActiveTab(2);
+    }
   }
 
   useEffect(() => {
     function getOffers() {
       getOffersByOwnerId()
         .then((response) => {
+          pendingPaymentCheck(response);
           setOffers(response);
         })
         .catch((_) => {
@@ -192,6 +163,7 @@ function OfferPage(props) {
     }
     getOffers();
   }, [history, showSnackBar]);
+
   function getCreateOffer() {
     return (
       <Grid item xs={12} md={6} lg={4} key={0}>
@@ -212,69 +184,6 @@ function OfferPage(props) {
     );
   }
 
-  function handleCardClick(offerId) {
-    setIsBiddingRequestDialogOpen(true, offerId);
-  }
-
-  function getGridItem(index, offer) {
-    return (
-      <Grid item xs={12} md={6} lg={4} key={index}>
-        <Card className={classes.root} variant="outlined">
-          <CardActionArea
-            className={classes.divActionArea}
-            onClick={() => handleCardClick(offer._id)}
-          >
-            <CardMedia
-              className={classes.media}
-              image={`${publicURL}/${offer.entity.images[0]}`}
-              title="Contemplative Reptile"
-            />
-
-            <CardContent className={classes.divCardContentText}>
-              <Typography
-                className={classes.offerCardTitle}
-                gutterBottom
-                variant="h5"
-                component="h2"
-              >
-                {offer.title}
-              </Typography>
-              <Typography
-                className={classes.offerDurationDates}
-                variant="body2"
-                color="textSecondary"
-                component="p"
-              >
-                Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
-              </Typography>
-
-              <Typography
-                className={classes.offerCardDescription}
-                variant="body2"
-                color="textSecondary"
-                component="p"
-              >
-                {offer.description}
-              </Typography>
-            </CardContent>
-
-            {/*
-          <div className={classes.offerCardId}>
-            Created on: {formatDate(offer.createdDate)}
-          </div>
-          <CardContent className={classes.offerCardContent}>
-            <img className={classes.offerImage} src={dummyImage} alt={"Pet"} />
-          </CardContent>
-          <div className={classes.offerCardTitle}>{offer.title}</div>
-          <div className={classes.offerCardDescription}>{offer.description}</div>
-          <div className={classes.offerCreatedDate}>
-            Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
-          </div> */}
-          </CardActionArea>
-        </Card>
-      </Grid>
-    );
-  }
   return (
     <div className={classes.ownerPage}>
       <Grid container direction="column" justify="flex-start" alignItems="stretch">
@@ -299,15 +208,37 @@ function OfferPage(props) {
             </Grid>
           </Grid>
         </div>
+        <div className={classes.tabroot}>
+          <div className={classes.tabOption}>
+            <Tabs value={activeTab}>
+              {tabs.map((tab, index) => (
+                <Tab
+                  key={index}
+                  value={index}
+                  disabled={index === 0 && disableTab}
+                  className={activeTab === index ? classes.tabActive : ""}
+                  label={tab}
+                  onClick={() => handleTabClick(index)}
+                />
+              ))}
+            </Tabs>
+          </div>
+        </div>
         <div className={classes.body}>
           <Grid container spacing={2}>
             {offers.length > 0 ? (
-              (getCreateOffer(),
+              (activeTab === 0 && getCreateOffer(),
               offers
                 .filter((offer) => {
+                  if (activeTab === 1) {
+                    if (offer.status === "Payment Pending") return true;
+                    else return false;
+                  }
+                  if (activeTab === 2) {
+                    if (offer.status === "Completed") return true;
+                    else return false;
+                  }
                   var searchRegex = new RegExp(searchValue, "gi");
-                  // todo only show user's own offers.
-                  //  (I did it like that. There is no point for the owner to see other people's offers in owner page - Eray)
                   if (searchValue === "") {
                     return true;
                   }
@@ -324,7 +255,9 @@ function OfferPage(props) {
                   }
                   return false;
                 })
-                .map((offer, index) => getGridItem(index, offer)))
+                .map((offer, index) => (
+                  <OwnerItemCard index={index} offer={offer} key={index} />
+                )))
             ) : (
               <div key={"noDataFound"} className={classes.noDataFound}>
                 <div className={classes.noDataFoundImageContainer}>
@@ -354,8 +287,8 @@ function OfferPage(props) {
         </div>
         <OfferForm history={history} />
         <BiddingRequestList history={history} />
+        <FeedbackForm history={history} />
         <MenuDialog />
-        <ViewFeedbackForm history={history} />
         <EntityList history={history} />
       </div>
     </div>
@@ -371,7 +304,6 @@ const mapDispatchToProps = {
   changeFilterBy: changeFilterBy,
   changeSearch: changeSearch,
   setIsOfferDialogOpen: setIsOfferDialogOpen,
-  setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
   showSnackBar: showSnackBar,
 };
 

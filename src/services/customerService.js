@@ -48,7 +48,9 @@ export function checkNewBadge() {
         if (result) dispatch(setNewBadgeAvailable(result, true));
       })
       .catch(async (err) => {
-        const errorMessage = await err.then((error) => error.message);
+        let errorMessage = "Server not reachable";
+        if (err instanceof Promise)
+          errorMessage = await err.then((error) => error.message);
         dispatch(showSnackBar(true, errorMessage, "error"));
       });
   };

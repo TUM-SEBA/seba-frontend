@@ -9,6 +9,7 @@ import {
   SETISBIDDINGREQUESTDIALOGOPEN,
   SETFEEDBACKFIELDVALUE,
   ISVIEWFEEDBACKDIALOGOPEN,
+  SETCARETAKERFORFEEDBACK,
   SETISENTITYLISTDIALOGOPEN,
   SETISENTITYFORMDIALOGOPEN,
   ENTITYLISTCHANGEFILTERBY,
@@ -37,6 +38,10 @@ let initialState = {
   feedbackFields: {
     description: "",
     rating: 3,
+  },
+  feedbackCaretaker: {
+    id: "",
+    username: "",
   },
   isEntityListDialogOpen: false,
   isEntityFormDialogOpen: false,
@@ -113,6 +118,11 @@ export default function ownerPage(state = initialState, action) {
         ...state,
         isViewFeedbackDialogOpen: action.value,
         offerId: action.offerId,
+      };
+    case SETCARETAKERFORFEEDBACK:
+      return {
+        ...state,
+        feedbackCaretaker: action.value,
       };
     case SETISENTITYLISTDIALOGOPEN:
       return {

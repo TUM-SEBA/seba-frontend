@@ -9,6 +9,7 @@ export const SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN =
   "SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN";
 export const SETFEEDBACKFIELDVALUE = "SETFEEDBACKFIELDVALUE";
 export const ISVIEWFEEDBACKDIALOGOPEN = "ISVIEWFEEDBACKDIALOGOPEN";
+export const SETCARETAKERFORFEEDBACK = "SETCARETAKERFORFEEDBACK";
 export const SETISENTITYLISTDIALOGOPEN = "SETISENTITYLISTDIALOGOPEN";
 export const SETISENTITYFORMDIALOGOPEN = "SETISENTITYFORMDIALOGOPEN";
 export const ENTITYLISTCHANGEFILTERBY = "ENTITYLISTCHANGEFILTERBY";
@@ -80,6 +81,12 @@ export const setIsViewFeedbackDialogOpen = (value, offerId) => (dispatch) =>
     type: ISVIEWFEEDBACKDIALOGOPEN,
     value,
     offerId,
+  });
+
+export const setCaretakerForFeedback = (value) => (dispatch) =>
+  dispatch({
+    type: SETCARETAKERFORFEEDBACK,
+    value,
   });
 
 export const setIsEntityListDialogOpen = (isOpen) => (dispatch) =>

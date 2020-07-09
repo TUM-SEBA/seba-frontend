@@ -102,7 +102,9 @@ function SignUpForm(props) {
           ? emptyField
             ? showSnackBar(true, requiredFieldsEmpty, "error")
             : await signUpCustomer(signUpFields).then((signUpSuccessful) =>
-                signUpSuccessful ? handleSuccessfulSignUp() : alert("Invalid Request")
+                signUpSuccessful
+                  ? handleSuccessfulSignUp()
+                  : showSnackBar(true, "Username exists", "error")
               )
           : showSnackBar(true, "Not a Valid Email format", "error")
         : showSnackBar(true, passwordStringCheckAlert, "error")

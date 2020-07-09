@@ -42,9 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const classes = useStyles();
-  const {logout} = props;
-
-  const {history} = props;
+  const {logout, history} = props;
 
   const currentUrl = window.location.pathname;
 
@@ -86,7 +84,7 @@ const Header = (props) => {
             )}
 
             <Grid item xs={6} sm={2} md={2} lg={1}>
-              <Button onClick={logout}>
+              <Button onClick={() => logout(history)}>
                 <Typography className={classes.sentenceCase}>Sign Out</Typography>
                 <ExitToAppOutlinedIcon />
               </Button>

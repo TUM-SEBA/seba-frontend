@@ -1,5 +1,6 @@
 import {
   ISVIEWBADGESDIALOGOPEN,
+  ISABOUTUSDIALOGOPEN,
   SAVEMYBADGES,
   CHANGEPASSWORD,
   NEWBADGEAVAILABLE,
@@ -10,6 +11,7 @@ import {
 
 let initialState = {
   isViewBadgesDialogOpen: false,
+  isAboutUsDialogOpen: false,
   myBadges: {},
   isChangePasswordDialogOpen: false,
   newBadge: null,
@@ -59,6 +61,11 @@ export default function welcomePage(state = initialState, action) {
       return {
         ...state,
         profileFields: {...state.profileFields, [action.fieldName]: action.value},
+      };
+    case ISABOUTUSDIALOGOPEN:
+      return {
+        ...state,
+        isAboutUsDialogOpen: action.value,
       };
     default:
       return {

@@ -1,4 +1,5 @@
 export const ISVIEWBADGESDIALOGOPEN = "ISVIEWBADGESDIALOGOPEN";
+export const ISABOUTUSDIALOGOPEN = "ISABOUTUSDIALOGOPEN";
 export const SAVEMYBADGES = "SAVEMYBADGES";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const NEWBADGEAVAILABLE = "NEWBADGEAVAILABLE";
@@ -47,5 +48,11 @@ export const setProfilefieldValue = (fieldName, value) => (dispatch) =>
   dispatch({
     type: SETPROFILEFIELDVALUE,
     fieldName,
+    value,
+  });
+
+export const setIsAboutUsDialogOpen = (value) => (dispatch) =>
+  dispatch({
+    type: ISABOUTUSDIALOGOPEN,
     value,
   });

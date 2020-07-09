@@ -1,11 +1,12 @@
 import React from "react";
-import {AppBar, Toolbar, Typography, Grid, Container, Button} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, Grid, Button} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import TwitterIcon from "@material-ui/icons/Twitter";
-import AddIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import {setIsAboutUsDialogOpen} from "../actions/welcomePage";
+import AboutUs from "./AboutUs";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Footer = (props) => {
+  const {history, setIsAboutUsDialogOpen} = props;
+
   const classes = useStyles();
 
   function openFacebook() {
@@ -89,19 +92,26 @@ const Footer = (props) => {
               </Grid>
             </Grid>
             <Grid item xs={4}>
-              <Button variant="contained" className={classes.socialMediaButton}>
+              <Button
+                variant="contained"
+                className={classes.socialMediaButton}
+                onClick={() => setIsAboutUsDialogOpen(true)}
+              >
                 About Us
               </Button>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
+      <AboutUs history={history} />
     </div>
   );
 };
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  setIsAboutUsDialogOpen: setIsAboutUsDialogOpen,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);

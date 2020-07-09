@@ -38,7 +38,7 @@ const styles = (theme) => {
 };
 
 function BiddingRequestCard(props) {
-  const {classes, biddingRequest, acceptCallback} = props;
+  const {classes, biddingRequest, offer, acceptCallback} = props;
 
   return (
     <Card variant="outlined" className={classes.gridItem}>
@@ -64,31 +64,33 @@ function BiddingRequestCard(props) {
           <div className={classes.line}>Bidding Price: {biddingRequest.price}</div>
           <div className={classes.line}>Remarks:</div>
           <div className={classes.remarks}>{biddingRequest.remarks}</div>
-          <CardActions>
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={4} md={5} lg={6}>
-                <Button
-                  variant="contained"
-                  className={classes.acceptButton}
-                  color="secondary"
-                  size="small"
-                  onClick={() => acceptCallback()}
-                >
-                  Accept
-                </Button>
+          {offer.status === "Not Assigned" && (
+            <CardActions>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={4} md={5} lg={6}>
+                  <Button
+                    variant="contained"
+                    className={classes.acceptButton}
+                    color="secondary"
+                    size="small"
+                    onClick={() => acceptCallback()}
+                  >
+                    Accept
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={4} md={5} lg={6}>
+                  <Button
+                    variant="contained"
+                    className={classes.acceptButton}
+                    color="secondary"
+                    size="small"
+                  >
+                    Reject
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={4} md={5} lg={6}>
-                <Button
-                  variant="contained"
-                  className={classes.acceptButton}
-                  color="secondary"
-                  size="small"
-                >
-                  Reject
-                </Button>
-              </Grid>
-            </Grid>
-          </CardActions>
+            </CardActions>
+          )}
         </Grid>
       </Grid>
     </Card>

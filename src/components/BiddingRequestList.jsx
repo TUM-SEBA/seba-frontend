@@ -18,7 +18,7 @@ import SnackbarAlert from "./SnackbarAlert";
 import BiddingRequestCard from "./BiddingRequestCard";
 import NoData from "./NoData";
 
-const filterByOptions = ["ID", "Description"];
+const filterByOptions = ["Description"];
 
 const styles = (theme) => ({
   header: {
@@ -132,7 +132,20 @@ function BiddingRequestList(props) {
           setOffer(assignedOffer);
           getBiddingRequestByOffer(offerId)
             .then((biddingRequests) => {
-              setBiddingRequests(biddingRequests);
+              const displayedBiddingRequests = biddingRequests.filter(
+                (biddingRequest) => {
+                  if (assignedOffer.status === "Not Assigned") {
+                    return true;
+                  } else {
+                    if (biddingRequest._id === assignedOffer.approvedBiddingRequest) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }
+                }
+              );
+              setBiddingRequests(displayedBiddingRequests);
             })
             .catch((status) => {
               if (status === 401) {
@@ -159,14 +172,10 @@ function BiddingRequestList(props) {
         return true;
       }
       if (selectedFilterBy === 1) {
-        if (searchRegex.test(biddingRequest._id.toString())) {
-          return true;
-        }
-      } else if (selectedFilterBy === 2) {
         if (searchRegex.test(biddingRequest.description)) {
           return true;
         }
-      } else if (selectedFilterBy === "") {
+      } else if (selectedFilterBy === -1) {
         return true;
       }
       return false;
@@ -175,6 +184,7 @@ function BiddingRequestList(props) {
       <Grid item xs={12} md={6} lg={6} key={index}>
         <BiddingRequestCard
           biddingRequest={biddingRequest}
+          offer={offer}
           acceptCallback={() => {
             setIsAcceptCaretakerConfirmationDialogOpen(true, biddingRequest._id);
           }}

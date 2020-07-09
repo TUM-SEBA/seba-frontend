@@ -27,11 +27,12 @@ const styles = (theme) => ({
   tabroot: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(5),
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
   },
   root: {
     maxWidth: 400,
-    minHeight: 262,
+    minHeight: 282,
   },
   container: {
     margin: "40px auto",
@@ -44,9 +45,9 @@ const styles = (theme) => ({
     width: "100%",
   },
   body: {
-    marginTop: theme.spacing(5),
-    height: "calc(100vh - 208px)",
+    height: "calc(100vh - 385px)",
     overflowY: "auto",
+    overflowX: "hidden",
   },
   offerImage: {
     width: theme.spacing(10),
@@ -226,8 +227,8 @@ function OfferPage(props) {
         </div>
         <div className={classes.body}>
           <Grid container spacing={2}>
+            {activeTab === 0 && offers.length > 0 && getCreateOffer()}
             {offers.length > 0 ? (
-              (activeTab === 0 && getCreateOffer(),
               offers
                 .filter((offer) => {
                   if (activeTab === 1) {
@@ -257,7 +258,7 @@ function OfferPage(props) {
                 })
                 .map((offer, index) => (
                   <OwnerItemCard index={index} offer={offer} key={index} />
-                )))
+                ))
             ) : (
               <div key={"noDataFound"} className={classes.noDataFound}>
                 <div className={classes.noDataFoundImageContainer}>

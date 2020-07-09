@@ -28,6 +28,20 @@ import logo from "../logoSEBA.png";
 import displayImage from "../assets/loginPageImage.jpg";
 
 const styles = (theme) => ({
+  tagLineDiv: {
+    background: "#317D3D",
+    background: "rgba(49, 125, 61, 0.5)",
+    height: "80px",
+    position: "absolute",
+    bottom: "0",
+    width: "100%",
+  },
+  tagLine: {
+    color: "white",
+    fontSize: "24px",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
   loginBackground: {
     background: "linear-gradient(45deg, #D0E1D3, transparent)",
     height: "100vh",
@@ -43,7 +57,12 @@ const styles = (theme) => ({
     marginTop: theme.spacing(18),
     display: "flex",
     flexDirection: "row",
-    // alignItems: "center",
+  },
+  columnFlex: {
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "50%",
+    position: "relative",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -70,8 +89,8 @@ const styles = (theme) => ({
     justifyContent: "flex-end",
   },
   loginImage: {
-    maxWidth: "50%",
-    maxHeight: "100%",
+    width: "100%",
+    height: "100%",
     objectFit: "cover",
   },
 });
@@ -125,7 +144,14 @@ function LoginPage(props) {
       <Container component="main" maxWidth="md">
         <Paper>
           <div className={classes.rowFlex}>
-            <img alt="display" src={displayImage} className={classes.loginImage} />
+            <div className={classes.columnFlex}>
+              <img alt="display" src={displayImage} className={classes.loginImage} />
+              <div className={classes.tagLineDiv}>
+                <Typography className={classes.tagLine}>
+                  Take the opportunity to help the community
+                </Typography>
+              </div>
+            </div>
 
             <div className={classes.paper}>
               <Avatar className={classes.avatar} src={logo}></Avatar>

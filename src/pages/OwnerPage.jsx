@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Card, CardContent, Button, Grid, Tabs, Tab} from "@material-ui/core";
+import {Card, CardContent, Button, Grid, Tabs, Tab, Typography} from "@material-ui/core";
 import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
@@ -15,13 +15,14 @@ import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
 import FeedbackForm from "../components/FeedbackForm";
 import OwnerItemCard from "../components/OwnerItemCard";
+import EntityList from "../components/EntityList";
+import noDataFoundImage from "../assets/no-data-found.png";
 
 const filterByOptions = ["Title", "Description"];
 
 const styles = (theme) => ({
   ownerPage: {
     height: "100vh",
-    overflow: "hidden",
   },
   tabroot: {
     flexGrow: 1,
@@ -92,6 +93,24 @@ const styles = (theme) => ({
     color: theme.palette.secondary.contrastText,
     background: theme.palette.secondary.main,
     opacity: 1,
+  },
+  noDataFoundImageContainer: {
+    textAlign: "center",
+    //width: "100%",
+  },
+  noDataFoundText: {
+    textAlign: "center",
+  },
+  noDataFound: {
+    width: "100%",
+  },
+  firstOfferButton: {
+    borderRadius: "20%",
+    width: "200px",
+    height: "50px",
+    left: "40%",
+    marginTop: "10px",
+    backgroundColor: "lightgreen",
   },
 });
 
@@ -204,10 +223,12 @@ function OfferPage(props) {
               ))}
             </Tabs>
           </div>
-          <div className={classes.body}>
-            <Grid container spacing={2}>
-              {activeTab === 0 && getCreateOffer()}
-              {offers
+        </div>
+        <div className={classes.body}>
+          <Grid container spacing={2}>
+            {offers.length > 0 ? (
+              (activeTab === 0 && getCreateOffer(),
+              offers
                 .filter((offer) => {
                   if (activeTab === 1) {
                     if (offer.status === "Payment Pending") return true;
@@ -236,14 +257,39 @@ function OfferPage(props) {
                 })
                 .map((offer, index) => (
                   <OwnerItemCard index={index} offer={offer} key={index} />
-                ))}
-            </Grid>
-          </div>
+                )))
+            ) : (
+              <div key={"noDataFound"} className={classes.noDataFound}>
+                <div className={classes.noDataFoundImageContainer}>
+                  <img
+                    className={classes.noDataFoundImage}
+                    src={noDataFoundImage}
+                    alt={"No Data Found"}
+                  />
+                </div>
+                <div className={classes.noDataFoundTextContainer}>
+                  <Typography className={classes.noDataFoundText}>
+                    You have not previously created an offer. Would you like to create an
+                    offer easily?
+                  </Typography>
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.firstOfferButton}
+                  onClick={() => setIsOfferDialogOpen(true)}
+                >
+                  Create an Offer
+                </Button>
+              </div>
+            )}
+          </Grid>
         </div>
         <OfferForm history={history} />
         <BiddingRequestList history={history} />
         <FeedbackForm history={history} />
         <MenuDialog />
+        <EntityList history={history} />
       </div>
     </div>
   );

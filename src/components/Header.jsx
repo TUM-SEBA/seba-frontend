@@ -75,7 +75,9 @@ const Header = (props) => {
             {currentUrl !== "/" && (
               <Grid item className={classes.switchDiv} xs={6} sm={2} md={2} lg={1}>
                 <Button onClick={switchUser}>
-                  <Typography className={classes.sentenceCase}>Switch</Typography>
+                  <Typography className={classes.sentenceCase}>
+                    Switch to {currentUrl === "/caretaker" ? "Owner" : "Caretaker"}
+                  </Typography>
                   <LoopIcon />
                 </Button>
               </Grid>

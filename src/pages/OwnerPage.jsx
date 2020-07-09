@@ -28,6 +28,7 @@ import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
 import ViewFeedbackForm from "../components/FeedbackForm";
 import EntityList from "../components/EntityList";
+import noDataFoundImage from "../assets/no-data-found.png";
 
 const filterByOptions = ["Title", "Description"];
 
@@ -128,6 +129,24 @@ const styles = (theme) => ({
     height: "100%",
     marginBottom: "10pt",
     textAlign: "center",
+  },
+  noDataFoundImageContainer: {
+    textAlign: "center",
+    //width: "100%",
+  },
+  noDataFoundText: {
+    textAlign: "center",
+  },
+  noDataFound: {
+    width: "100%",
+  },
+  firstOfferButton: {
+    borderRadius: "20%",
+    width: "200px",
+    height: "50px",
+    left: "40%",
+    marginTop: "10px",
+    backgroundColor: "lightgreen",
   },
 });
 function OfferPage(props) {
@@ -282,29 +301,55 @@ function OfferPage(props) {
         </div>
         <div className={classes.body}>
           <Grid container spacing={2}>
-            {getCreateOffer()}
-            {offers
-              .filter((offer) => {
-                var searchRegex = new RegExp(searchValue, "gi");
-                // todo only show user's own offers.
-                //  (I did it like that. There is no point for the owner to see other people's offers in owner page - Eray)
-                if (searchValue === "") {
-                  return true;
-                }
-                if (selectedFilterBy === 1) {
-                  if (searchRegex.test(offer.title)) {
+            {offers.length > 0 ? (
+              (getCreateOffer(),
+              offers
+                .filter((offer) => {
+                  var searchRegex = new RegExp(searchValue, "gi");
+                  // todo only show user's own offers.
+                  //  (I did it like that. There is no point for the owner to see other people's offers in owner page - Eray)
+                  if (searchValue === "") {
                     return true;
                   }
-                } else if (selectedFilterBy === 2) {
-                  if (searchRegex.test(offer.description)) {
+                  if (selectedFilterBy === 1) {
+                    if (searchRegex.test(offer.title)) {
+                      return true;
+                    }
+                  } else if (selectedFilterBy === 2) {
+                    if (searchRegex.test(offer.description)) {
+                      return true;
+                    }
+                  } else if (selectedFilterBy === "") {
                     return true;
                   }
-                } else if (selectedFilterBy === "") {
-                  return true;
-                }
-                return false;
-              })
-              .map((offer, index) => getGridItem(index, offer))}
+                  return false;
+                })
+                .map((offer, index) => getGridItem(index, offer)))
+            ) : (
+              <div key={"noDataFound"} className={classes.noDataFound}>
+                <div className={classes.noDataFoundImageContainer}>
+                  <img
+                    className={classes.noDataFoundImage}
+                    src={noDataFoundImage}
+                    alt={"No Data Found"}
+                  />
+                </div>
+                <div className={classes.noDataFoundTextContainer}>
+                  <Typography className={classes.noDataFoundText}>
+                    You have not previously created an offer. Would you like to create an
+                    offer easily?
+                  </Typography>
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.firstOfferButton}
+                  onClick={() => setIsOfferDialogOpen(true)}
+                >
+                  Create an Offer
+                </Button>
+              </div>
+            )}
           </Grid>
         </div>
         <OfferForm history={history} />

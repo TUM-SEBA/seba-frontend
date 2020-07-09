@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Button, Dialog, Grid, Typography} from "@material-ui/core";
+import {Button, Dialog, DialogTitle, Grid, Typography} from "@material-ui/core";
 import {
   entityChangeSearch,
   entityListChangeFilterBy,
@@ -123,6 +123,7 @@ function EntityList(props) {
       open={isEntityListDialogOpen}
       onClose={() => setIsEntityListDialogOpen(false, "")}
     >
+      <DialogTitle>Pet / Plant</DialogTitle>
       <Grid container className={classes.header}>
         <Grid item xs={12} sm={4} md={7} lg={7}></Grid>
         <Grid item xs={12} sm={8} md={5} lg={5}>
@@ -141,6 +142,7 @@ function EntityList(props) {
           size="small"
           onClick={() => {
             setEntityfieldValue("category", "");
+            setEntityfieldValue("name", "");
             setEntityfieldValue("breed", "");
             setEntityfieldValue("description", "");
             setIsEntityFormDialogOpen(true, true, "");

@@ -184,7 +184,16 @@ function OfferPage(props) {
       </Grid>
     );
   }
-
+  function successCallback() {
+    getOffersByOwnerId()
+      .then((response) => {
+        pendingPaymentCheck(response);
+        setOffers(response);
+      })
+      .catch((_) => {
+        showSnackBar(true, fetchFailed, "error");
+      });
+  }
   return (
     <div className={classes.ownerPage}>
       <Grid container direction="column" justify="flex-start" alignItems="stretch">
@@ -286,7 +295,7 @@ function OfferPage(props) {
             )}
           </Grid>
         </div>
-        <OfferForm history={history} />
+        <OfferForm history={history} successCallback={successCallback} />
         <BiddingRequestList history={history} />
         <FeedbackForm history={history} />
         <MenuDialog />

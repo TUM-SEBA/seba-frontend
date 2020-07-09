@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {Avatar, Grid, Typography} from "@material-ui/core";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import caretakerImage from "../assets/caretaker.png";
 import ownerImage from "../assets/owner.png";
 import {withStyles} from "@material-ui/styles";
@@ -32,6 +33,12 @@ const styles = (theme) => ({
     color: "#000000",
     textDecoration: "none",
     cursor: "pointer",
+  },
+  footer: {
+    position: "absolute",
+    left: "0",
+    bottom: "0",
+    right: "0",
   },
 });
 
@@ -95,6 +102,9 @@ function WelcomePage(props) {
       </Grid>
       <MenuDialog />
       <BadgeNotification badge={newBadge} />
+      <Grid item className={classes.footer}>
+        <Footer history={history} />
+      </Grid>
     </div>
   );
 }

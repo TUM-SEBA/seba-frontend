@@ -22,7 +22,7 @@ let initialState = {
   searchValue: "",
   isOfferDialogOpen: false,
   offerFields: {
-    category: "Pet",
+    entity: "",
     startDate: "",
     endDate: "",
     description: " ",
@@ -49,6 +49,7 @@ let initialState = {
   entitySearchValue: "",
   entityFields: {
     category: "",
+    name: "",
     breed: "",
     description: "",
   },

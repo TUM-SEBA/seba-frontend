@@ -66,8 +66,12 @@ const styles = (theme) => ({
     height: theme.spacing(10),
     borderRadius: "100%",
   },
-  interestedButton: {
+  button: {
     width: "100%",
+  },
+  buttonContainer: {
+    padding: "0 !important",
+    marginLeft: theme.spacing(1),
   },
 });
 
@@ -135,60 +139,64 @@ function AcceptCaretakerConfirmation(props) {
       open={isAcceptCaretakerConfirmationDialogOpen}
       onClose={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
     >
-      <Grid container className={classes.container}>
-        <Grid item xs={4}>
-          <div>
-            <img
-              className={classes.biddingRequestImage}
-              src={dummyBiddingRequest.image}
-              alt={"Caretaker"}
-            />
-          </div>
-          <div>{biddingRequest.caretaker.username}</div>
-        </Grid>
-        <Grid item xs={8}>
-          <div className={classes.question}>Initiate pre payment</div>
-          <div className={classes.line}>
-            Pre Payment Amount: {biddingRequest.price * 0.2} euro
-          </div>
-          <div className={classes.line}>
-            Post Payment Amount: {biddingRequest.price * 0.8} euro
-          </div>
-          <div className={classes.line}>Total Price: {biddingRequest.price} euro</div>
-          <div className={classes.line}>Start Date: {biddingRequest.offer.startDate}</div>
-          <div className={classes.line}>End Date: {biddingRequest.offer.endDate}</div>
-          <div className={classes.insurance}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isInsuranceChecked}
-                  onChange={() => setIsInsuranceChecked(!isInsuranceChecked)}
-                  color="secondary"
-                />
-              }
-              label="Insurance"
-            />
-          </div>
-          <Grid container spacing={1}>
-            <PaypalButton
-              paymentDetails={paymentDetails}
-              handlePaymentCompleted={handlePrePaymentCompleted}
-            />
+      {biddingRequest._id !== "" && (
+        <Grid container className={classes.container}>
+          <Grid item xs={4}>
+            <div>
+              <img
+                className={classes.biddingRequestImage}
+                src={dummyBiddingRequest.image}
+                alt={"Caretaker"}
+              />
+            </div>
+            <div>{biddingRequest.caretaker.username}</div>
+          </Grid>
+          <Grid item xs={8}>
+            <div className={classes.question}>Initiate pre payment</div>
+            <div className={classes.line}>
+              Pre Payment Amount: {biddingRequest.price * 0.2} euro
+            </div>
+            <div className={classes.line}>
+              Post Payment Amount: {biddingRequest.price * 0.8} euro
+            </div>
+            <div className={classes.line}>Total Price: {biddingRequest.price} euro</div>
+            <div className={classes.line}>
+              Start Date: {biddingRequest.offer.startDate}
+            </div>
+            <div className={classes.line}>End Date: {biddingRequest.offer.endDate}</div>
+            <div className={classes.insurance}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isInsuranceChecked}
+                    onChange={() => setIsInsuranceChecked(!isInsuranceChecked)}
+                    color="secondary"
+                  />
+                }
+                label="Insurance"
+              />
+            </div>
+            <Grid container spacing={1}>
+              <PaypalButton
+                paymentDetails={paymentDetails}
+                handlePaymentCompleted={handlePrePaymentCompleted}
+              />
 
-            <Grid item xs={12} sm={3}>
-              <Button
-                variant="contained"
-                className={classes.interestedButton}
-                color="secondary"
-                size="small"
-                onClick={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
-              >
-                Cancel
-              </Button>
+              <Grid item xs={12} sm={3} className={classes.buttonContainer}>
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  color="secondary"
+                  size="small"
+                  onClick={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
+                >
+                  Cancel
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
     </Dialog>
   );
 }

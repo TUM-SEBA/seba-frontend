@@ -28,6 +28,11 @@ import logo from "../logoSEBA.png";
 import displayImage from "../assets/loginPageImage.jpg";
 
 const styles = (theme) => ({
+  loginBackground: {
+    background: "linear-gradient(45deg, #D0E1D3, transparent)",
+    height: "100vh",
+    display: "flex",
+  },
   paper: {
     display: "flex",
     flexDirection: "column",
@@ -38,7 +43,7 @@ const styles = (theme) => ({
     marginTop: theme.spacing(18),
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -66,7 +71,8 @@ const styles = (theme) => ({
   },
   loginImage: {
     maxWidth: "50%",
-    maxheight: "100%",
+    maxHeight: "100%",
+    objectFit: "cover",
   },
 });
 
@@ -115,89 +121,91 @@ function LoginPage(props) {
   }
 
   return (
-    <Container component="main" maxWidth="md">
-      <Paper>
-        <div className={classes.rowFlex}>
-          <img alt="display" src={displayImage} className={classes.loginImage} />
+    <div className={classes.loginBackground}>
+      <Container component="main" maxWidth="md">
+        <Paper>
+          <div className={classes.rowFlex}>
+            <img alt="display" src={displayImage} className={classes.loginImage} />
 
-          <div className={classes.paper}>
-            <Avatar className={classes.avatar} src={logo}></Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <form className={classes.form} noValidate>
-              <CustomTextField
-                fullWidth
-                autoFocus
-                required
-                margin="dense"
-                id="userId"
-                label="Username"
-                type="text"
-                variant="outlined"
-                value={selectedUserId}
-                onChange={(event) => {
-                  changeUserId(event.target.value);
-                }}
-              />
-              <CustomTextField
-                fullWidth
-                required
-                margin="dense"
-                id="password"
-                label="Password"
-                type="password"
-                variant="outlined"
-                value={selectedPassword}
-                onChange={(event) => {
-                  changePassword(event.target.value);
-                }}
-              />
-              <div className={classes.forgotPass}>
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar} src={logo}></Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
+              <form className={classes.form} noValidate>
+                <CustomTextField
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  id="userId"
+                  label="Username"
+                  type="text"
+                  variant="outlined"
+                  value={selectedUserId}
+                  onChange={(event) => {
+                    changeUserId(event.target.value);
+                  }}
+                />
+                <CustomTextField
+                  fullWidth
+                  required
+                  margin="dense"
+                  id="password"
+                  label="Password"
+                  type="password"
+                  variant="outlined"
+                  value={selectedPassword}
+                  onChange={(event) => {
+                    changePassword(event.target.value);
+                  }}
+                />
+                <div className={classes.forgotPass}>
+                  <Button
+                    color="secondary"
+                    style={{backgroundColor: "transparent", textTransform: "none"}}
+                    onClick={() => setForgotPasswordDialogOpen(true)}
+                  >
+                    <Typography variant="body2">Forgot Password?</Typography>
+                  </Button>
+                </div>
+                <Collapse in={showAlert}>
+                  <Alert
+                    severity="error"
+                    className={classes.alert}
+                    onClose={() => setLoginAlert(false)}
+                  >
+                    {loginAlertText}
+                  </Alert>
+                </Collapse>
+                <Button
+                  fullWidth
+                  className={classes.submit}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => attemptLoginHandler(selectedUserId, selectedPassword)}
+                >
+                  LogIn
+                </Button>
+              </form>
+              <div className={classes.signUp}>
+                <Typography variant="body1">Don't have an account?</Typography>
                 <Button
                   color="secondary"
-                  style={{backgroundColor: "transparent", textTransform: "none"}}
-                  onClick={() => setForgotPasswordDialogOpen(true)}
+                  style={{backgroundColor: "transparent"}}
+                  onClick={() => setIsSignUpDialogOpen(true)}
                 >
-                  <Typography variant="body2">Forgot Password?</Typography>
+                  Sign Up
                 </Button>
               </div>
-              <Collapse in={showAlert}>
-                <Alert
-                  severity="error"
-                  className={classes.alert}
-                  onClose={() => setLoginAlert(false)}
-                >
-                  {loginAlertText}
-                </Alert>
-              </Collapse>
-              <Button
-                fullWidth
-                className={classes.submit}
-                variant="contained"
-                color="secondary"
-                onClick={() => attemptLoginHandler(selectedUserId, selectedPassword)}
-              >
-                LogIn
-              </Button>
-            </form>
-            <div className={classes.signUp}>
-              <Typography variant="body1">Don't have an account?</Typography>
-              <Button
-                color="secondary"
-                style={{backgroundColor: "transparent"}}
-                onClick={() => setIsSignUpDialogOpen(true)}
-              >
-                Sign Up
-              </Button>
             </div>
           </div>
-        </div>
-      </Paper>
-      <SignUpForm />
-      <ForgotPasswordDialog />
-      <SnackbarAlert />
-    </Container>
+        </Paper>
+        <SignUpForm />
+        <ForgotPasswordDialog />
+        <SnackbarAlert />
+      </Container>
+    </div>
   );
 }
 

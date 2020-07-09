@@ -28,9 +28,10 @@ const styles = (theme) => {
     },
     offerCardDescription: {
       height: theme.spacing(10),
-      overflow: "scroll",
+      overflow: "auto",
       margin: `${theme.spacing(1)}px 0`,
       textAlign: "justify",
+      wordBreak: "break-all",
     },
     offerCardActions: {
       justifyContent: "flex-end",

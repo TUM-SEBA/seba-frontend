@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Grid, Typography, Tabs, Tab} from "@material-ui/core";
+import {Grid, Tab, Tabs} from "@material-ui/core";
 import {
   changeFilterBy,
   changeSearch,
@@ -14,8 +14,6 @@ import {fetchFailed, saveFailed, saveSuccess} from "../constants";
 import FilterSearch from "../components/FilterSearch";
 import CaretakerCard from "../components/CaretakerCard";
 import Header from "../components/Header";
-import noDataFoundImage from "../assets/no-data-found.png";
-import dummyDogImage from "../assets/dummy-dog.jpeg";
 import {
   getAvailableOffers,
   getInterestedOffers,
@@ -159,24 +157,39 @@ function CaretakerPage(props) {
       });
   }
 
-  const filteredOffers = offers.filter((offer) => {
-    var searchRegex = new RegExp(searchValue, "gi");
-    if (searchValue === "") {
-      return true;
-    }
-    if (selectedFilterBy === 1) {
-      if (searchRegex.test(offer.owner.username.toString())) {
+  const filteredOffers = offers
+    .filter((offer) => {
+      var searchRegex = new RegExp(searchValue, "gi");
+      if (searchValue === "") {
         return true;
       }
-    } else if (selectedFilterBy === 2) {
-      if (searchRegex.test(offer.description)) {
+      if (selectedFilterBy === 1) {
+        if (searchRegex.test(offer.owner.username.toString())) {
+          return true;
+        }
+      } else if (selectedFilterBy === 2) {
+        if (searchRegex.test(offer.description)) {
+          return true;
+        }
+      } else if (selectedFilterBy === "") {
         return true;
       }
-    } else if (selectedFilterBy === "") {
-      return true;
-    }
-    return false;
-  });
+      return false;
+    })
+    .map((offer, index) => {
+      return (
+        <Grid item xs={12} md={6} lg={4} key={offer._id}>
+          <CaretakerCard
+            key={index}
+            offer={offer}
+            tab={activeTab}
+            interestedCallback={() => setIsBiddingRequestDialogOpen(true, offer._id)}
+            notInterestedCallback={() => handleNotInterestedCallback(offer._id)}
+            history
+          />
+        </Grid>
+      );
+    });
 
   return (
     <div>
@@ -216,26 +229,7 @@ function CaretakerPage(props) {
           <Grid container spacing={2}>
             {offers.length > 0 ? (
               filteredOffers.length > 0 ? (
-                filteredOffers.map((offer, index) => {
-                  // TODO: remove this when image has been implemented on the backend
-                  offer.image = dummyDogImage;
-                  return (
-                    <Grid item xs={12} md={6} lg={4} key={offer._id}>
-                      <CaretakerCard
-                        key={index}
-                        offer={offer}
-                        tab={activeTab}
-                        interestedCallback={() =>
-                          setIsBiddingRequestDialogOpen(true, offer._id)
-                        }
-                        notInterestedCallback={() =>
-                          handleNotInterestedCallback(offer._id)
-                        }
-                        history
-                      />
-                    </Grid>
-                  );
-                })
+                filteredOffers
               ) : (
                 <NoData text={"There is no offer based on your search."} />
               )

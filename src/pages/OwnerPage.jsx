@@ -169,6 +169,35 @@ function OfferPage(props) {
     getOffers();
   }, [history, showSnackBar]);
 
+  const filteredOffers = offers
+    .filter((offer) => {
+      if (activeTab === 1) {
+        if (offer.status === "Payment Pending") return true;
+        else return false;
+      }
+      if (activeTab === 2) {
+        if (offer.status === "Completed") return true;
+        else return false;
+      }
+      var searchRegex = new RegExp(searchValue, "gi");
+      if (searchValue === "") {
+        return true;
+      }
+      if (selectedFilterBy === 1) {
+        if (searchRegex.test(offer.title)) {
+          return true;
+        }
+      } else if (selectedFilterBy === 2) {
+        if (searchRegex.test(offer.description)) {
+          return true;
+        }
+      } else if (selectedFilterBy === "") {
+        return true;
+      }
+      return false;
+    })
+    .map((offer, index) => <OwnerItemCard index={index} offer={offer} key={index} />);
+
   function getCreateOffer() {
     return (
       <Grid item xs={12} md={6} lg={4} key={0}>
@@ -242,36 +271,11 @@ function OfferPage(props) {
           <Grid container spacing={2}>
             {activeTab === 0 && offers.length > 0 && getCreateOffer()}
             {offers.length > 0 ? (
-              offers
-                .filter((offer) => {
-                  if (activeTab === 1) {
-                    if (offer.status === "Payment Pending") return true;
-                    else return false;
-                  }
-                  if (activeTab === 2) {
-                    if (offer.status === "Completed") return true;
-                    else return false;
-                  }
-                  var searchRegex = new RegExp(searchValue, "gi");
-                  if (searchValue === "") {
-                    return true;
-                  }
-                  if (selectedFilterBy === 1) {
-                    if (searchRegex.test(offer.title)) {
-                      return true;
-                    }
-                  } else if (selectedFilterBy === 2) {
-                    if (searchRegex.test(offer.description)) {
-                      return true;
-                    }
-                  } else if (selectedFilterBy === "") {
-                    return true;
-                  }
-                  return false;
-                })
-                .map((offer, index) => (
-                  <OwnerItemCard index={index} offer={offer} key={index} />
-                ))
+              filteredOffers.length > 0 ? (
+                filteredOffers
+              ) : (
+                <NoData text={"There is no offer based on your search."} />
+              )
             ) : (
               <div className={classes.noDataContainer}>
                 <NoData text={"You have not previously created an offer."} />

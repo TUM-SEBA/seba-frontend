@@ -18,17 +18,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   logoDiv: {
-    minWidth: "70%",
     flexGrow: "1",
-  },
-  menuDiv: {
-    minWidth: "9%",
-  },
-  switchDiv: {
-    minWidth: "13%",
-  },
-  logoutDiv: {
-    minWidth: "7%",
   },
   root: {
     display: "flex",
@@ -90,18 +80,18 @@ const Header = (props) => {
             {currentUrl !== "/" && (
               <div className={classes.switchDiv}>
                 <Button onClick={switchUser}>
+                  <LoopIcon />
                   <Typography className={classes.sentenceCase}>
                     Switch to {currentUrl === "/caretaker" ? "Owner" : "Caretaker"}
                   </Typography>
-                  <LoopIcon />
                 </Button>
               </div>
             )}
 
             <div className={classes.logoutDiv}>
               <Button onClick={() => logout(history)}>
-                <Typography className={classes.sentenceCase}>Sign Out</Typography>
                 <ExitToAppOutlinedIcon />
+                <Typography className={classes.sentenceCase}>Sign Out</Typography>
               </Button>
             </div>
           </div>

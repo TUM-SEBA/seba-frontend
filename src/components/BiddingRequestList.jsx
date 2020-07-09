@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Dialog, Grid, Typography} from "@material-ui/core";
+import {Dialog, Grid} from "@material-ui/core";
 import {
   biddingRequestChangeSearch,
   biddingRequestListChangeFilterBy,
@@ -15,8 +15,8 @@ import {getBiddingRequestByOffer} from "../services/biddingRequestService";
 import {showSnackBar} from "../actions/loginPage";
 import {getOffer} from "../services/offerService";
 import SnackbarAlert from "./SnackbarAlert";
-import noDataFoundImage from "../assets/no-data-found.png";
 import BiddingRequestCard from "./BiddingRequestCard";
+import NoData from "./NoData";
 
 const filterByOptions = ["ID", "Description"];
 
@@ -152,6 +152,35 @@ function BiddingRequestList(props) {
     }
   }, [offerId, history, showSnackBar]);
   const createdDate = new Date(offer.createdDate);
+  const filteredBiddingRequestList = biddingRequests
+    .filter((biddingRequest) => {
+      const searchRegex = new RegExp(searchValue, "gi");
+      if (searchValue === "") {
+        return true;
+      }
+      if (selectedFilterBy === 1) {
+        if (searchRegex.test(biddingRequest._id.toString())) {
+          return true;
+        }
+      } else if (selectedFilterBy === 2) {
+        if (searchRegex.test(biddingRequest.description)) {
+          return true;
+        }
+      } else if (selectedFilterBy === "") {
+        return true;
+      }
+      return false;
+    })
+    .map((biddingRequest, index) => (
+      <Grid item xs={12} md={6} lg={6} key={index}>
+        <BiddingRequestCard
+          biddingRequest={biddingRequest}
+          acceptCallback={() => {
+            setIsAcceptCaretakerConfirmationDialogOpen(true, biddingRequest._id);
+          }}
+        />
+      </Grid>
+    ));
   return (
     <Dialog
       fullWidth
@@ -187,57 +216,19 @@ function BiddingRequestList(props) {
         </Grid>
         <Grid container className={classes.gridContainer} spacing={2}>
           {biddingRequests.length > 0 ? (
-            biddingRequests
-              .filter((biddingRequest) => {
-                const searchRegex = new RegExp(searchValue, "gi");
-                if (searchValue === "") {
-                  return true;
-                }
-                if (selectedFilterBy === 1) {
-                  if (searchRegex.test(biddingRequest._id.toString())) {
-                    return true;
-                  }
-                } else if (selectedFilterBy === 2) {
-                  if (searchRegex.test(biddingRequest.description)) {
-                    return true;
-                  }
-                } else if (selectedFilterBy === "") {
-                  return true;
-                }
-                return false;
-              })
-              .map((biddingRequest, index) => (
-                <Grid item xs={12} md={6} lg={6} key={index}>
-                  <BiddingRequestCard
-                    biddingRequest={biddingRequest}
-                    acceptCallback={() => {
-                      setIsAcceptCaretakerConfirmationDialogOpen(
-                        true,
-                        biddingRequest._id
-                      );
-                    }}
-                  />
-                </Grid>
-              ))
+            filteredBiddingRequestList.length > 0 ? (
+              filteredBiddingRequestList
+            ) : (
+              <NoData text={"There is no offer based on your search."} />
+            )
           ) : (
-            <div key={"noDataFound"} className={classes.noDataFound}>
-              <div className={classes.noDataFoundImageContainer}>
-                <img
-                  className={classes.noDataFoundImage}
-                  src={noDataFoundImage}
-                  alt={"No Data Found"}
-                />
-              </div>
-              <div className={classes.noDataFoundTextContainer}>
-                <Typography className={classes.noDataFoundText}>
-                  No bidding request is available for now. Please check again later.
-                </Typography>
-              </div>
-            </div>
+            <NoData
+              text={"No bidding request is available for now. Please check again later."}
+            />
           )}
         </Grid>
       </div>
-      <AcceptCaretakerConfirmation />
+      <AcceptCaretakerConfirmation history={history} />
       <SnackbarAlert />
     </Dialog>
   );

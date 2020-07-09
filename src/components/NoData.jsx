@@ -5,7 +5,7 @@ import noDataFoundImage from "../assets/no-data-found.png";
 
 const styles = (theme) => ({
   noDataFound: {
-    margin: "25px auto",
+    margin: "15px auto",
     width: "100%",
     textAlign: "center",
   },
@@ -17,7 +17,7 @@ const styles = (theme) => ({
   },
 });
 
-function EntityList(props) {
+function NoData(props) {
   const {classes, text} = props;
   return (
     <div key={"noDataFound"} className={classes.noDataFound}>
@@ -35,4 +35,4 @@ function EntityList(props) {
   );
 }
 
-export default withStyles(styles, {withTheme: true})(EntityList);
+export default withStyles(styles, {withTheme: true})(NoData);

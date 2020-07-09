@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Grid, Typography, Tabs, Tab} from "@material-ui/core";
+import {Grid, Tab, Tabs} from "@material-ui/core";
 import {
   changeFilterBy,
   changeSearch,
@@ -14,8 +14,6 @@ import {fetchFailed, saveFailed, saveSuccess} from "../constants";
 import FilterSearch from "../components/FilterSearch";
 import CaretakerCard from "../components/CaretakerCard";
 import Header from "../components/Header";
-import noDataFoundImage from "../assets/no-data-found.png";
-import dummyDogImage from "../assets/dummy-dog.jpeg";
 import {
   getAvailableOffers,
   getInterestedOffers,
@@ -23,22 +21,25 @@ import {
   updateNotInterested,
 } from "../services/offerService";
 import MenuDialog from "../components/MenuDialog";
+import NoData from "../components/NoData";
 
-const tabs = ["Available", "Interested", "Not Intereted"];
+const tabs = ["Available", "Not Assigned", "Assigned to You", "Not Intereted"];
 const getOfferServices = [
   getAvailableOffers,
+  getInterestedOffers,
   getInterestedOffers,
   getNotInterestedOffers,
 ];
 const noOfferMessages = [
   "No offer is available for now. Please check again later.",
-  "You do not have any interesting offers yet.",
+  "There is no unassigned offers.",
+  "You have no assigned offers.",
   "There is no offers that is not interested for you.",
 ];
 const filterByOptions = ["Owner", "Description"];
 const styles = (theme) => ({
   container: {
-    margin: `${theme.spacing(10)}px auto 0 auto`,
+    margin: `${theme.spacing(5)}px auto 0 auto`,
     width: "80%",
   },
   body: {
@@ -91,18 +92,29 @@ function CaretakerPage(props) {
     history.push("/");
     window.location.reload();
   }
-
+  function filterOffer(index, offer) {
+    if (index === 1) {
+      return offer.status === "Not Assigned";
+    } else if (index === 2) {
+      console.log(offer);
+      if (offer.approvedBiddingRequest)
+        return (
+          offer.approvedBiddingRequest.caretaker.username === localStorage["username"]
+        );
+      return false;
+    }
+    return true;
+  }
   function getOffers(index) {
     getOfferServices[index]()
       .then((offers) => {
-        setOffers(offers);
+        const displayedOffers = offers.filter((offer) => filterOffer(index, offer));
+        setOffers(displayedOffers);
       })
       .catch((status) => {
         if (status === 401) {
           history.push("/");
           window.location.reload();
-        } else {
-          setOffers([]);
         }
         showSnackBar(true, fetchFailed, "error");
       });
@@ -117,8 +129,6 @@ function CaretakerPage(props) {
         if (status === 401) {
           history.push("/");
           window.location.reload();
-        } else {
-          setOffers([]);
         }
         showSnackBar(true, saveFailed, "error");
       });
@@ -158,24 +168,39 @@ function CaretakerPage(props) {
       });
   }
 
-  const filteredOffers = offers.filter((offer) => {
-    var searchRegex = new RegExp(searchValue, "gi");
-    if (searchValue === "") {
-      return true;
-    }
-    if (selectedFilterBy === 1) {
-      if (searchRegex.test(offer.owner.username.toString())) {
+  const filteredOffers = offers
+    .filter((offer) => {
+      var searchRegex = new RegExp(searchValue, "gi");
+      if (searchValue === "") {
         return true;
       }
-    } else if (selectedFilterBy === 2) {
-      if (searchRegex.test(offer.description)) {
+      if (selectedFilterBy === 1) {
+        if (searchRegex.test(offer.owner.username.toString())) {
+          return true;
+        }
+      } else if (selectedFilterBy === 2) {
+        if (searchRegex.test(offer.description)) {
+          return true;
+        }
+      } else if (selectedFilterBy === "") {
         return true;
       }
-    } else if (selectedFilterBy === "") {
-      return true;
-    }
-    return false;
-  });
+      return false;
+    })
+    .map((offer, index) => {
+      return (
+        <Grid item xs={12} md={6} lg={4} key={offer._id}>
+          <CaretakerCard
+            key={index}
+            offer={offer}
+            tab={activeTab}
+            interestedCallback={() => setIsBiddingRequestDialogOpen(true, offer._id)}
+            notInterestedCallback={() => handleNotInterestedCallback(offer._id)}
+            history
+          />
+        </Grid>
+      );
+    });
 
   return (
     <div>
@@ -215,57 +240,12 @@ function CaretakerPage(props) {
           <Grid container spacing={2}>
             {offers.length > 0 ? (
               filteredOffers.length > 0 ? (
-                filteredOffers.map((offer, index) => {
-                  // TODO: remove this when image has been implemented on the backend
-                  offer.image = dummyDogImage;
-                  return (
-                    <Grid item xs={12} md={6} lg={4} key={offer._id}>
-                      <CaretakerCard
-                        key={index}
-                        offer={offer}
-                        tab={activeTab}
-                        interestedCallback={() =>
-                          setIsBiddingRequestDialogOpen(true, offer._id)
-                        }
-                        notInterestedCallback={() =>
-                          handleNotInterestedCallback(offer._id)
-                        }
-                        history
-                      />
-                    </Grid>
-                  );
-                })
+                filteredOffers
               ) : (
-                <div key={"noDataFound"} className={classes.noDataFound}>
-                  <div className={classes.noDataFoundImageContainer}>
-                    <img
-                      className={classes.noDataFoundImage}
-                      src={noDataFoundImage}
-                      alt={"No Data Found"}
-                    />
-                  </div>
-                  <div className={classes.noDataFoundTextContainer}>
-                    <Typography className={classes.noDataFoundText}>
-                      There is no offer based on your search.
-                    </Typography>
-                  </div>
-                </div>
+                <NoData text={"There is no offer based on your search."} />
               )
             ) : (
-              <div key={"noDataFound"} className={classes.noDataFound}>
-                <div className={classes.noDataFoundImageContainer}>
-                  <img
-                    className={classes.noDataFoundImage}
-                    src={noDataFoundImage}
-                    alt={"No Data Found"}
-                  />
-                </div>
-                <div className={classes.noDataFoundTextContainer}>
-                  <Typography className={classes.noDataFoundText}>
-                    {noOfferMessages[activeTab]}
-                  </Typography>
-                </div>
-              </div>
+              <NoData text={noOfferMessages[activeTab]} />
             )}
           </Grid>
         </div>

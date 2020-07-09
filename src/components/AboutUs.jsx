@@ -1,13 +1,12 @@
 import React from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Button,
-  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
+  Typography,
 } from "@material-ui/core";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";

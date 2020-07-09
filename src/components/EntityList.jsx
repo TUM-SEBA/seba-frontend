@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Button, Dialog, DialogTitle, Grid, Typography} from "@material-ui/core";
+import {Button, Dialog, DialogTitle, Grid} from "@material-ui/core";
 import {
   entityChangeSearch,
   entityListChangeFilterBy,
@@ -14,10 +14,10 @@ import FilterSearch from "./FilterSearch";
 import {fetchFailed} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 import SnackbarAlert from "./SnackbarAlert";
-import noDataFoundImage from "../assets/no-data-found.png";
 import {getEntities} from "../services/entityService";
 import EntityCard from "./EntityCard";
 import EntityForm from "./EntityForm";
+import NoData from "./NoData";
 
 const filterByOptions = ["Category"];
 
@@ -165,36 +165,10 @@ function EntityList(props) {
                 </Grid>
               ))
             ) : (
-              <div key={"noDataFound"} className={classes.noDataFound}>
-                <div className={classes.noDataFoundImageContainer}>
-                  <img
-                    className={classes.noDataFoundImage}
-                    src={noDataFoundImage}
-                    alt={"No Data Found"}
-                  />
-                </div>
-                <div className={classes.noDataFoundTextContainer}>
-                  <Typography className={classes.noDataFoundText}>
-                    There is no offer based on your search.
-                  </Typography>
-                </div>
-              </div>
+              <NoData text={"There is no pet / plant based on your search."} />
             )
           ) : (
-            <div key={"noDataFound"} className={classes.noDataFound}>
-              <div className={classes.noDataFoundImageContainer}>
-                <img
-                  className={classes.noDataFoundImage}
-                  src={noDataFoundImage}
-                  alt={"No Data Found"}
-                />
-              </div>
-              <div className={classes.noDataFoundTextContainer}>
-                <Typography className={classes.noDataFoundText}>
-                  You do not have any pet / plants.
-                </Typography>
-              </div>
-            </div>
+            <NoData text={"You do not have any pet / plants."} />
           )}
         </Grid>
       </div>

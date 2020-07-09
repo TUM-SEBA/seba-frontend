@@ -145,7 +145,7 @@ export function insertOffer(offer) {
 
 export function acceptOffer(offerId, approveBiddingRequestId, price, insurance) {
   const body = {
-    approveBiddingRequestId: approveBiddingRequestId,
+    approvedBiddingRequest: approveBiddingRequestId,
     price: price,
     insurance: insurance,
   };

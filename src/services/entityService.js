@@ -32,6 +32,7 @@ export function getEntities() {
 export function insertEntity(entity, images) {
   const formData = new FormData();
   formData.append("category", entity.category);
+  formData.append("name", entity.name);
   formData.append("breed", entity.breed);
   formData.append("description", entity.description);
   for (let i = 0; i < images.length; i++) {
@@ -57,6 +58,7 @@ export function insertEntity(entity, images) {
 export function updateEntity(entity, images) {
   const formData = new FormData();
   formData.append("category", entity.category);
+  formData.append("name", entity.name);
   formData.append("breed", entity.breed);
   formData.append("description", entity.description);
   for (let i = 0; i < images.length; i++) {

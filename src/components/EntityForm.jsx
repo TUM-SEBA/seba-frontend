@@ -135,7 +135,7 @@ function EntityForm(props) {
   }
   return (
     <Dialog fullWidth maxWidth="md" open={isEntityFormDialogOpen} onClose={handleClose}>
-      <DialogTitle id="form-dialog-title">Pet / Plant</DialogTitle>
+      <DialogTitle>New Pet / Plant</DialogTitle>
       <form className={classes.form} noValidate>
         <DialogContent>
           <DialogContentText className={classes.header}>
@@ -160,6 +160,19 @@ function EntityForm(props) {
                 </ToggleButton>
               </ToggleButtonGroup>
             </div>
+          </div>
+          <div key={"name"} className={classes.textFields}>
+            <CustomTextField
+              id={"name"}
+              fullWidth
+              label={"Name"}
+              defaultValue={entityFields["name"]}
+              required={true}
+              variant="outlined"
+              onChange={(event) => {
+                setEntityfieldValue("name", event.target.value);
+              }}
+            />
           </div>
           <div key={"breed"} className={classes.textFields}>
             <CustomTextField

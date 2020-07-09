@@ -1,24 +1,31 @@
-import React, {useRef} from "react";
+import React, {useEffect, useState} from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
   Grid,
   Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
 } from "@material-ui/core";
-import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {setOfferFieldValue, setIsOfferDialogOpen} from "../actions/ownerPage";
+import {
+  setIsEntityFormDialogOpen,
+  setIsOfferDialogOpen,
+  setOfferFieldValue,
+} from "../actions/ownerPage";
 import {showSnackBar} from "../actions/loginPage";
-import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import {requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
+import {fetchFailed, requiredFieldsEmpty, saveFailed, saveSuccess} from "../constants";
 import {insertOffer} from "../services/offerService";
-import PetsIcon from "@material-ui/icons/Pets";
-import NatureIcon from "@material-ui/icons/Nature";
+import {getEntities} from "../services/entityService";
+import NoData from "./NoData";
+import EntityForm from "./EntityForm";
 
 const styles = (theme) => ({
   textFields: {
@@ -56,6 +63,19 @@ const styles = (theme) => ({
   dialogContent: {
     paddingTop: "0px !important",
   },
+  addPetPlantContainer: {
+    width: "100%",
+    textAlign: "center",
+  },
+  addPetPlant: {
+    margin: `${theme.spacing(1)}px auto`,
+  },
+  noDataContainer: {
+    paddingBottom: theme.spacing(4),
+  },
+  selectPetPlant: {
+    width: theme.spacing(20),
+  },
 });
 
 function OfferForm(props) {
@@ -67,10 +87,27 @@ function OfferForm(props) {
     offerFields,
     showSnackBar,
     setOfferFieldValue,
+    setIsEntityFormDialogOpen,
+    successCallback,
   } = props;
 
-  const inputFileRef = useRef(null);
-  let images = [];
+  const [entities, setEntities] = useState([]);
+
+  useEffect(() => {
+    if (isOfferDialogOpen) {
+      getEntities()
+        .then((entities) => {
+          setEntities(entities);
+        })
+        .catch((status) => {
+          if (status === 401) {
+            history.push("/");
+            window.location.reload();
+          }
+          showSnackBar(true, fetchFailed, "error");
+        });
+    }
+  }, [isOfferDialogOpen, history, showSnackBar]);
 
   async function handleSave() {
     const emptyField = Object.keys(offerFields).find(
@@ -82,19 +119,18 @@ function OfferForm(props) {
       showSnackBar(true, "Start time cannot be after End time.", "error");
     } else {
       let offer = {
+        entity: offerFields["entity"],
         description: offerFields["description"],
-        category: offerFields["category"],
         startDate: offerFields["startDate"],
         endDate: offerFields["endDate"],
         createdDate: new Date(),
         title: offerFields["title"],
       };
-      insertOffer(offer, images)
+      insertOffer(offer)
         .then(() => {
           showSnackBar(true, saveSuccess, "success");
+          successCallback();
           setIsOfferDialogOpen(false);
-          // successCallback();
-          console.log("Offer is submitted");
         })
         .catch((status) => {
           if (status === 401) {
@@ -105,208 +141,203 @@ function OfferForm(props) {
         });
     }
   }
-
-  function handleBrowseClick() {
-    inputFileRef.current.click();
+  function handleAddPetPlant() {
+    setIsEntityFormDialogOpen(true, true, "");
   }
-
-  function handleFileChange(event) {
-    images = event.target.files;
+  function entitySuccessCallback() {
+    setIsEntityFormDialogOpen(false);
+    getEntities()
+      .then((entities) => {
+        setEntities(entities);
+      })
+      .catch((status) => {
+        if (status === 401) {
+          history.push("/");
+          window.location.reload();
+        }
+        showSnackBar(true, fetchFailed, "error");
+      });
   }
-
+  function handleChangeEntity(event) {
+    const value = event.target.value;
+    setOfferFieldValue("entity", value);
+  }
   return (
     <Dialog
       fullWidth
       maxWidth="md"
       open={isOfferDialogOpen}
-      onClose={() => setIsOfferDialogOpen(true)}
+      onClose={() => setIsOfferDialogOpen(false)}
     >
       <DialogTitle className={classes.divTitle} id="form-dialog-title">
         New Offer
       </DialogTitle>
-      <div className={classes.divForm}>
-        <form className={classes.form} noValidate>
-          <DialogContent className={classes.dialogContent}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} md={5}>
-                <div align="center">Category</div>
-                <div align="center" className={classes.categoryGridObject}>
-                  <ToggleButtonGroup
-                    value={offerFields["category"]}
-                    exclusive
-                    onChange={(event, value) => {
-                      setOfferFieldValue("category", value);
-                    }}
-                    size="large"
-                  >
-                    <ToggleButton value="Pet">
-                      <PetsIcon />
-                    </ToggleButton>
-                    <ToggleButton value="Plant">
-                      <NatureIcon />
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </div>
-                <div align="center" className={classes.categoryGridObject}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.photoButton}
-                  >
-                    <PhotoCameraIcon />
-                  </Button>
-                </div>
-              </Grid>
-
-              <Grid item xs={12} md={7}>
-                <Grid container direction="row" justify="center" alignItems="center">
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.categoryGridObject}
-                  >
-                    <Grid item xs={12} md={3}>
-                      <div>Start Date:</div>
-                    </Grid>
-                    <Grid item xs={12} md={9}>
-                      <TextField
-                        id="startDate"
-                        type="datetime-local"
-                        className={classes.textField}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        onChange={(event) => {
-                          setOfferFieldValue("startDate", event.target.value);
-                          console.log("StartDate Changed");
-                        }}
-                      />
-                    </Grid>
+      {entities.length > 0 ? (
+        <div className={classes.divForm}>
+          <form className={classes.form} noValidate>
+            <DialogContent className={classes.dialogContent}>
+              <Grid container direction="row" justify="center" alignItems="center">
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.categoryGridObject}
+                >
+                  <Grid item xs={12} md={3}>
+                    <div>Entity: </div>
                   </Grid>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.categoryGridObject}
-                  >
-                    <Grid item xs={12} md={3}>
-                      <div>End Date:</div>
-                    </Grid>
-                    <Grid item xs={12} md={9}>
-                      <TextField
-                        id="endDate"
-                        type="datetime-local"
-                        className={classes.textField}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        onChange={(event) => {
-                          setOfferFieldValue("endDate", event.target.value);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.categoryGridObject}
-                  >
-                    <Grid item xs={12} md={3}>
-                      <div>Title:</div>
-                    </Grid>
-                    <Grid item xs={12} md={9}>
-                      <Input
-                        className={classes.titleText}
-                        id="title"
-                        placeholder="Title"
-                        fullWidth
-                        onChange={(event) => {
-                          setOfferFieldValue("title", event.target.value);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.categoryGridObject}
-                  >
-                    <Grid item xs={12} md={3}>
-                      <div>Description:</div>
-                    </Grid>
-                    <Grid item xs={12} md={9}>
-                      <TextField
-                        className={classes.descriptionText}
-                        id="description"
-                        rows={8}
-                        variant="filled"
-                        fullWidth
-                        multiline
-                        onChange={(event) => {
-                          setOfferFieldValue("description", event.target.value);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.categoryGridObject}
-                  >
-                    <Grid item xs={12} md={3}>
-                      <div>Upload Files:</div>
-                    </Grid>
-                    <Grid item xs={12} md={9}>
-                      <input
-                        type="file"
-                        name="file"
-                        multiple={true}
-                        style={{display: "none"}}
-                        ref={inputFileRef}
-                        onChange={handleFileChange}
-                      />
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleBrowseClick}
+                  <Grid item xs={12} md={9}>
+                    <FormControl>
+                      <InputLabel id="filter-by-label">Select Pet/Plant</InputLabel>
+                      <Select
+                        labelId="filter-by-label"
+                        id="filter-by"
+                        color="secondary"
+                        value={offerFields["entity"]}
+                        className={classes.selectPetPlant}
+                        onChange={handleChangeEntity}
                       >
-                        Browse
-                      </Button>
-                    </Grid>
+                        {entities.map((entity, index) => (
+                          <MenuItem key={index} value={entity._id}>
+                            {entity.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.categoryGridObject}
+                >
+                  <Grid item xs={12} md={3}>
+                    <div>Start Date:</div>
+                  </Grid>
+                  <Grid item xs={12} md={9}>
+                    <TextField
+                      id="startDate"
+                      type="datetime-local"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(event) => {
+                        setOfferFieldValue("startDate", event.target.value);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.categoryGridObject}
+                >
+                  <Grid item xs={12} md={3}>
+                    <div>End Date:</div>
+                  </Grid>
+                  <Grid item xs={12} md={9}>
+                    <TextField
+                      id="endDate"
+                      type="datetime-local"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(event) => {
+                        setOfferFieldValue("endDate", event.target.value);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.categoryGridObject}
+                >
+                  <Grid item xs={12} md={3}>
+                    <div>Title:</div>
+                  </Grid>
+                  <Grid item xs={12} md={9}>
+                    <Input
+                      className={classes.titleText}
+                      id="title"
+                      placeholder="Title"
+                      fullWidth
+                      onChange={(event) => {
+                        setOfferFieldValue("title", event.target.value);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.categoryGridObject}
+                >
+                  <Grid item xs={12} md={3}>
+                    <div>Description:</div>
+                  </Grid>
+                  <Grid item xs={12} md={9}>
+                    <TextField
+                      className={classes.descriptionText}
+                      id="description"
+                      rows={8}
+                      variant="filled"
+                      fullWidth
+                      multiline
+                      onChange={(event) => {
+                        setOfferFieldValue("description", event.target.value);
+                      }}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                className={classes.button}
+                onClick={() => setIsOfferDialogOpen(false)}
+                color="secondary"
+              >
+                Cancel
+              </Button>
+              <Button
+                className={classes.button}
+                onClick={handleSave}
+                color="secondary"
+                variant="contained"
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </form>
+        </div>
+      ) : (
+        <div className={classes.noDataContainer}>
+          <NoData text={"You do not have any pet / plants to offer."} />
+          <div className={classes.addPetPlantContainer}>
             <Button
-              className={classes.button}
-              onClick={() => setIsOfferDialogOpen(false)}
-              color="secondary"
-            >
-              Cancel
-            </Button>
-            <Button
-              className={classes.button}
-              onClick={handleSave}
+              className={`${classes.button} ${classes.addPetPlant}`}
+              onClick={handleAddPetPlant}
               color="secondary"
               variant="contained"
             >
-              Submit
+              Add Pet/Plant
             </Button>
-          </DialogActions>
-        </form>
-      </div>
+          </div>
+        </div>
+      )}
+      <EntityForm history={history} successCallback={entitySuccessCallback} />
     </Dialog>
   );
 }
@@ -321,6 +352,7 @@ const mapDispatchToProps = {
   setIsOfferDialogOpen: setIsOfferDialogOpen,
   setOfferFieldValue: setOfferFieldValue,
   showSnackBar: showSnackBar,
+  setIsEntityFormDialogOpen: setIsEntityFormDialogOpen,
 };
 
 export default connect(

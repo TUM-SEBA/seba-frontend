@@ -116,24 +116,23 @@ export function getOffer(offerId) {
   });
 }
 
-export function insertOffer(offer, images) {
-  const formData = new FormData();
-  formData.append("description", offer.description);
-  formData.append("category", offer.category);
-  formData.append("startDate", offer.startDate);
-  formData.append("endDate", offer.endDate);
-  formData.append("createdDate", offer.createdDate);
-  formData.append("title", offer.title);
-  for (let i = 0; i < images.length; i++) {
-    formData.append("images", images[i]);
-  }
+export function insertOffer(offer) {
+  const body = {
+    entity: offer.entity,
+    description: offer.description,
+    startDate: offer.startDate,
+    endDate: offer.endDate,
+    createdDate: offer.createdDate,
+    title: offer.title,
+  };
   return new Promise((resolve, reject) => {
     fetch(offerURL, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         authorization: `Bearer ${localStorage["token"]}`,
       },
-      body: formData,
+      body: JSON.stringify(body),
     }).then((response) => {
       if (response.status === 201) {
         resolve();

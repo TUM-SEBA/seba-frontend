@@ -9,13 +9,7 @@ import {setIsAboutUsDialogOpen} from "../actions/welcomePage";
 import AboutUs from "./AboutUs";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  footerColor: {
+  footer: {
     background: "darkgray",
   },
   footerText: {
@@ -23,12 +17,11 @@ const useStyles = makeStyles((theme) => ({
     width: "170px",
     fontSize: "12px",
   },
-  footerToolbar: {},
+  footerToolbar: {
+    height: "15px",
+  },
   gridContainer: {
-    direction: "column",
-    justify: "center",
     alignItems: "center",
-    spacing: "1",
   },
   socialMediaButton: {
     backgroundColor: "transparent",
@@ -51,8 +44,8 @@ const Footer = (props) => {
   }
 
   return (
-    <div className={classes.footerColor}>
-      <AppBar className={classes.footerColor} position="static">
+    <div className={classes.footer}>
+      <AppBar className={classes.footer} position="static">
         <Toolbar className={classes.footerToolbar}>
           <Grid container className={classes.gridContainer}>
             <Grid item xs={4}>

@@ -1,38 +1,20 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {
-  Card,
-  CardContent,
-  Button,
-  CardActionArea,
-  CardActions,
-  CardMedia,
-  Grid,
-} from "@material-ui/core";
-import {
-  changeFilterBy,
-  changeSearch,
-  setIsBiddingRequestDialogOpen,
-  setIsOfferDialogOpen,
-  setIsViewFeedbackDialogOpen,
-  setCaretakerForFeedback,
-} from "../actions/ownerPage";
+import {Card, CardContent, Button, Grid} from "@material-ui/core";
+import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
-import {fetchFailed, publicURL} from "../constants";
+import {fetchFailed} from "../constants";
 import Header from "../components/Header";
 import AddIcon from "@material-ui/icons/Add";
-import Typography from "@material-ui/core/Typography";
 import FilterSearch from "../components/FilterSearch";
 import BiddingRequestList from "../components/BiddingRequestList";
 import MenuDialog from "../components/MenuDialog";
 import FeedbackForm from "../components/FeedbackForm";
-import PaypalButton from "../components/PaypalButton";
-import {postPaymentCompleted} from "../services/offerService";
-import {getCaretakerFromBiddingRequest} from "../services/biddingRequestService";
+import OwnerItemCard from "../components/OwnerItemCard";
 
 const filterByOptions = ["Title", "Description"];
 
@@ -45,14 +27,6 @@ const styles = (theme) => ({
     maxWidth: 400,
     minHeight: 262,
   },
-  divActionArea: {
-    minHeight: 262,
-  },
-  media: {
-    height: theme.spacing(20),
-    objectFit: "cover",
-  },
-  ownerHeader: {},
   container: {
     margin: "40px auto",
     width: "80%",
@@ -79,16 +53,6 @@ const styles = (theme) => ({
     color: "rgba(0, 0, 0, 0.4)",
     fontSize: "10pt",
   },
-  divCardContentText: {
-    minHeight: "90px",
-  },
-  // offerCardTitle: {
-  //   marginLeft: theme.spacing(3),
-  //   height: theme.spacing(3),
-  //   textAlign: "justify",
-  //   fontSize: "13pt",
-  //   fontWeight: "fontWeightBold",
-  // },
   offerCardContent: {
     height: theme.spacing(12),
     display: "flex",
@@ -100,25 +64,6 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "center",
     paddingTop: theme.spacing(3),
-  },
-  offerCreatedDate: {
-    // marginLeft: theme.spacing(3),
-    // marginTop: theme.spacing(2),
-    // textAlign: "justify",
-    // fontSize: "10pt",
-  },
-  offerCardDescription: {
-    // marginLeft: theme.spacing(3),
-    // height: theme.spacing(4),
-    // textAlign: "justify",
-    // fontSize: "10pt",
-    overflowY: "auto",
-  },
-  offerDurationDates: {
-    color: "black",
-  },
-  interestedButton: {
-    width: "100%",
   },
   createOfferButton: {
     borderRadius: "100%",
@@ -135,6 +80,7 @@ const styles = (theme) => ({
     textAlign: "center",
   },
 });
+
 function OfferPage(props) {
   const {
     history,
@@ -144,25 +90,10 @@ function OfferPage(props) {
     changeFilterBy,
     changeSearch,
     setIsOfferDialogOpen,
-    setIsBiddingRequestDialogOpen,
     showSnackBar,
-    setIsViewFeedbackDialogOpen,
-    setCaretakerForFeedback,
   } = props;
 
   const [offers, setOffers] = useState([]);
-
-  function formatDate(date) {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [day, month, year].join("/");
-  }
 
   useEffect(() => {
     function getOffers() {
@@ -200,109 +131,6 @@ function OfferPage(props) {
     );
   }
 
-  function handleCardClick(offerId) {
-    setIsBiddingRequestDialogOpen(true, offerId);
-  }
-
-  function getGridItem(index, offer) {
-    const paymentDetails = {
-      price: offer.approvedPrice * 0.8,
-      description: offer.description,
-      currency: "EUR",
-    };
-
-    function handlePostPaymentCompleted() {
-      postPaymentCompleted(offer._id)
-        .then(async () => {
-          showSnackBar(true, "Payment Successful", "success");
-          await getCaretakerFromBiddingRequest(offer.approveBiddingRequestId).then(
-            (caretaker) => {
-              setCaretakerForFeedback(caretaker);
-            }
-          );
-          setIsViewFeedbackDialogOpen(true, offer._id);
-        })
-        .catch((status) => {
-          if (status === 401) {
-            history.push("/");
-            window.location.reload();
-          }
-          showSnackBar(true, "Internal Server error", "error");
-        });
-    }
-
-    return (
-      <Grid item xs={12} md={6} lg={4} key={index}>
-        <Card className={classes.root} variant="outlined">
-          <CardActionArea
-            className={classes.divActionArea}
-            onClick={() => handleCardClick(offer._id)}
-          >
-            <CardMedia
-              className={classes.media}
-              image={`${publicURL}/${offer.entity.images[0]}`}
-              title="Contemplative Reptile"
-            />
-
-            <CardContent className={classes.divCardContentText}>
-              <Typography
-                className={classes.offerCardTitle}
-                gutterBottom
-                variant="h5"
-                component="h2"
-              >
-                {offer.title}
-              </Typography>
-              <Typography
-                className={classes.offerDurationDates}
-                variant="body2"
-                color="textSecondary"
-                component="p"
-              >
-                Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
-              </Typography>
-
-              <Typography
-                className={classes.offerCardDescription}
-                variant="body2"
-                color="textSecondary"
-                component="p"
-              >
-                {offer.description}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          {offer.status === "Payment Pending" && (
-            <CardActions>
-              <PaypalButton
-                paymentDetails={paymentDetails}
-                handlePaymentCompleted={handlePostPaymentCompleted}
-              />
-            </CardActions>
-          )}
-          {offer.status === "Completed" && (
-            <CardActions>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.interestedButton}
-                onClick={async () => {
-                  await getCaretakerFromBiddingRequest(
-                    offer.approveBiddingRequestId
-                  ).then((caretaker) => {
-                    setCaretakerForFeedback(caretaker);
-                  });
-                  setIsViewFeedbackDialogOpen(true, offer._id);
-                }}
-              >
-                Give Feedback
-              </Button>
-            </CardActions>
-          )}
-        </Card>
-      </Grid>
-    );
-  }
   return (
     <div className={classes.ownerPage}>
       <Grid container direction="column" justify="flex-start" alignItems="stretch">
@@ -351,7 +179,9 @@ function OfferPage(props) {
                 }
                 return false;
               })
-              .map((offer, index) => getGridItem(index, offer))}
+              .map((offer, index) => (
+                <OwnerItemCard index={index} offer={offer} />
+              ))}
           </Grid>
         </div>
         <OfferForm history={history} />
@@ -372,10 +202,7 @@ const mapDispatchToProps = {
   changeFilterBy: changeFilterBy,
   changeSearch: changeSearch,
   setIsOfferDialogOpen: setIsOfferDialogOpen,
-  setIsBiddingRequestDialogOpen: setIsBiddingRequestDialogOpen,
   showSnackBar: showSnackBar,
-  setIsViewFeedbackDialogOpen: setIsViewFeedbackDialogOpen,
-  setCaretakerForFeedback: setCaretakerForFeedback,
 };
 
 export default connect(

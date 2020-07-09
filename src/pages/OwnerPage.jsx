@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
-import {Card, CardContent, Button, Grid} from "@material-ui/core";
+import {Card, CardContent, Button, Grid, Tabs, Tab} from "@material-ui/core";
 import {changeFilterBy, changeSearch, setIsOfferDialogOpen} from "../actions/ownerPage";
 import OfferForm from "../components/OfferForm";
 import {getOffersByOwnerId} from "../services/offerService";
@@ -22,6 +22,11 @@ const styles = (theme) => ({
   ownerPage: {
     height: "100vh",
     overflow: "hidden",
+  },
+  tabroot: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(5),
   },
   root: {
     maxWidth: 400,
@@ -79,6 +84,15 @@ const styles = (theme) => ({
     marginBottom: "10pt",
     textAlign: "center",
   },
+  tabOption: {
+    marginTop: theme.spacing(4),
+    borderBottom: `1px solid rgba(0, 0, 0, 0.3)`,
+  },
+  tabActive: {
+    color: theme.palette.secondary.contrastText,
+    background: theme.palette.secondary.main,
+    opacity: 1,
+  },
 });
 
 function OfferPage(props) {
@@ -94,11 +108,30 @@ function OfferPage(props) {
   } = props;
 
   const [offers, setOffers] = useState([]);
+  const [activeTab, setActiveTab] = React.useState(0);
+  const tabs = ["Offers", "Pending Payments", "Pending Feedbacks"];
+  const [disableTab, setDisableTab] = React.useState(false);
+
+  const handleTabClick = (index) => {
+    setActiveTab(index);
+  };
+
+  function pendingPaymentCheck(offers) {
+    if (offers.some((offer) => offer.status === "Payment Pending")) {
+      setDisableTab(true);
+      setActiveTab(1);
+    }
+    if (offers.some((offer) => offer.status === "Completed")) {
+      setDisableTab(true);
+      setActiveTab(2);
+    }
+  }
 
   useEffect(() => {
     function getOffers() {
       getOffersByOwnerId()
         .then((response) => {
+          pendingPaymentCheck(response);
           setOffers(response);
         })
         .catch((_) => {
@@ -111,6 +144,7 @@ function OfferPage(props) {
     }
     getOffers();
   }, [history, showSnackBar]);
+
   function getCreateOffer() {
     return (
       <Grid item xs={12} md={6} lg={4} key={0}>
@@ -155,34 +189,56 @@ function OfferPage(props) {
             </Grid>
           </Grid>
         </div>
-        <div className={classes.body}>
-          <Grid container spacing={2}>
-            {getCreateOffer()}
-            {offers
-              .filter((offer) => {
-                var searchRegex = new RegExp(searchValue, "gi");
-                // todo only show user's own offers.
-                //  (I did it like that. There is no point for the owner to see other people's offers in owner page - Eray)
-                if (searchValue === "") {
-                  return true;
-                }
-                if (selectedFilterBy === 1) {
-                  if (searchRegex.test(offer.title)) {
-                    return true;
-                  }
-                } else if (selectedFilterBy === 2) {
-                  if (searchRegex.test(offer.description)) {
-                    return true;
-                  }
-                } else if (selectedFilterBy === "") {
-                  return true;
-                }
-                return false;
-              })
-              .map((offer, index) => (
-                <OwnerItemCard index={index} offer={offer} />
+        <div className={classes.tabroot}>
+          <div className={classes.tabOption}>
+            <Tabs value={activeTab}>
+              {tabs.map((tab, index) => (
+                <Tab
+                  key={index}
+                  value={index}
+                  disabled={index === 0 && disableTab}
+                  className={activeTab === index ? classes.tabActive : ""}
+                  label={tab}
+                  onClick={() => handleTabClick(index)}
+                />
               ))}
-          </Grid>
+            </Tabs>
+          </div>
+          <div className={classes.body}>
+            <Grid container spacing={2}>
+              {activeTab === 0 && getCreateOffer()}
+              {offers
+                .filter((offer) => {
+                  if (activeTab === 1) {
+                    if (offer.status === "Payment Pending") return true;
+                    else return false;
+                  }
+                  if (activeTab === 2) {
+                    if (offer.status === "Completed") return true;
+                    else return false;
+                  }
+                  var searchRegex = new RegExp(searchValue, "gi");
+                  if (searchValue === "") {
+                    return true;
+                  }
+                  if (selectedFilterBy === 1) {
+                    if (searchRegex.test(offer.title)) {
+                      return true;
+                    }
+                  } else if (selectedFilterBy === 2) {
+                    if (searchRegex.test(offer.description)) {
+                      return true;
+                    }
+                  } else if (selectedFilterBy === "") {
+                    return true;
+                  }
+                  return false;
+                })
+                .map((offer, index) => (
+                  <OwnerItemCard index={index} offer={offer} key={index} />
+                ))}
+            </Grid>
+          </div>
         </div>
         <OfferForm history={history} />
         <BiddingRequestList history={history} />

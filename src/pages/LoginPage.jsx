@@ -38,7 +38,7 @@ const styles = (theme) => ({
     marginTop: theme.spacing(18),
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -66,7 +66,8 @@ const styles = (theme) => ({
   },
   loginImage: {
     maxWidth: "50%",
-    maxheight: "100%",
+    maxHeight: "100%",
+    objectFit: "cover",
   },
 });
 

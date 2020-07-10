@@ -30,7 +30,6 @@ import displayImage from "../assets/loginPageImage.jpg";
 const styles = (theme) => ({
   tagLineDiv: {
     background: "#317D3D",
-    background: "rgba(49, 125, 61, 0.5)",
     height: "80px",
     position: "absolute",
     bottom: "0",

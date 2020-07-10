@@ -83,7 +83,7 @@ function OwnerItemCard(props) {
     postPaymentCompleted(offer._id)
       .then(async () => {
         showSnackBar(true, "Payment Successful", "success");
-        await getCaretakerFromBiddingRequest(offer.approveBiddingRequestId).then(
+        await getCaretakerFromBiddingRequest(offer.approvedBiddingRequest).then(
           (caretaker) => {
             setCaretakerForFeedback(caretaker);
           }
@@ -155,7 +155,7 @@ function OwnerItemCard(props) {
               color="secondary"
               className={classes.interestedButton}
               onClick={async () => {
-                await getCaretakerFromBiddingRequest(offer.approveBiddingRequestId).then(
+                await getCaretakerFromBiddingRequest(offer.approvedBiddingRequest).then(
                   (caretaker) => {
                     setCaretakerForFeedback(caretaker);
                   }

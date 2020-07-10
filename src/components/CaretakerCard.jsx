@@ -108,7 +108,7 @@ function CaretakerCard(props) {
   let showCompletedButton = false;
   const endDate = new Date(offer.endDate);
   const today = new Date();
-  if (today > endDate && offer.status === "Assigned") showCompletedButton = true;
+  if (today >= endDate && offer.status === "Assigned") showCompletedButton = true;
 
   return (
     <Card variant="outlined">
@@ -190,7 +190,7 @@ function CaretakerCard(props) {
         </CardActions>
       )}
 
-      {tab === 1 && showCompletedButton && (
+      {tab === 2 && showCompletedButton && (
         <CardActions className={classes.offerCardActions}>
           <Grid container spacing={1}>
             <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} />

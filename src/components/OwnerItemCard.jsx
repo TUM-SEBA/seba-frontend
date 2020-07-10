@@ -101,7 +101,7 @@ function OwnerItemCard(props) {
   }
 
   return (
-    <Grid item xs={12} md={6} lg={4} key={index}>
+    <Grid item xs={12} md={6} lg={3} key={index}>
       <Card className={classes.root} variant="outlined">
         <CardActionArea
           className={classes.divActionArea}

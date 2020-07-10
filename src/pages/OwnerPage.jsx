@@ -199,7 +199,7 @@ function OfferPage(props) {
 
   function getCreateOffer() {
     return (
-      <Grid item xs={12} md={6} lg={4} key={0}>
+      <Grid item xs={12} md={6} lg={3} key={0}>
         <Card className={classes.root} variant="outlined">
           <CardContent className={classes.createOfferContent}>
             <Button

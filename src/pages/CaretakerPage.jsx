@@ -211,7 +211,7 @@ function CaretakerPage(props) {
         <div>
           <Grid container spacing={3}>
             <Grid item xs={12} md={3}>
-              {/*<Typography>Hello, Caretaker</Typography>*/}
+              Hello, Caretaker {localStorage["username"]}
             </Grid>
             <Grid item xs={"auto"} md={2} lg={4} />
             <Grid item xs={12} md={7} lg={5}>

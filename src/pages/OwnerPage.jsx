@@ -21,6 +21,9 @@ import NoData from "../components/NoData";
 const filterByOptions = ["Title", "Description"];
 
 const styles = (theme) => ({
+  ownerGreeting: {
+    fontSize: "24px",
+  },
   ownerPage: {
     height: "100vh",
   },
@@ -236,7 +239,7 @@ function OfferPage(props) {
       <div className={classes.container}>
         <div className={classes.ownerHeader}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={3}>
+            <Grid className={classes.ownerGreeting} item xs={12} md={3}>
               Hello, Owner {localStorage["username"]}
             </Grid>
             <Grid item xs={"auto"} md={2} lg={4} />

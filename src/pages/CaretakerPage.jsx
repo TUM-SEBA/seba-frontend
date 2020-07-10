@@ -38,6 +38,9 @@ const noOfferMessages = [
 ];
 const filterByOptions = ["Owner", "Description"];
 const styles = (theme) => ({
+  caretakerGreeting: {
+    fontSize: "24px",
+  },
   container: {
     margin: `${theme.spacing(5)}px auto 0 auto`,
     width: "80%",
@@ -210,7 +213,7 @@ function CaretakerPage(props) {
       <div className={classes.container}>
         <div>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={3}>
+            <Grid className={classes.caretakerGreeting} item xs={12} md={3}>
               Hello, Caretaker {localStorage["username"]}
             </Grid>
             <Grid item xs={"auto"} md={2} lg={4} />

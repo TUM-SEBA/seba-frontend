@@ -24,7 +24,6 @@ import {getCaretakerFromBiddingRequest} from "../services/biddingRequestService"
 
 const styles = (theme) => ({
   root: {
-    maxWidth: 400,
     minHeight: 262,
   },
   divActionArea: {

@@ -30,7 +30,6 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(5),
   },
   root: {
-    maxWidth: 400,
     minHeight: 282,
   },
   container: {

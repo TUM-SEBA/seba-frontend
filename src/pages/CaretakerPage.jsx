@@ -80,6 +80,7 @@ const styles = (theme) => ({
 function CaretakerPage(props) {
   const {
     history,
+    sock,
     classes,
     selectedFilterBy,
     searchValue,
@@ -252,7 +253,11 @@ function CaretakerPage(props) {
             )}
           </Grid>
         </div>
-        <BiddingRequestForm history={history} successCallback={saveSuccessCallback} />
+        <BiddingRequestForm
+          history={history}
+          successCallback={saveSuccessCallback}
+          sock={sock}
+        />
         <MenuDialog />
       </div>
     </div>

@@ -19,8 +19,9 @@ import {connect} from "react-redux";
 import {publicURL} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
 import PaypalButton from "./PaypalButton";
-import {postPaymentCompleted} from "../services/offerService";
+import {postPaymentCompleted, disableOfferNotification} from "../services/offerService";
 import {getCaretakerFromBiddingRequest} from "../services/biddingRequestService";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 
 const styles = (theme) => ({
   root: {
@@ -45,25 +46,40 @@ const styles = (theme) => ({
   interestedButton: {
     width: "100%",
   },
+  notif: {
+    display: "flex",
+  },
 });
 
 function OwnerItemCard(props) {
   const {
     index,
     offer,
+    sock,
     classes,
     history,
     setIsViewFeedbackDialogOpen,
     setCaretakerForFeedback,
     setIsBiddingRequestDialogOpen,
   } = props;
+
   const paymentDetails = {
     price: offer.approvedPrice * 0.8,
     description: offer.description,
     currency: "EUR",
   };
 
+  const [offerNotif, setOfferNotif] = React.useState(offer.notification);
+
+  sock.onmessage = function (e) {
+    if (offer._id === e.data) {
+      setOfferNotif(true);
+    }
+  };
+
   function handleCardClick(offerId) {
+    if (offer.notification) disableOfferNotification(offer._id);
+    setOfferNotif(false);
     setIsBiddingRequestDialogOpen(true, offerId);
   }
 
@@ -113,14 +129,17 @@ function OwnerItemCard(props) {
           />
 
           <CardContent className={classes.divCardContentText}>
-            <Typography
-              className={classes.offerCardTitle}
-              gutterBottom
-              variant="h5"
-              component="h2"
-            >
-              {offer.title}
-            </Typography>
+            <div className={classes.notif}>
+              <Typography
+                className={classes.offerCardTitle}
+                gutterBottom
+                variant="h5"
+                component="h2"
+              >
+                {offer.title}
+              </Typography>
+              {offerNotif && <NotificationsIcon style={{fontSize: "xx-large"}} />}
+            </div>
             <Typography
               className={classes.offerDurationDates}
               variant="body2"

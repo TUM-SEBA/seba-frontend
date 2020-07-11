@@ -9,9 +9,11 @@ import CaretakerPage from "./pages/CaretakerPage";
 import OwnerPage from "./pages/OwnerPage";
 import WelcomePage from "./pages/WelcomePage";
 import {isAuthenticated} from "../src/services/loginService";
+import SockJS from "sockjs-client";
 
 function App() {
   const history = createBrowserHistory();
+  const sock = new SockJS("http://localhost:5000/echo");
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -34,7 +36,7 @@ function App() {
               !isAuthenticated() ? (
                 <LoginPage history={history} />
               ) : (
-                <CaretakerPage history={history} />
+                <CaretakerPage history={history} sock={sock} />
               )
             }
           />
@@ -44,7 +46,7 @@ function App() {
               !isAuthenticated() ? (
                 <LoginPage history={history} />
               ) : (
-                <OwnerPage history={history} />
+                <OwnerPage history={history} sock={sock} />
               )
             }
           />

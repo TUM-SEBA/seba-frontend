@@ -123,6 +123,7 @@ const styles = (theme) => ({
 function OfferPage(props) {
   const {
     history,
+    sock,
     classes,
     selectedFilterBy,
     searchValue,
@@ -197,7 +198,9 @@ function OfferPage(props) {
       }
       return false;
     })
-    .map((offer, index) => <OwnerItemCard index={index} offer={offer} key={index} />);
+    .map((offer, index) => (
+      <OwnerItemCard index={index} offer={offer} key={index} sock={sock} />
+    ));
 
   function getCreateOffer() {
     return (

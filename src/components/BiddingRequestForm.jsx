@@ -167,6 +167,7 @@ const keyMap = {
 function BiddingRequestForm(props) {
   const {
     history,
+    sock,
     classes,
     successCallback,
     biddingRequestFields,
@@ -203,6 +204,7 @@ function BiddingRequestForm(props) {
     if (emptyField) {
       showSnackBar(true, requiredFieldsEmpty, "error");
     } else {
+      sock.send(offer._id);
       let biddingRequest = {
         offer: offerId,
         caretaker: localStorage["username"],
@@ -224,6 +226,7 @@ function BiddingRequestForm(props) {
         });
     }
   }
+
   function handleNavigateBefore() {
     if (imageShow > 0) {
       setImageShow(imageShow - 1);

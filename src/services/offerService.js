@@ -221,6 +221,24 @@ export function closeOffer(offerId) {
   });
 }
 
+export function disableOfferNotification(offerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/disablenotification/${offerId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}
+
 export function updateNotInterested(offerId) {
   return new Promise((resolve, reject) => {
     fetch(`${offerURL}/not-interested/${offerId}`, {

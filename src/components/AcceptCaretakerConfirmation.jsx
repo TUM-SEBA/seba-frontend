@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
@@ -6,50 +6,14 @@ import {
   setIsBiddingRequestDialogOpen,
 } from "../actions/ownerPage";
 import {Button, Checkbox, Dialog, FormControlLabel, Grid} from "@material-ui/core";
-import {fetchFailed, saveFailed, saveSuccess} from "../constants";
+import {saveFailed, saveSuccess} from "../constants";
 import {showSnackBar} from "../actions/loginPage";
-import {getBiddingRequest} from "../services/biddingRequestService";
 import {acceptOffer} from "../services/offerService";
 import PaypalButton from "./PaypalButton";
 
-const dummyBiddingRequest = {
-  image:
-    "https://start-cons.com/wp-content/uploads/2019/03/person-dummy-e1553259379744.jpg",
-};
-
-const initialCustomer = {
-  _id: "",
-  username: "",
-  password: "",
-  name: "",
-  phoneNumber: "",
-  address: "",
-  feedbacksGiven: 0,
-  starsRecieved: 0,
-  badgesEarned: {
-    _id: "",
-    name: "",
-    description: "",
-    image: "",
-  },
-  type: "",
-  interestedOffers: [],
-};
-
-const initialBiddingRequest = {
-  _id: "",
-  offer: {},
-  caretaker: initialCustomer,
-  createdDate: "",
-  price: 0,
-  prepaymentPrice: 0,
-  postpaymentPrice: 0,
-  remarks: "",
-};
-
 const styles = (theme) => ({
   container: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
   },
   question: {
     fontWeight: "bold",
@@ -60,11 +24,6 @@ const styles = (theme) => ({
   },
   insurance: {
     margin: `${theme.spacing(2)}px 0`,
-  },
-  biddingRequestImage: {
-    width: theme.spacing(10),
-    height: theme.spacing(10),
-    borderRadius: "100%",
   },
   button: {
     width: "100%",
@@ -79,32 +38,13 @@ function AcceptCaretakerConfirmation(props) {
   const {
     classes,
     history,
-    biddingRequestId,
+    biddingRequest,
     isAcceptCaretakerConfirmationDialogOpen,
     setIsBiddingRequestDialogOpen,
     setIsAcceptCaretakerConfirmationDialogOpen,
     showSnackBar,
   } = props;
-
-  const [biddingRequest, setBiddingRequest] = useState(initialBiddingRequest);
   const [isInsuranceChecked, setIsInsuranceChecked] = useState(false);
-
-  useEffect(() => {
-    if (biddingRequestId !== "") {
-      getBiddingRequest(biddingRequestId)
-        .then((biddingRequest) => {
-          setBiddingRequest(biddingRequest);
-        })
-        .catch((status) => {
-          if (status === 401) {
-            history.push("/");
-            window.location.reload();
-          }
-          showSnackBar(true, fetchFailed, "error");
-        });
-    }
-  }, [biddingRequestId, history, showSnackBar]);
-
   function handlePrePaymentCompleted() {
     acceptOffer(
       biddingRequest.offer._id,
@@ -114,7 +54,7 @@ function AcceptCaretakerConfirmation(props) {
     )
       .then(() => {
         showSnackBar(true, saveSuccess, "success");
-        setIsAcceptCaretakerConfirmationDialogOpen(false, "");
+        setIsAcceptCaretakerConfirmationDialogOpen(false, biddingRequest);
         setIsBiddingRequestDialogOpen(false, "");
       })
       .catch((status) => {
@@ -131,81 +71,66 @@ function AcceptCaretakerConfirmation(props) {
     description: biddingRequest.remarks,
     currency: "EUR",
   };
-
   return (
     <Dialog
-      fullWidth
       maxWidth="sm"
       open={isAcceptCaretakerConfirmationDialogOpen}
-      onClose={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
+      onClose={() => setIsAcceptCaretakerConfirmationDialogOpen(false, biddingRequest)}
     >
       {biddingRequest._id !== "" && (
-        <Grid container className={classes.container}>
-          <Grid item xs={4}>
-            <div>
-              <img
-                className={classes.biddingRequestImage}
-                src={dummyBiddingRequest.image}
-                alt={"Caretaker"}
-              />
-            </div>
-            <div>{biddingRequest.caretaker.username}</div>
-          </Grid>
-          <Grid item xs={8}>
-            <div className={classes.question}>Initiate pre payment</div>
-            <div className={classes.line}>
-              Pre Payment Amount: {biddingRequest.price * 0.2} euro
-            </div>
-            <div className={classes.line}>
-              Post Payment Amount: {biddingRequest.price * 0.8} euro
-            </div>
-            <div className={classes.line}>Total Price: {biddingRequest.price} euro</div>
-            <div className={classes.line}>
-              Start Date: {biddingRequest.offer.startDate}
-            </div>
-            <div className={classes.line}>End Date: {biddingRequest.offer.endDate}</div>
-            <div className={classes.insurance}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isInsuranceChecked}
-                    onChange={() => setIsInsuranceChecked(!isInsuranceChecked)}
-                    color="secondary"
-                  />
-                }
-                label="Insurance"
-              />
-            </div>
-            <Grid container spacing={1}>
-              <PaypalButton
-                paymentDetails={paymentDetails}
-                handlePaymentCompleted={handlePrePaymentCompleted}
-              />
-
-              <Grid item xs={12} sm={3} className={classes.buttonContainer}>
-                <Button
-                  variant="contained"
-                  className={classes.button}
+        <div className={classes.container}>
+          <div className={classes.question}>Initiate pre payment</div>
+          <div className={classes.line}>
+            Pre Payment Amount: {biddingRequest.price * 0.2} euro
+          </div>
+          <div className={classes.line}>
+            Post Payment Amount: {biddingRequest.price * 0.8} euro
+          </div>
+          <div className={classes.line}>Total Price: {biddingRequest.price} euro</div>
+          <div className={classes.line}>Start Date: {biddingRequest.offer.startDate}</div>
+          <div className={classes.line}>End Date: {biddingRequest.offer.endDate}</div>
+          <div className={classes.insurance}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isInsuranceChecked}
+                  onChange={() => setIsInsuranceChecked(!isInsuranceChecked)}
                   color="secondary"
-                  size="small"
-                  onClick={() => setIsAcceptCaretakerConfirmationDialogOpen(false, "")}
-                >
-                  Cancel
-                </Button>
-              </Grid>
+                />
+              }
+              label="Insurance"
+            />
+          </div>
+          <Grid container spacing={1}>
+            <PaypalButton
+              paymentDetails={paymentDetails}
+              handlePaymentCompleted={handlePrePaymentCompleted}
+            />
+            <Grid item xs={12} sm={3} className={classes.buttonContainer}>
+              <Button
+                variant="contained"
+                className={classes.button}
+                color="secondary"
+                size="small"
+                onClick={() =>
+                  setIsAcceptCaretakerConfirmationDialogOpen(false, biddingRequest)
+                }
+              >
+                Cancel
+              </Button>
             </Grid>
           </Grid>
-        </Grid>
+        </div>
       )}
     </Dialog>
   );
 }
 
 const mapStateToProps = ({
-  ownerPage: {isAcceptCaretakerConfirmationDialogOpen, biddingRequestId},
+  ownerPage: {isAcceptCaretakerConfirmationDialogOpen, biddingRequest},
 }) => ({
   isAcceptCaretakerConfirmationDialogOpen,
-  biddingRequestId,
+  biddingRequest,
 });
 
 const mapDispatchToProps = {

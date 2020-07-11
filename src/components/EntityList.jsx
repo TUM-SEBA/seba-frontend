@@ -23,9 +23,7 @@ const filterByOptions = ["Category"];
 
 const styles = (theme) => ({
   header: {
-    paddingTop: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    padding: theme.spacing(2),
   },
   content: {
     paddingBottom: theme.spacing(4),
@@ -145,6 +143,7 @@ function EntityList(props) {
             setEntityfieldValue("name", "");
             setEntityfieldValue("breed", "");
             setEntityfieldValue("description", "");
+            setEntityfieldValue("images", "");
             setIsEntityFormDialogOpen(true, true, "");
           }}
         >

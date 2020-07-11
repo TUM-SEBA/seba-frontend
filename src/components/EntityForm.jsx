@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useRef} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {
@@ -9,6 +9,7 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  Tooltip,
 } from "@material-ui/core";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import PetsIcon from "@material-ui/icons/Pets";
@@ -31,6 +32,7 @@ const styles = (theme) => ({
   categoryLabel: {
     display: "inline-block",
     width: "100px",
+    color: "rgba(0, 0, 0, 0.54)",
   },
   categoryGridObject: {
     display: "inline-block",
@@ -46,22 +48,6 @@ const styles = (theme) => ({
   },
 });
 
-const CustomTextField = withStyles({
-  root: {
-    "& label.Mui-focused": {
-      color: "black",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "black",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "black",
-      },
-    },
-  },
-})(TextField);
-
 function EntityForm(props) {
   const {
     history,
@@ -75,9 +61,7 @@ function EntityForm(props) {
     showSnackBar,
     successCallback,
   } = props;
-
   const inputFileRef = useRef(null);
-  const [images, setImages] = useState([]);
 
   function handleClose() {
     setIsEntityFormDialogOpen(false, false, "");
@@ -85,19 +69,26 @@ function EntityForm(props) {
 
   function handleInsertOrUpdate() {
     const emptyField = Object.keys(entityFields).find(
-      (keyName) => entityFields[keyName] === ""
+      (keyName) => entityFields[keyName] === "" || entityFields[keyName] === null
     );
+    const images = entityFields["images"];
     if (emptyField) {
       showSnackBar(true, requiredFieldsEmpty + " " + emptyField, "error");
+    } else if (entityFields["category"] === "null") {
+      showSnackBar(true, requiredFieldsEmpty + " category", "error");
     } else if (images.length === 0) {
-      showSnackBar(true, requiredFieldsEmpty + " Images", "error");
+      showSnackBar(true, requiredFieldsEmpty + " images", "error");
     } else {
       if (isInsert) {
         insertEntity(entityFields, images)
           .then(() => {
             showSnackBar(true, saveSuccess, "success");
+            setEntityfieldValue("category", null);
+            setEntityfieldValue("name", "");
+            setEntityfieldValue("breed", "");
+            setEntityfieldValue("description", "");
+            setEntityfieldValue("images", []);
             setIsEntityFormDialogOpen(false, false, "");
-            setImages([]);
             successCallback();
           })
           .catch((status) => {
@@ -113,8 +104,12 @@ function EntityForm(props) {
         updateEntity(entity, images)
           .then(() => {
             showSnackBar(true, saveSuccess, "success");
+            setEntityfieldValue("category", null);
+            setEntityfieldValue("name", "");
+            setEntityfieldValue("breed", "");
+            setEntityfieldValue("description", "");
+            setEntityfieldValue("images", []);
             setIsEntityFormDialogOpen(false, false, "");
-            setImages([]);
             successCallback();
           })
           .catch((status) => {
@@ -131,7 +126,8 @@ function EntityForm(props) {
     inputFileRef.current.click();
   }
   function handleFileChange(event) {
-    setImages(event.target.files);
+    const images = event.target.files;
+    setEntityfieldValue("images", images);
   }
   return (
     <Dialog fullWidth maxWidth="md" open={isEntityFormDialogOpen} onClose={handleClose}>
@@ -153,48 +149,53 @@ function EntityForm(props) {
                 size="large"
               >
                 <ToggleButton value="Pet">
-                  <PetsIcon />
+                  <Tooltip title="Pet" aria-label="pet">
+                    <PetsIcon />
+                  </Tooltip>
                 </ToggleButton>
                 <ToggleButton value="Plant">
-                  <NatureIcon />
+                  <Tooltip title="Plant" aria-label="plant">
+                    <NatureIcon />
+                  </Tooltip>
                 </ToggleButton>
               </ToggleButtonGroup>
             </div>
           </div>
           <div key={"name"} className={classes.textFields}>
-            <CustomTextField
+            <TextField
               id={"name"}
               fullWidth
               label={"Name"}
               defaultValue={entityFields["name"]}
               required={true}
-              variant="outlined"
+              color="secondary"
               onChange={(event) => {
                 setEntityfieldValue("name", event.target.value);
               }}
             />
           </div>
           <div key={"breed"} className={classes.textFields}>
-            <CustomTextField
+            <TextField
               id={"breed"}
               fullWidth
               label={"Breed"}
               defaultValue={entityFields["breed"]}
               required={true}
-              variant="outlined"
+              color="secondary"
               onChange={(event) => {
                 setEntityfieldValue("breed", event.target.value);
               }}
             />
           </div>
           <div key={"description"} className={classes.textFields}>
-            <CustomTextField
+            <TextField
               id={"description"}
               fullWidth
               label={"Description"}
               defaultValue={entityFields["description"]}
               required={true}
               variant="outlined"
+              color="secondary"
               rows={8}
               multiline
               onChange={(event) => {
@@ -211,10 +212,12 @@ function EntityForm(props) {
               ref={inputFileRef}
               onChange={handleFileChange}
             />
-            <Button variant="contained" color="primary" onClick={handleBrowseClick}>
+            <Button variant="contained" color="secondary" onClick={handleBrowseClick}>
               Browse
             </Button>
-            <span className={classes.noOfImages}>{images.length} Images</span>
+            <span className={classes.noOfImages}>
+              {entityFields["images"].length} Images
+            </span>
           </div>
         </DialogContent>
         <DialogActions>

@@ -78,7 +78,7 @@ function OwnerItemCard(props) {
   };
 
   function handleCardClick(offerId) {
-    if (offer.notification) disableOfferNotification(offer._id);
+    disableOfferNotification(offer._id);
     setOfferNotif(false);
     setIsBiddingRequestDialogOpen(true, offerId);
   }

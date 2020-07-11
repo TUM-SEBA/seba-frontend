@@ -74,7 +74,15 @@ const styles = (theme) => {
 };
 
 function CaretakerCard(props) {
-  const {classes, offer, interestedCallback, notInterestedCallback, tab, history} = props;
+  const {
+    classes,
+    offer,
+    interestedCallback,
+    notInterestedCallback,
+    tab,
+    history,
+    isShowStatus,
+  } = props;
 
   function formatDate(date) {
     var d = new Date(date),
@@ -89,13 +97,11 @@ function CaretakerCard(props) {
   }
 
   let status = "";
-  if (offer.status === "Not Assigned") {
-    status = "Not assigned yet";
-  } else if (offer.status === "Assigned") {
-    if (offer.owner.username === localStorage["username"]) {
-      status = "The offer has been assigned to you.";
+  if (offer.status === "Assigned") {
+    if (offer.approvedBiddingRequest.caretaker.username === localStorage["username"]) {
+      status = "This offer is assigned to you.";
     } else {
-      status = "The offer has been assigned to other caretaker.";
+      status = "This offer is assigned to other caretaker.";
     }
   } else if (offer.status === "Payment Pending") {
     status = "Payment by owner is pending";
@@ -143,14 +149,16 @@ function CaretakerCard(props) {
           >
             Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
           </Typography>
-          <Typography
-            className={classes.status}
-            variant="body2"
-            color="textSecondary"
-            component="p"
-          >
-            Status: {status}
-          </Typography>
+          {isShowStatus && (
+            <Typography
+              className={classes.status}
+              variant="body2"
+              color="textSecondary"
+              component="p"
+            >
+              Status: {status}
+            </Typography>
+          )}
           <Typography
             className={classes.offerCardDescription}
             variant="body2"

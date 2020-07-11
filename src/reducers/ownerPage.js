@@ -33,7 +33,18 @@ let initialState = {
   isBiddingRequestDialogOpen: false,
   offerId: "",
   isAcceptCaretakerConfirmationDialogOpen: false,
-  biddingRequestId: "",
+  biddingRequest: {
+    _id: "",
+    price: "",
+    remarks: "",
+    caretaker: {
+      _id: "",
+      username: "",
+    },
+    offer: {
+      _id: "",
+    },
+  },
   isViewFeedbackDialogOpen: false,
   feedbackFields: {
     description: "",
@@ -48,10 +59,11 @@ let initialState = {
   entitySelectedFilterBy: -1,
   entitySearchValue: "",
   entityFields: {
-    category: "",
+    category: null,
     name: "",
     breed: "",
     description: "",
+    images: [],
   },
   entityId: "",
   isInsert: false,
@@ -104,7 +116,7 @@ export default function ownerPage(state = initialState, action) {
       return {
         ...state,
         isAcceptCaretakerConfirmationDialogOpen: action.isOpen,
-        biddingRequestId: action.biddingRequestId,
+        biddingRequest: action.biddingRequest,
       };
     case SETFEEDBACKFIELDVALUE:
       return {

@@ -19,6 +19,7 @@ import {
 import {fetchFailed} from "../constants";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
+import Rating from "@material-ui/lab/Rating";
 
 const styles = (theme) => ({
   displayUs: {
@@ -91,7 +92,9 @@ function Review(props) {
           <CardContent className={classes.reviewCardContent}>
             <div className={classes.reviewCardId}>{review.caretaker}</div>
             <div className={classes.reviewCardText}>{review.text}</div>
-            <div className={classes.reviewCardRating}>{review.rating}</div>
+            <div className={classes.reviewCardRating}>
+              <Rating name="read-only" value={parseInt(review.rating, 10)} readOnly />
+            </div>
           </CardContent>
         </Card>
       </div>

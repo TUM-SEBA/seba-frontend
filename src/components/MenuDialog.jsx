@@ -3,6 +3,7 @@ import ViewBadges from "./ViewBadges";
 import ChangePassword from "./ChangePassword";
 import SnackbarAlert from "./SnackbarAlert";
 import ViewEditCustomerProfile from "./ViewEditCustomerProfile";
+import Review from "./Review";
 
 function MenuDialog() {
   return (
@@ -10,6 +11,7 @@ function MenuDialog() {
       <ViewBadges />
       <ChangePassword />
       <SnackbarAlert />
+      <Review />
       <ViewEditCustomerProfile />
     </div>
   );

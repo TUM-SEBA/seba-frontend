@@ -1,5 +1,6 @@
 export const ISVIEWBADGESDIALOGOPEN = "ISVIEWBADGESDIALOGOPEN";
 export const ISABOUTUSDIALOGOPEN = "ISABOUTUSDIALOGOPEN";
+export const ISREVIEWDIALOGOPEN = "ISREVIEWDIALOGOPEN";
 export const SAVEMYBADGES = "SAVEMYBADGES";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const NEWBADGEAVAILABLE = "NEWBADGEAVAILABLE";
@@ -55,4 +56,11 @@ export const setIsAboutUsDialogOpen = (value) => (dispatch) =>
   dispatch({
     type: ISABOUTUSDIALOGOPEN,
     value,
+  });
+
+export const setIsReviewDialogOpen = (value, userIdReview) => (dispatch) =>
+  dispatch({
+    type: ISREVIEWDIALOGOPEN,
+    value,
+    userIdReview,
   });

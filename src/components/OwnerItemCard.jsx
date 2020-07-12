@@ -38,7 +38,8 @@ const styles = (theme) => ({
     minHeight: "90px",
   },
   offerCardDescription: {
-    overflowY: "auto",
+    overflowX: "auto",
+    height: "40px",
   },
   offerDurationDates: {
     color: "black",

@@ -27,11 +27,10 @@ const styles = (theme) => {
       margin: `${theme.spacing(1)}px 0`,
     },
     offerCardDescription: {
-      height: theme.spacing(10),
-      overflow: "auto",
+      height: "40px",
+      overflowX: "auto",
       margin: `${theme.spacing(1)}px 0`,
       textAlign: "justify",
-      wordBreak: "break-all",
     },
     offerCardActions: {
       justifyContent: "flex-end",

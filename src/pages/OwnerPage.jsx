@@ -33,7 +33,7 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(5),
   },
   root: {
-    minHeight: 282,
+    minHeight: 292,
   },
   container: {
     margin: "40px auto",

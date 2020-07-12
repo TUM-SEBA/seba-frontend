@@ -100,7 +100,6 @@ const styles = (theme) => ({
   petImageContent: {
     display: "flex",
     flexDirection: "row",
-    marginTop: theme.spacing(6),
   },
   ownerName: {
     marginTop: theme.spacing(2),
@@ -124,43 +123,34 @@ const styles = (theme) => ({
     margin: `${theme.spacing(6)}px ${theme.spacing(1)}px`,
   },
   content: {
-    height: "100%",
+    height: "95%",
     width: "400px",
     minWidth: "400px",
     margin: "0 auto",
   },
-  interestedButton: {},
-});
-
-const CustomTextField = withStyles({
-  root: {
-    "& label.Mui-focused": {
-      color: "black",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "black",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "black",
-      },
-    },
+  name: {
+    textAlign: "justify",
+    marginTop: theme.spacing(4),
   },
-})(TextField);
+  line: {
+    marginTop: theme.spacing(1),
+  },
+});
 
 const FieldType = {
   TEXT_FIELD: 0,
-  TEXT_AREA: 1,
+  TEXT_FIELD_NUMBER: 1,
+  TEXT_AREA: 2,
 };
 
 const keyMap = {
   biddingAmount: {
     label: "Bidding Amount",
-    type: FieldType.TEXT_FIELD,
+    type: FieldType.TEXT_FIELD_NUMBER,
   },
   remarks: {
     label: "Remarks",
-    type: FieldType.TEXT_AREA,
+    type: FieldType.TEXT_FIELD,
   },
 };
 
@@ -203,6 +193,8 @@ function BiddingRequestForm(props) {
     );
     if (emptyField) {
       showSnackBar(true, requiredFieldsEmpty, "error");
+    } else if (biddingRequestFields["remarks"].length > 15) {
+      showSnackBar(true, "Remarks must be less than 15 characters.", "error");
     } else {
       sock.send(offer._id);
       let biddingRequest = {
@@ -278,6 +270,10 @@ function BiddingRequestForm(props) {
                       <NavigateNext />
                     </IconButton>
                   </div>
+                  <div className={classes.name}>
+                    <div className={classes.line}>{offer.entity.name}</div>
+                    <div className={classes.line}>{offer.entity.description}</div>
+                  </div>
                 </CardContent>
               </Card>
             </Grid>
@@ -289,13 +285,22 @@ function BiddingRequestForm(props) {
                 {Object.keys(biddingRequestFields).map((keyName, i) => {
                   return (
                     <div key={i} className={classes.textFields}>
-                      <CustomTextField
+                      <TextField
                         id={keyName}
                         fullWidth
-                        type={"number"}
+                        type={
+                          keyMap[keyName].type === FieldType.TEXT_FIELD
+                            ? "text"
+                            : "number"
+                        }
                         label={keyMap[keyName].label}
                         required={true}
-                        variant="outlined"
+                        variant={
+                          keyMap[keyName].type === FieldType.TEXT_AREA
+                            ? "outlined"
+                            : "standard"
+                        }
+                        color="secondary"
                         multiline={keyMap[keyName].type === FieldType.TEXT_AREA}
                         rows={keyMap[keyName].type === FieldType.TEXT_AREA ? 10 : 1}
                         onChange={(event) => {
@@ -310,19 +315,10 @@ function BiddingRequestForm(props) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button
-            className={classes.interestedButton}
-            onClick={() => setIsBiddingRequestDialogOpen(false)}
-            color="secondary"
-          >
+          <Button onClick={() => setIsBiddingRequestDialogOpen(false)} color="secondary">
             Cancel
           </Button>
-          <Button
-            className={classes.interestedButton}
-            onClick={handleSave}
-            color="secondary"
-            variant="contained"
-          >
+          <Button onClick={handleSave} color="secondary" variant="contained">
             Submit
           </Button>
         </DialogActions>

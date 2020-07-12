@@ -74,7 +74,12 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(4),
   },
   selectPetPlant: {
-    width: theme.spacing(20),
+    width: "248px",
+  },
+  addPetPlantButton: {
+    marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(2),
+    padding: "4px 8px",
   },
 });
 
@@ -113,10 +118,15 @@ function OfferForm(props) {
     const emptyField = Object.keys(offerFields).find(
       (keyName) => offerFields[keyName] === ""
     );
+    const now = new Date();
     if (emptyField) {
       showSnackBar(true, requiredFieldsEmpty + " " + emptyField, "error");
     } else if (offerFields["endDate"] <= offerFields["startDate"]) {
       showSnackBar(true, "Start time cannot be after End time.", "error");
+    } else if (offerFields["description"].length > 15) {
+      showSnackBar(true, "Description must be less than 15 characters.", "error");
+    } else if (new Date(offerFields["startDate"]) < now) {
+      showSnackBar(true, "Start time cannot be before now.", "error");
     } else {
       let offer = {
         entity: offerFields["entity"],
@@ -185,11 +195,11 @@ function OfferForm(props) {
                   className={classes.categoryGridObject}
                 >
                   <Grid item xs={12} md={3}>
-                    <div>Entity: </div>
+                    <div>Pet/Plant: </div>
                   </Grid>
                   <Grid item xs={12} md={9}>
                     <FormControl>
-                      <InputLabel id="filter-by-label">Select Pet/Plant</InputLabel>
+                      <InputLabel id="filter-by-label">Select</InputLabel>
                       <Select
                         labelId="filter-by-label"
                         id="filter-by"
@@ -205,6 +215,14 @@ function OfferForm(props) {
                         ))}
                       </Select>
                     </FormControl>
+                    <Button
+                      onClick={handleAddPetPlant}
+                      color="secondary"
+                      variant="contained"
+                      className={classes.addPetPlantButton}
+                    >
+                      Add Pet/Plant
+                    </Button>
                   </Grid>
                 </Grid>
                 <Grid
@@ -221,6 +239,7 @@ function OfferForm(props) {
                     <TextField
                       id="startDate"
                       type="datetime-local"
+                      color="secondary"
                       className={classes.textField}
                       InputLabelProps={{
                         shrink: true,
@@ -245,6 +264,7 @@ function OfferForm(props) {
                     <TextField
                       id="endDate"
                       type="datetime-local"
+                      color="secondary"
                       className={classes.textField}
                       InputLabelProps={{
                         shrink: true,
@@ -270,6 +290,7 @@ function OfferForm(props) {
                       className={classes.titleText}
                       id="title"
                       placeholder="Title"
+                      color="secondary"
                       fullWidth
                       onChange={(event) => {
                         setOfferFieldValue("title", event.target.value);
@@ -291,10 +312,9 @@ function OfferForm(props) {
                     <TextField
                       className={classes.descriptionText}
                       id="description"
-                      rows={8}
-                      variant="filled"
+                      placeholder="Description"
+                      color="secondary"
                       fullWidth
-                      multiline
                       onChange={(event) => {
                         setOfferFieldValue("description", event.target.value);
                       }}

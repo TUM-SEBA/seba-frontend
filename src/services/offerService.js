@@ -87,6 +87,35 @@ export function getNotInterestedOffers() {
   });
 }
 
+export function getRejectedOffers() {
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/rejected`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((_) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}
+
 export function getOffer(offerId) {
   return new Promise((resolve, reject) => {
     fetch(`${offerURL}/${offerId}`, {
@@ -151,6 +180,29 @@ export function acceptOffer(offerId, approveBiddingRequestId, price, insurance) 
   };
   return new Promise((resolve, reject) => {
     fetch(`${offerURL}/accept/${offerId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+      body: JSON.stringify(body),
+    }).then((response) => {
+      if (response.status === 200) {
+        resolve();
+      } else {
+        reject(response.status);
+      }
+    });
+  });
+}
+
+export function rejectOffer(offerId, biddingRequestId, caretakerId) {
+  const body = {
+    caretakerId: caretakerId,
+    biddingRequestId: biddingRequestId,
+  };
+  return new Promise((resolve, reject) => {
+    fetch(`${offerURL}/reject/${offerId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

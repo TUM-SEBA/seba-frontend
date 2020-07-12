@@ -58,8 +58,9 @@ export const setIsAboutUsDialogOpen = (value) => (dispatch) =>
     value,
   });
 
-export const setIsReviewDialogOpen = (value) => (dispatch) =>
+export const setIsReviewDialogOpen = (value, userIdReview) => (dispatch) =>
   dispatch({
     type: ISREVIEWDIALOGOPEN,
     value,
+    userIdReview,
   });

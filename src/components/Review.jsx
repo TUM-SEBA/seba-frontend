@@ -12,7 +12,10 @@ import {
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";
 import {setIsReviewDialogOpen} from "../actions/welcomePage";
-import {getReviewsByMyCaretakerId} from "../services/reviewService";
+import {
+  getReviewsByMyCaretakerId,
+  getReviewsByCaretakerId,
+} from "../services/reviewService";
 import {fetchFailed} from "../constants";
 import {isAuthenticated} from "../services/loginService";
 import {showSnackBar} from "../actions/loginPage";
@@ -36,7 +39,13 @@ const styles = (theme) => ({
 });
 
 function Review(props) {
-  const {classes, history, isReviewDialogOpen, setIsReviewDialogOpen} = props;
+  const {
+    classes,
+    history,
+    isReviewDialogOpen,
+    setIsReviewDialogOpen,
+    userIdReview,
+  } = props;
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -49,12 +58,31 @@ function Review(props) {
           showSnackBar(true, fetchFailed, "error loading reviews");
         });
     }
+
+    function getReviewsFromId(userId) {
+      getReviewsByCaretakerId(userId)
+        .then((response) => {
+          setReviews(response);
+        })
+        .catch((_) => {
+          showSnackBar(true, fetchFailed, "error loading reviews");
+        });
+    }
+
     if (!isAuthenticated()) {
       history.push("/");
       window.location.reload();
     }
-    getReviews();
-  }, [history]);
+    console.log(userIdReview);
+    console.log(userIdReview !== "");
+    if (userIdReview != null && userIdReview !== "") {
+      getReviewsFromId(userIdReview);
+      console.log("trie");
+    } else {
+      console.log("fsdaf");
+      getReviews();
+    }
+  }, [history, userIdReview]);
 
   function getGridReviewItem(index, review) {
     return (
@@ -71,7 +99,7 @@ function Review(props) {
   }
 
   return (
-    <Dialog open={isReviewDialogOpen} onClose={() => setIsReviewDialogOpen(false)}>
+    <Dialog open={isReviewDialogOpen} onClose={() => setIsReviewDialogOpen(false, "")}>
       <DialogTitle id="show-reviews" disableTypography={true}>
         <Typography variant="h5">Seba Team 55</Typography>
       </DialogTitle>
@@ -87,7 +115,7 @@ function Review(props) {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsReviewDialogOpen(false)} color="secondary">
+        <Button onClick={() => setIsReviewDialogOpen(false, "")} color="secondary">
           Cancel
         </Button>
       </DialogActions>
@@ -95,8 +123,9 @@ function Review(props) {
   );
 }
 
-const mapStateToProps = ({welcomePage: {isReviewDialogOpen}}) => ({
+const mapStateToProps = ({welcomePage: {isReviewDialogOpen, userIdReview}}) => ({
   isReviewDialogOpen,
+  userIdReview,
 });
 
 const mapDispatchToProps = {

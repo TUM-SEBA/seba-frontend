@@ -14,6 +14,7 @@ let initialState = {
   isViewBadgesDialogOpen: false,
   isAboutUsDialogOpen: false,
   isReviewDialogOpen: false,
+  userIdReview: "",
   myBadges: {},
   isChangePasswordDialogOpen: false,
   newBadge: null,
@@ -73,6 +74,7 @@ export default function welcomePage(state = initialState, action) {
       return {
         ...state,
         isReviewDialogOpen: action.value,
+        userIdReview: action.userIdReview,
       };
     default:
       return {

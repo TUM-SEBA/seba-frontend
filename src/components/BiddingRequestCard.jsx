@@ -1,6 +1,8 @@
 import React from "react";
 import {withStyles} from "@material-ui/styles";
-import {Button, Card, CardActions, Grid} from "@material-ui/core";
+import {Button, Card, CardActions, Grid, Typography} from "@material-ui/core";
+import {setIsReviewDialogOpen} from "../actions/welcomePage";
+import {connect} from "react-redux";
 
 const styles = (theme) => {
   return {
@@ -26,10 +28,27 @@ const styles = (theme) => {
 };
 
 function BiddingRequestCard(props) {
-  const {classes, biddingRequest, offer, acceptCallback, rejectCallback} = props;
+  const {
+    classes,
+    biddingRequest,
+    offer,
+    acceptCallback,
+    rejectCallback,
+    setIsReviewDialogOpen,
+  } = props;
   return (
     <Card variant="outlined" className={classes.gridItem}>
-      <div className={classes.line}>Caretaker: @{biddingRequest.caretaker.username}</div>
+      <div>
+        <Button
+          onClick={() => setIsReviewDialogOpen(true, biddingRequest.caretaker._id)}
+          className={classes.button}
+        >
+          <Typography className={classes.sentenceCase}>
+            {biddingRequest.caretaker.username}
+          </Typography>
+        </Button>
+      </div>
+      <div className={classes.line}>Caretaker: @{biddingRequest.caretaker.name}</div>
       <div className={classes.line}>Bidding Price: {biddingRequest.price}</div>
       <div className={classes.line}>Remarks: {biddingRequest.remarks}</div>
       {offer.status === "Not Assigned" && (
@@ -64,4 +83,15 @@ function BiddingRequestCard(props) {
   );
 }
 
-export default withStyles(styles, {withTheme: true})(BiddingRequestCard);
+const mapStateToProps = ({welcomePage: {setIsReviewDialogOpen}}) => ({
+  setIsReviewDialogOpen,
+});
+
+const mapDispatchToProps = {
+  setIsReviewDialogOpen: setIsReviewDialogOpen,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, {withTheme: true})(BiddingRequestCard));

@@ -90,8 +90,8 @@ function Review(props) {
         <Card variant="outlined">
           <CardContent className={classes.reviewCardContent}>
             <div className={classes.reviewCardId}>{review.caretaker}</div>
-            <div className={classes.reviewCardId}>{review.text}</div>
-            <div className={classes.reviewCardId}>{review.rating}</div>
+            <div className={classes.reviewCardText}>{review.text}</div>
+            <div className={classes.reviewCardRating}>{review.rating}</div>
           </CardContent>
         </Card>
       </div>

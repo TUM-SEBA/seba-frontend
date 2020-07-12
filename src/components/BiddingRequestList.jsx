@@ -75,6 +75,7 @@ const styles = (theme) => ({
     height: theme.spacing(10),
     borderRadius: "100%",
     marginTop: theme.spacing(1),
+    objectFit: "cover",
   },
   entityImageContainer: {
     flex: "1 0 25%",

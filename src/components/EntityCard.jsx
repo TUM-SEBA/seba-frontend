@@ -25,6 +25,7 @@ const styles = (theme) => {
       width: theme.spacing(10),
       height: theme.spacing(10),
       borderRadius: "100%",
+      objectFit: "cover",
     },
     button: {
       width: "100%",

@@ -128,12 +128,16 @@ const styles = (theme) => ({
     minWidth: "400px",
     margin: "0 auto",
   },
-  name: {
+  nameContainer: {
     textAlign: "justify",
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
   },
   line: {
     marginTop: theme.spacing(1),
+  },
+  name: {
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
@@ -270,8 +274,10 @@ function BiddingRequestForm(props) {
                       <NavigateNext />
                     </IconButton>
                   </div>
-                  <div className={classes.name}>
-                    <div className={classes.line}>{offer.entity.name}</div>
+                  <div className={classes.nameContainer}>
+                    <div className={`${classes.line} ${classes.name}`}>
+                      {offer.entity.name}
+                    </div>
                     <div className={classes.line}>{offer.entity.description}</div>
                   </div>
                 </CardContent>

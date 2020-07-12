@@ -12,6 +12,7 @@ import {
   setIsViewBadgesDialogOpen,
   setIsChangePasswordDialogOpen,
   setUserProfileDialogOpen,
+  setIsReviewDialogOpen,
 } from "../actions/welcomePage";
 import {getMyBadges, getUserProfile} from "../services/customerService";
 import {
@@ -46,6 +47,7 @@ function MenuPopupState(props) {
     getUserProfile,
     setUserProfileDialogOpen,
     setIsEntityListDialogOpen,
+    setIsReviewDialogOpen,
   } = props;
   const currentUrl = window.location.pathname;
   return (
@@ -113,6 +115,14 @@ function MenuPopupState(props) {
             >
               Feedbacks
             </MyMenuItem>
+            <MyMenuItem
+              onClick={() => {
+                setIsReviewDialogOpen(true);
+                popupState.close();
+              }}
+            >
+              My Reviews
+            </MyMenuItem>
           </Menu>
         </React.Fragment>
       )}
@@ -132,6 +142,7 @@ const mapDispatchToProps = {
   getUserProfile: getUserProfile,
   setUserProfileDialogOpen: setUserProfileDialogOpen,
   setIsEntityListDialogOpen: setIsEntityListDialogOpen,
+  setIsReviewDialogOpen: setIsReviewDialogOpen,
 };
 
 export default connect(

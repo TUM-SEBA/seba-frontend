@@ -18,3 +18,61 @@ export function insertReview(review) {
     });
   });
 }
+
+export function getReviewsByMyCaretakerId() {
+  return new Promise((resolve, reject) => {
+    fetch(`${reviewURL}/user/listByCaretakerId`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}
+
+export function getReviewsByCaretakerId(caretakerId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${reviewURL}/user/${caretakerId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage["token"]}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              reject(response.status);
+            });
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((_) => {
+        reject(500);
+      });
+  });
+}

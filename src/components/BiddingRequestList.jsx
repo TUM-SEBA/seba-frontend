@@ -10,7 +10,7 @@ import {
 } from "../actions/ownerPage";
 import AcceptCaretakerConfirmation from "./AcceptCaretakerConfirmation";
 import FilterSearch from "./FilterSearch";
-import {fetchFailed, saveFailed, saveSuccess} from "../constants";
+import {fetchFailed, publicURL, saveFailed, saveSuccess} from "../constants";
 import {getBiddingRequestByOffer} from "../services/biddingRequestService";
 import {showSnackBar} from "../actions/loginPage";
 import {getOffer, rejectOffer} from "../services/offerService";
@@ -25,7 +25,7 @@ const styles = (theme) => ({
     padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
   },
   header: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
@@ -35,8 +35,9 @@ const styles = (theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
-  offerNumber: {
+  offerDescriptionContainer: {
     marginBottom: theme.spacing(3),
+    display: "flex",
   },
   gridContainer: {
     marginTop: theme.spacing(2),
@@ -61,6 +62,25 @@ const styles = (theme) => ({
   },
   status: {
     textAlign: "left",
+  },
+  line: {
+    marginTop: theme.spacing(1),
+  },
+  offerTitle: {
+    marginTop: theme.spacing(1),
+    fontWeight: "bold",
+  },
+  entityImage: {
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+    borderRadius: "100%",
+    marginTop: theme.spacing(1),
+  },
+  entityImageContainer: {
+    flex: "1 0 25%",
+  },
+  offerDescription: {
+    flex: "1 0 75%",
   },
 });
 
@@ -192,7 +212,7 @@ function BiddingRequestList(props) {
       return false;
     })
     .map((biddingRequest, index) => (
-      <Grid item xs={12} md={6} lg={6} key={index}>
+      <Grid item xs={12} md={6} lg={4} key={index}>
         <BiddingRequestCard
           biddingRequest={biddingRequest}
           offer={offer}
@@ -252,15 +272,33 @@ function BiddingRequestList(props) {
       onClose={() => setIsBiddingRequestDialogOpen(false, "")}
     >
       <div className={classes.dialog}>
-        <Grid container className={classes.header}>
-          <Grid item xs={12} sm={12} md={4} lg={4} className={classes.offerNumber}>
-            <div className={classes.line}>Offer: {offer.title}</div>
-            <div className={classes.line}>Status: {offer.status}</div>
-            <div className={classes.line}>
-              Created on: {createdDate.toLocaleString("default")}
+        <Grid container spacing={2} className={classes.header}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={5}
+            lg={5}
+            className={classes.offerDescriptionContainer}
+          >
+            <div className={classes.entityImageContainer}>
+              {offer.entity.images.length > 0 && (
+                <img
+                  className={classes.entityImage}
+                  src={`${publicURL}/${offer.entity.images[0]}`}
+                  alt={"Pet"}
+                />
+              )}
+            </div>
+            <div className={classes.offerDescription}>
+              <div className={classes.offerTitle}>{offer.title}</div>
+              <div className={classes.line}>Status: {offer.status}</div>
+              <div className={classes.line}>
+                Created on: {createdDate.toLocaleString("default")}
+              </div>
             </div>
           </Grid>
-          <Grid item xs={"auto"} sm={"auto"} md={3} lg={3} />
+          <Grid item xs={"auto"} sm={"auto"} md={2} lg={2} />
           <Grid item xs={12} sm={12} md={5} lg={5}>
             <FilterSearch
               filterOptions={filterByOptions}

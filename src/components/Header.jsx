@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   headerColor: {
-    background: "#DCEFDE",
+    background: "white",
   },
 
   sentenceCase: {

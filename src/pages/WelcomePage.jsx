@@ -80,7 +80,7 @@ function WelcomePage(props) {
               textAlign: "center",
             }}
           >
-            Hello User, XYZ Countinue as
+            Hello User, {localStorage["username"]} Countinue as
           </Typography>
 
           <Grid container direction="row" justify="space-around" alignItems="center">

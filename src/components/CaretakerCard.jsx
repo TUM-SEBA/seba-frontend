@@ -143,7 +143,6 @@ function CaretakerCard(props) {
           <Typography
             className={classes.offerDurationDates}
             variant="body2"
-            color="textSecondary"
             component="p"
           >
             Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}

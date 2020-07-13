@@ -37,6 +37,12 @@ const styles = (theme) => ({
   },
   reviewCardId: {},
   reviewCardContent: {},
+  reviewCardDiv: {
+    padding: "5px",
+  },
+  reviewCardText: {
+    width: "500px",
+  },
 });
 
 function Review(props) {
@@ -83,14 +89,14 @@ function Review(props) {
 
   function getGridReviewItem(index, review) {
     return (
-      <div key={index}>
+      <div className={classes.reviewCardDiv} key={index}>
         <Card variant="outlined">
           <CardContent className={classes.reviewCardContent}>
             <div className={classes.reviewCardId}>{review.caretaker}</div>
-            <div className={classes.reviewCardText}>{review.text}</div>
             <div className={classes.reviewCardRating}>
               <Rating name="read-only" value={parseInt(review.rating, 10)} readOnly />
             </div>
+            <div className={classes.reviewCardText}>{review.text}</div>
           </CardContent>
         </Card>
       </div>

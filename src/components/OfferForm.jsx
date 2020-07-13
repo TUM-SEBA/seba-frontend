@@ -210,7 +210,7 @@ function OfferForm(props) {
                       >
                         {entities.map((entity, index) => (
                           <MenuItem key={index} value={entity._id}>
-                            {entity.name}
+                            {entity.name} - {entity.category}
                           </MenuItem>
                         ))}
                       </Select>

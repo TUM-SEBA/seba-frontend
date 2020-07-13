@@ -106,7 +106,7 @@ function Review(props) {
   return (
     <Dialog open={isReviewDialogOpen} onClose={() => setIsReviewDialogOpen(false, "")}>
       <DialogTitle id="show-reviews" disableTypography={true}>
-        <Typography variant="h5">Feedbacks</Typography>
+        <Typography variant="h5">Reviews</Typography>
       </DialogTitle>
       <DialogContent>
         <div className={classes.displayUs}>

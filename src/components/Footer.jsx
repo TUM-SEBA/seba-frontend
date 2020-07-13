@@ -11,6 +11,8 @@ import AboutUs from "./AboutUs";
 const useStyles = makeStyles((theme) => ({
   footer: {
     background: "darkgray",
+    position: "fixed",
+    bottom: "0",
   },
   footerText: {
     margin: "auto",

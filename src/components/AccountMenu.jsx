@@ -115,14 +115,6 @@ function MenuPopupState(props) {
             </MyMenuItem>
             <MyMenuItem
               onClick={() => {
-                setIsViewFeedbackDialogOpen(true);
-                popupState.close();
-              }}
-            >
-              Feedbacks
-            </MyMenuItem>
-            <MyMenuItem
-              onClick={() => {
                 setIsReviewDialogOpen(true);
                 popupState.close();
               }}

@@ -92,7 +92,7 @@ function Review(props) {
       <div className={classes.reviewCardDiv} key={index}>
         <Card variant="outlined">
           <CardContent className={classes.reviewCardContent}>
-            <div className={classes.reviewCardId}>{review.caretaker}</div>
+            <div className={classes.reviewCardId}>{review.offer.owner.username}</div>
             <div className={classes.reviewCardRating}>
               <Rating name="read-only" value={parseInt(review.rating, 10)} readOnly />
             </div>

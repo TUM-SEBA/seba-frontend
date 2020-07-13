@@ -10,20 +10,21 @@ import AboutUs from "./AboutUs";
 
 const useStyles = makeStyles((theme) => ({
   footer: {
-    background: "darkgray",
+    background: "#317D3D",
     position: "fixed",
     bottom: "0",
   },
   footerText: {
-    margin: "auto",
-    width: "170px",
     fontSize: "12px",
+    textAlign: "right",
+    color: "white",
   },
   footerToolbar: {
     height: "15px",
   },
   gridContainer: {
     alignItems: "center",
+    justifyContent: "center",
   },
   socialMediaButton: {
     backgroundColor: "transparent",
@@ -51,49 +52,44 @@ const Footer = (props) => {
         <Toolbar className={classes.footerToolbar}>
           <Grid container className={classes.gridContainer}>
             <Grid item xs={4}>
-              <Typography className={classes.footerText}>
-                Copyright @2020 Technical University of Munich
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Grid container className={classes.gridContainer}>
-                <Grid item xs={4}>
-                  <Button
-                    variant="contained"
-                    className={classes.socialMediaButton}
-                    onClick={openFacebook}
-                  >
-                    <FacebookIcon fontSize="large" />
-                  </Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    variant="contained"
-                    className={classes.socialMediaButton}
-                    onClick={openTwitter}
-                  >
-                    <TwitterIcon fontSize="large" />
-                  </Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    variant="contained"
-                    className={classes.socialMediaButton}
-                    onClick={openInstagram}
-                  >
-                    <InstagramIcon fontSize="large" />
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={4}>
               <Button
-                variant="contained"
+                style={{color: "white"}}
                 className={classes.socialMediaButton}
                 onClick={() => setIsAboutUsDialogOpen(true)}
               >
                 About Us
               </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Grid container className={classes.gridContainer}>
+                <Button
+                  style={{color: "white"}}
+                  className={classes.socialMediaButton}
+                  onClick={openFacebook}
+                >
+                  <FacebookIcon fontSize="large" />
+                </Button>
+                <Button
+                  style={{color: "white"}}
+                  className={classes.socialMediaButton}
+                  onClick={openTwitter}
+                >
+                  <TwitterIcon fontSize="large" />
+                </Button>
+                <Button
+                  style={{color: "white"}}
+                  className={classes.socialMediaButton}
+                  onClick={openInstagram}
+                >
+                  <InstagramIcon style={{color: "white"}} fontSize="large" />
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Typography className={classes.footerText}>
+                &copy; 2020 Copyright Technical University of Munich
+              </Typography>
             </Grid>
           </Grid>
         </Toolbar>

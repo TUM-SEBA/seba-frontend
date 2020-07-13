@@ -76,11 +76,10 @@ function WelcomePage(props) {
             style={{
               margin: "auto",
               fontSize: "25px",
-              width: "170px",
               textAlign: "center",
             }}
           >
-            Hello User, {localStorage["username"]} Countinue as
+            Welcome User, {localStorage["username"]} <br /> Countinue as
           </Typography>
 
           <Grid container direction="row" justify="space-around" alignItems="center">

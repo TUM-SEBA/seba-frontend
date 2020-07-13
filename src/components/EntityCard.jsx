@@ -25,6 +25,7 @@ const styles = (theme) => {
       width: theme.spacing(10),
       height: theme.spacing(10),
       borderRadius: "100%",
+      objectFit: "cover",
     },
     button: {
       width: "100%",
@@ -57,6 +58,7 @@ function EntityCard(props) {
         </Grid>
         <Grid item xs={8}>
           <div className={classes.line}>Category: {entity.category}</div>
+          <div className={classes.line}>Name: {entity.name}</div>
           <div className={classes.line}>Breed: {entity.breed}</div>
           <div className={classes.line}>Description:</div>
           <div className={classes.description}>{entity.description}</div>
@@ -70,8 +72,10 @@ function EntityCard(props) {
                   size="small"
                   onClick={() => {
                     setEntityfieldValue("category", entity.category);
+                    setEntityfieldValue("name", entity.name);
                     setEntityfieldValue("breed", entity.breed);
                     setEntityfieldValue("description", entity.description);
+                    setEntityfieldValue("images", entity.images);
                     setIsEntityFormDialogOpen(true, false, entity._id);
                   }}
                 >
@@ -79,29 +83,31 @@ function EntityCard(props) {
                 </Button>
               </Grid>
               <Grid item xs={12} sm={4} md={5} lg={6}>
-                <Button
-                  variant="contained"
-                  className={classes.button}
-                  color="secondary"
-                  size="small"
-                  onClick={() =>
-                    deleteEntity(entity._id)
-                      .then(() => {
-                        showSnackBar(true, saveSuccess, "success");
-                        setIsEntityFormDialogOpen(false, false, "");
-                        successCallback();
-                      })
-                      .catch((status) => {
-                        if (status === 401) {
-                          history.push("/");
-                          window.location.reload();
-                        }
-                        showSnackBar(true, saveFailed, "error");
-                      })
-                  }
-                >
-                  Delete
-                </Button>
+                {!entity.hasOffer && (
+                  <Button
+                    variant="contained"
+                    className={classes.button}
+                    color="secondary"
+                    size="small"
+                    onClick={() =>
+                      deleteEntity(entity._id)
+                        .then(() => {
+                          showSnackBar(true, saveSuccess, "success");
+                          setIsEntityFormDialogOpen(false, false, "");
+                          successCallback();
+                        })
+                        .catch((status) => {
+                          if (status === 401) {
+                            history.push("/");
+                            window.location.reload();
+                          }
+                          showSnackBar(true, saveFailed, "error");
+                        })
+                    }
+                  >
+                    Delete
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </CardActions>

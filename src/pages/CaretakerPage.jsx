@@ -18,23 +18,33 @@ import {
   getAvailableOffers,
   getInterestedOffers,
   getNotInterestedOffers,
+  getRejectedOffers,
   updateNotInterested,
 } from "../services/offerService";
 import MenuDialog from "../components/MenuDialog";
 import NoData from "../components/NoData";
 
-const tabs = ["Available", "Not Assigned", "Assigned to You", "Not Intereted"];
+const tabs = [
+  "Available",
+  "Not Assigned",
+  "Assigned to You",
+  "Rejected",
+  "Not Interested",
+];
+const isShowStatus = [false, false, true, false, false];
 const getOfferServices = [
   getAvailableOffers,
   getInterestedOffers,
   getInterestedOffers,
+  getRejectedOffers,
   getNotInterestedOffers,
 ];
 const noOfferMessages = [
   "No offer is available for now. Please check again later.",
-  "There is no unassigned offers.",
-  "You have no assigned offers.",
-  "There is no offers that is not interested for you.",
+  "There is no unassigned offer.",
+  "You have no assigned offer.",
+  "There is no offer.",
+  "There is no uninterested offer.",
 ];
 const filterByOptions = ["Owner", "Description"];
 const styles = (theme) => ({
@@ -100,7 +110,6 @@ function CaretakerPage(props) {
     if (index === 1) {
       return offer.status === "Not Assigned";
     } else if (index === 2) {
-      console.log(offer);
       if (offer.approvedBiddingRequest)
         return (
           offer.approvedBiddingRequest.caretaker.username === localStorage["username"]
@@ -193,7 +202,7 @@ function CaretakerPage(props) {
     })
     .map((offer, index) => {
       return (
-        <Grid item xs={12} md={6} lg={4} key={offer._id}>
+        <Grid item xs={12} md={6} lg={3} key={offer._id}>
           <CaretakerCard
             key={index}
             offer={offer}
@@ -201,6 +210,7 @@ function CaretakerPage(props) {
             interestedCallback={() => setIsBiddingRequestDialogOpen(true, offer._id)}
             notInterestedCallback={() => handleNotInterestedCallback(offer._id)}
             history
+            isShowStatus={isShowStatus[activeTab]}
           />
         </Grid>
       );

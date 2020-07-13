@@ -41,9 +41,6 @@ const styles = (theme) => ({
     overflowX: "auto",
     height: "40px",
   },
-  offerDurationDates: {
-    color: "black",
-  },
   interestedButton: {
     width: "100%",
   },
@@ -79,7 +76,7 @@ function OwnerItemCard(props) {
   };
 
   function handleCardClick(offerId) {
-    if (offer.notification) disableOfferNotification(offer._id);
+    disableOfferNotification(offer._id);
     setOfferNotif(false);
     setIsBiddingRequestDialogOpen(true, offerId);
   }
@@ -141,12 +138,7 @@ function OwnerItemCard(props) {
               </Typography>
               {offerNotif && <NotificationsIcon style={{fontSize: "xx-large"}} />}
             </div>
-            <Typography
-              className={classes.offerDurationDates}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
+            <Typography variant="body2" component="p">
               Dates: {formatDate(offer.startDate)} - {formatDate(offer.endDate)}
             </Typography>
 

@@ -52,7 +52,7 @@ function FilterSearch(props) {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={6} md={7}>
+      <Grid item xs={12} sm={8} md={7}>
         <TextField
           className={classes.search}
           value={searchQueryValue}
@@ -61,7 +61,6 @@ function FilterSearch(props) {
           label="Search"
         />
       </Grid>
-      <Grid item xs={"auto"} sm={2} md={"auto"} />
     </Grid>
   );
 }

@@ -11,7 +11,7 @@ export const publicURL = `${serverURL}/public`;
 export const userSignUpSuccessMsg =
   "User added successfully!! Confirm your email, by using the link sent, to Login";
 export const passwordMismatch = "Passwords do not match!!";
-export const requiredFieldsEmpty = "Required fields are empty!!";
+export const requiredFieldsEmpty = "Required fields are empty: ";
 export const loginSuccess = "Login Successful";
 export const fetchFailed = "Failed to fetch";
 export const welcomeMessage = "Hello User XYZ, Continue as";

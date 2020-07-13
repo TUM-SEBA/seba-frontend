@@ -36,12 +36,18 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   headerColor: {
-    background: "#DCEFDE",
+    background: "white",
   },
 
   sentenceCase: {
     textTransform: "none",
     fontSize: "13px",
+    marginLeft: "10px",
+  },
+  button: {
+    height: theme.spacing(10),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
   },
 }));
 
@@ -79,7 +85,7 @@ const Header = (props) => {
             </div>
             {currentUrl !== "/" && (
               <div className={classes.switchDiv}>
-                <Button onClick={switchUser}>
+                <Button onClick={switchUser} className={classes.button}>
                   <LoopIcon />
                   <Typography className={classes.sentenceCase}>
                     Switch to {currentUrl === "/caretaker" ? "Owner" : "Caretaker"}
@@ -89,7 +95,7 @@ const Header = (props) => {
             )}
 
             <div className={classes.logoutDiv}>
-              <Button onClick={() => logout(history)}>
+              <Button onClick={() => logout(history)} className={classes.button}>
                 <ExitToAppOutlinedIcon />
                 <Typography className={classes.sentenceCase}>Sign Out</Typography>
               </Button>

@@ -74,13 +74,9 @@ function Review(props) {
       history.push("/");
       window.location.reload();
     }
-    console.log(userIdReview);
-    console.log(userIdReview !== "");
     if (userIdReview != null && userIdReview !== "") {
       getReviewsFromId(userIdReview);
-      console.log("trie");
     } else {
-      console.log("fsdaf");
       getReviews();
     }
   }, [history, userIdReview]);

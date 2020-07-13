@@ -27,6 +27,12 @@ const styles = (theme) => ({
   sentenceCase: {
     textTransform: "none",
     fontSize: "13px",
+    marginLeft: "10px",
+  },
+  accountButton: {
+    height: theme.spacing(10),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
   },
 });
 
@@ -54,7 +60,7 @@ function MenuPopupState(props) {
     <PopupState variant="popover" popupId="account-menu">
       {(popupState) => (
         <React.Fragment>
-          <Button {...bindTrigger(popupState)}>
+          <Button {...bindTrigger(popupState)} className={classes.accountButton}>
             <AccountCircleIcon />
             <Typography className={classes.sentenceCase}>My Account</Typography>
           </Button>

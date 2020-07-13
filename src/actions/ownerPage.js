@@ -60,13 +60,13 @@ export const setIsBiddingRequestDialogOpen = (isOpen, offerId) => (dispatch) =>
     offerId,
   });
 
-export const setIsAcceptCaretakerConfirmationDialogOpen = (isOpen, biddingRequestId) => (
+export const setIsAcceptCaretakerConfirmationDialogOpen = (isOpen, biddingRequest) => (
   dispatch
 ) =>
   dispatch({
     type: SETISACCEPTCARETAKERCONFIRMATIONDIALOGOPEN,
     isOpen,
-    biddingRequestId,
+    biddingRequest,
   });
 
 export const setFeedbackFieldValue = (fieldName, value) => (dispatch) =>

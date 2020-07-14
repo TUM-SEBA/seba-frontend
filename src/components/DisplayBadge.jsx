@@ -20,6 +20,7 @@ const styles = (theme) => ({
   },
 });
 
+//Single Badge card that is displayed when the customer views his badges
 function DisplayBadge(props) {
   const {classes, mybadge} = props;
   const badgeDate = () => {

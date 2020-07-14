@@ -9,6 +9,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+//The Alert that is displayed at the bottom of the page
 function SnackbarAlert(props) {
   const {snackBarData, showSnackBar} = props;
   return (

@@ -44,7 +44,8 @@ const MyMenuItem = withStyles({
   },
 })(MenuItem);
 
-function MenuPopupState(props) {
+//Component that displays various the menu options on clicking the account button on the header
+function AccountMenu(props) {
   const {
     classes,
     setIsViewBadgesDialogOpen,
@@ -146,4 +147,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles, {withTheme: true})(MenuPopupState));
+)(withStyles(styles, {withTheme: true})(AccountMenu));

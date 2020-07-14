@@ -110,6 +110,7 @@ const CustomTextField = withStyles({
   },
 })(TextField);
 
+//The landing page for logging in, signing up a new user
 function LoginPage(props) {
   const {
     classes,

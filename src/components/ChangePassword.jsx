@@ -41,6 +41,7 @@ const CustomTextField = withStyles({
   },
 })(TextField);
 
+//Component that handles change password task
 function ChangePassword(props) {
   const {
     classes,

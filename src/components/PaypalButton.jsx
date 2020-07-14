@@ -1,5 +1,6 @@
 import React from "react";
 
+//Displays the Paypal button and handles the payment success and failure
 function PaypalButton(props) {
   const {paymentDetails, handlePaymentCompleted} = props;
   const paypalRef = React.useRef();

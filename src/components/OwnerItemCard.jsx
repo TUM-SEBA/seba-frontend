@@ -49,6 +49,7 @@ const styles = (theme) => ({
   },
 });
 
+//Each Offer that the owner has created is displayed
 function OwnerItemCard(props) {
   const {
     index,

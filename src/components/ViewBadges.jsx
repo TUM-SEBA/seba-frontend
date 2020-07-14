@@ -22,6 +22,7 @@ const styles = (theme) => ({
   },
 });
 
+//The list of badges displayed when the customer wants to view his badges
 function ViewBadges(props) {
   const {classes, isViewBadgesDialogOpen, setIsViewBadgesDialogOpen, myBadges} = props;
 

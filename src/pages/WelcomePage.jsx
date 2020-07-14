@@ -42,6 +42,7 @@ const styles = (theme) => ({
   },
 });
 
+//The landing page once the user has logged in and can choose to be an owner or caretaker
 function WelcomePage(props) {
   const {classes, setIsChangePasswordDialogOpen, checkNewBadge, newBadge} = props;
 
@@ -79,7 +80,7 @@ function WelcomePage(props) {
               textAlign: "center",
             }}
           >
-            Welcome User, {localStorage["username"]} <br /> Countinue as
+            Welcome @{localStorage["username"]} <br /> Continue as
           </Typography>
 
           <Grid container direction="row" justify="space-around" alignItems="center">

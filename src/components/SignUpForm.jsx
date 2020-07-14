@@ -59,6 +59,7 @@ const keyNameMap = {
   confirmPassword: "Confirm Password",
 };
 
+//The Component that takes care of signing up a new user and also validating his email
 function SignUpForm(props) {
   const {
     classes,

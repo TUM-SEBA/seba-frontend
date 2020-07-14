@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 
+//The error page redirection in case of a major error
 function ErrorPage(props) {
   const {history} = props;
   return (

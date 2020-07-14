@@ -37,6 +37,7 @@ const styles = (theme) => ({
   },
 });
 
+//Component that pops up when a new badge is awarded to the Customer
 function BadgeNotification(props) {
   const {
     classes,

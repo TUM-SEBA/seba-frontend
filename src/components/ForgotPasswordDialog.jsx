@@ -43,6 +43,8 @@ const CustomTextField = withStyles({
   },
 })(TextField);
 
+//Component that is displayed when the user forgets his password.
+//A mail is sent to his registered email id
 function ForgotPasswordDialog(props) {
   const {
     classes,

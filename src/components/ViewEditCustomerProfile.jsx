@@ -38,6 +38,7 @@ const CustomTextField = withStyles({
   },
 })(TextField);
 
+//The Component to view and edit customer profile information
 function ViewEditCustomerProfile(props) {
   const {
     classes,

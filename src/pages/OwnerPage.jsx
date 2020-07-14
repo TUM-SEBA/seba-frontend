@@ -98,7 +98,6 @@ const styles = (theme) => ({
   },
   noDataFoundImageContainer: {
     textAlign: "center",
-    //width: "100%",
   },
   noDataFoundText: {
     textAlign: "center",

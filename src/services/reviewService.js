@@ -1,4 +1,5 @@
 import {reviewURL} from "../constants";
+import {checkInvalidRequest} from "./loginService";
 
 export function insertReview(review) {
   return new Promise((resolve, reject) => {
@@ -39,6 +40,7 @@ export function getReviewsByMyCaretakerId() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -68,6 +70,7 @@ export function getReviewsByCaretakerId(caretakerId) {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })

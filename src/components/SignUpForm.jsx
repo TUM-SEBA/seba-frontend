@@ -67,6 +67,7 @@ function SignUpForm(props) {
     signUpFields,
     setSignUpfieldValue,
     showSnackBar,
+    signUpCustomer,
   } = props;
 
   const [passwordsMatch, setPasswordsMatch] = React.useState(true);
@@ -102,9 +103,7 @@ function SignUpForm(props) {
           ? emptyField
             ? showSnackBar(true, requiredFieldsEmpty, "error")
             : await signUpCustomer(signUpFields).then((signUpSuccessful) =>
-                signUpSuccessful
-                  ? handleSuccessfulSignUp()
-                  : showSnackBar(true, "Username exists", "error")
+                signUpSuccessful ? handleSuccessfulSignUp() : null
               )
           : showSnackBar(true, "Not a Valid Email format", "error")
         : showSnackBar(true, passwordStringCheckAlert, "error")
@@ -174,6 +173,7 @@ const mapDispatchToProps = {
   setIsSignUpDialogOpen: setIsSignUpDialogOpen,
   setSignUpfieldValue: setSignUpfieldValue,
   showSnackBar: showSnackBar,
+  signUpCustomer: signUpCustomer,
 };
 
 export default connect(

@@ -1,11 +1,20 @@
 import {authURL} from "../constants";
 import {setLoginAlertText, showSnackBar} from "../actions/loginPage";
 
-export let invalidRequest = async (response) => {
+export const invalidRequest = async (response) => {
   let error = new Error();
   const res = await response.json();
+  checkInvalidRequest(response.status);
   error.message = res.message;
   return error;
+};
+
+export const checkInvalidRequest = (responseStatus) => {
+  if (responseStatus === 401) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    window.location.reload();
+  }
 };
 
 export function isAuthenticated() {
@@ -21,23 +30,29 @@ export function signUpCustomer(signUpFields) {
     address: signUpFields.address,
     email: signUpFields.email,
   };
-  return fetch(authURL + "/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  })
-    .then((response) => {
-      if (response.status === 200) return response.json();
-      else throw invalidRequest(response);
+  return (dispatch) => {
+    return fetch(authURL + "/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
     })
-    .then(() => {
-      return true;
-    })
-    .catch((err) => {
-      return false;
-    });
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        else throw invalidRequest(response);
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(async (err) => {
+        let errorMessage = "Server not reachable";
+        if (err instanceof Promise)
+          errorMessage = await err.then((error) => error.message);
+        dispatch(showSnackBar(true, errorMessage, "error"));
+        return false;
+      });
+  };
 }
 
 export function loginCustomer(username, password) {
@@ -64,7 +79,8 @@ export function loginCustomer(username, password) {
         return true;
       })
       .catch(async (err) => {
-        const errorMessage = await err.then((err) => err.message);
+        let errorMessage = "Server not reachable";
+        if (err instanceof Promise) errorMessage = await err.then((err) => err.message);
         dispatch(setLoginAlertText(errorMessage));
         return false;
       });
@@ -118,7 +134,9 @@ export function forgotPassword(email) {
         return true;
       })
       .catch(async (err) => {
-        const errorMessage = await err.then((error) => error.message);
+        let errorMessage = "Server not reachable";
+        if (err instanceof Promise)
+          errorMessage = await err.then((error) => error.message);
         dispatch(showSnackBar(true, errorMessage, "error"));
         return false;
       });

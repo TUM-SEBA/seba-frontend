@@ -1,4 +1,5 @@
 import {biddingRequestURL} from "../constants";
+import {checkInvalidRequest} from "./loginService";
 
 export function insertBiddingRequest(biddingRequest) {
   const body = {
@@ -19,6 +20,7 @@ export function insertBiddingRequest(biddingRequest) {
       if (response.status === 201) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -45,6 +47,7 @@ export function getBiddingRequestByOffer(offerId) {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -74,6 +77,7 @@ export function getCaretakerFromBiddingRequest(biddingRequestId) {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })

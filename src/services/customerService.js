@@ -25,7 +25,6 @@ export function getMyBadges() {
         dispatch(saveMyBadges(result));
       })
       .catch(() => {
-        console.log("Invalid Request");
         return false;
       });
   };
@@ -81,7 +80,9 @@ export function changePassword(currentPassword, newPassword) {
           localStorage.removeItem("shouldChangePassword");
       })
       .catch(async (err) => {
-        const errorMessage = await err.then((error) => error.message);
+        let errorMessage = "Server not reachable";
+        if (err instanceof Promise)
+          errorMessage = await err.then((error) => error.message);
         dispatch(showSnackBar(true, errorMessage, "error"));
       });
   };

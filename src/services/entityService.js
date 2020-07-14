@@ -1,4 +1,5 @@
 import {entityURL} from "../constants";
+import {checkInvalidRequest} from "./loginService";
 
 export function getEntities() {
   return new Promise((resolve, reject) => {
@@ -20,6 +21,7 @@ export function getEntities() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -49,6 +51,7 @@ export function insertEntity(entity, images) {
       if (response.status === 201) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -75,6 +78,7 @@ export function updateEntity(entity, images) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -93,6 +97,7 @@ export function deleteEntity(entityId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });

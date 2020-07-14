@@ -1,4 +1,5 @@
 import {offerURL} from "../constants";
+import {checkInvalidRequest} from "./loginService";
 
 export function getAvailableOffers() {
   return new Promise((resolve, reject) => {
@@ -20,6 +21,7 @@ export function getAvailableOffers() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -49,6 +51,7 @@ export function getInterestedOffers() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -78,6 +81,7 @@ export function getNotInterestedOffers() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -107,6 +111,7 @@ export function getRejectedOffers() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -136,6 +141,7 @@ export function getOffer(offerId) {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })
@@ -166,6 +172,7 @@ export function insertOffer(offer) {
       if (response.status === 201) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -190,6 +197,7 @@ export function acceptOffer(offerId, approveBiddingRequestId, price, insurance) 
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -213,6 +221,7 @@ export function rejectOffer(offerId, biddingRequestId, caretakerId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -231,6 +240,7 @@ export function caretakingCompleted(offerId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -249,6 +259,7 @@ export function postPaymentCompleted(offerId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -267,6 +278,7 @@ export function closeOffer(offerId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -285,6 +297,7 @@ export function disableOfferNotification(offerId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -303,6 +316,7 @@ export function updateNotInterested(offerId) {
       if (response.status === 200) {
         resolve();
       } else {
+        checkInvalidRequest(response.status);
         reject(response.status);
       }
     });
@@ -329,6 +343,7 @@ export function getOffersByOwnerId() {
               reject(response.status);
             });
         } else {
+          checkInvalidRequest(response.status);
           reject(response.status);
         }
       })

@@ -30,7 +30,8 @@ const styles = (theme) => {
     },
     reviewButton: {
       width: "100%",
-      backgroundColor: "darkgrey",
+      backgroundColor: "#307D3D",
+      color: "white",
     },
     buttonContainer: {
       margin: `${theme.spacing(1)}px 0`,

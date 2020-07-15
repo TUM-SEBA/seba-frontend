@@ -1,3 +1,7 @@
+/**
+ * FilterSearch: Component to filter / search data based on a query.
+ */
+
 import React, {useState} from "react";
 import {withStyles} from "@material-ui/styles";
 import {

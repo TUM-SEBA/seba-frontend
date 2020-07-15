@@ -1,3 +1,7 @@
+/**
+ * MenuDialog: Component that contains dialog that can be displayed on both owner & caretaker page.
+ */
+
 import React from "react";
 import ViewBadges from "./ViewBadges";
 import ChangePassword from "./ChangePassword";

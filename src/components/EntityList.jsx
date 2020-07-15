@@ -1,3 +1,7 @@
+/**
+ * EntityList: Dialog which displays list of entities owned by specific owner.
+ */
+
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";

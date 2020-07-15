@@ -1,3 +1,7 @@
+/**
+ * BiddingRequestList: Dialog which displays list of bidding requests of a specific offer.
+ */
+
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";

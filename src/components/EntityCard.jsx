@@ -1,3 +1,7 @@
+/**
+ * EntityCard: Card which displays information about an entity.
+ */
+
 import React from "react";
 import {withStyles} from "@material-ui/styles";
 import {Button, Card, CardActions, Grid} from "@material-ui/core";

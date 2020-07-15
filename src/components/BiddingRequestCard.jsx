@@ -1,6 +1,6 @@
 import React from "react";
 import {withStyles} from "@material-ui/styles";
-import {Button, Card, CardActions, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardActions, Grid} from "@material-ui/core";
 import {setIsReviewDialogOpen} from "../actions/welcomePage";
 import {connect} from "react-redux";
 
@@ -24,6 +24,13 @@ const styles = (theme) => {
     button: {
       width: "100%",
     },
+    reviewButton: {
+      width: "100%",
+      backgroundColor: "darkgrey",
+    },
+    buttonContainer: {
+      margin: `${theme.spacing(1)}px 0`,
+    },
   };
 };
 
@@ -38,19 +45,17 @@ function BiddingRequestCard(props) {
   } = props;
   return (
     <Card variant="outlined" className={classes.gridItem}>
-      <div>
-        <Button
-          onClick={() => setIsReviewDialogOpen(true, biddingRequest.caretaker._id)}
-          className={classes.button}
-        >
-          <Typography className={classes.sentenceCase}>
-            {biddingRequest.caretaker.username}
-          </Typography>
-        </Button>
-      </div>
       <div className={classes.line}>Caretaker: @{biddingRequest.caretaker.name}</div>
       <div className={classes.line}>Bidding Price: {biddingRequest.price}</div>
       <div className={classes.line}>Remarks: {biddingRequest.remarks}</div>
+      <div className={classes.buttonContainer}>
+        <Button
+          onClick={() => setIsReviewDialogOpen(true, biddingRequest.caretaker._id)}
+          className={classes.reviewButton}
+        >
+          Reviews
+        </Button>
+      </div>
       {offer.status === "Not Assigned" && (
         <CardActions>
           <Grid container spacing={1}>

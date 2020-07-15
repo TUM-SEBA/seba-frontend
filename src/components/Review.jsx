@@ -110,13 +110,19 @@ function Review(props) {
       </DialogTitle>
       <DialogContent>
         <div className={classes.displayUs}>
-          <div className={classes.gridContainerDialog}>
-            {reviews
-              .filter((review) => {
-                return true;
-              })
-              .map((review, index) => getGridReviewItem(index, review))}
-          </div>
+          {reviews.length === 0 ? (
+            <div className={classes.gridContainerDialog}>
+              <Typography variant="h6">No reviews found for the user.</Typography>
+            </div>
+          ) : (
+            <div className={classes.gridContainerDialog}>
+              {reviews
+                .filter((review) => {
+                  return true;
+                })
+                .map((review, index) => getGridReviewItem(index, review))}
+            </div>
+          )}
         </div>
       </DialogContent>
       <DialogActions>

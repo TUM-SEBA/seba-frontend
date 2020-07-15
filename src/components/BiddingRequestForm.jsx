@@ -1,3 +1,7 @@
+/**
+ * BiddingRequestForm: Form dialog which is used to submit bidding request for an offer.
+ */
+
 import React, {useEffect} from "react";
 import {
   Dialog,

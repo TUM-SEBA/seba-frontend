@@ -1,3 +1,7 @@
+/**
+ * CaretakerCard: Card which displays information about an offer on caretaker page.
+ */
+
 import React from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";

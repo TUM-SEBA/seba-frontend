@@ -1,3 +1,7 @@
+/**
+ * EntityForm: Form dialog which is used to insert / update an entity.
+ */
+
 import React, {useRef} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";

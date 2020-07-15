@@ -1,3 +1,7 @@
+/**
+ * AcceptCaretakerConfirmation: Confirmation dialog when accepting bidding request.
+ */
+
 import React, {useState} from "react";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/styles";

@@ -22,7 +22,7 @@ const styles = (theme) => {
     description: {
       margin: `${theme.spacing(1)}px 0`,
       height: theme.spacing(10),
-      overflowY: "scroll",
+      overflowY: "auto",
       textAlign: "justify",
     },
     entityImage: {

@@ -7,6 +7,7 @@ import {withStyles} from "@material-ui/styles";
 import {Button, Card, CardActions, Grid} from "@material-ui/core";
 import {setIsReviewDialogOpen} from "../actions/welcomePage";
 import {connect} from "react-redux";
+import Rating from "@material-ui/lab/Rating/Rating";
 
 const styles = (theme) => {
   return {
@@ -38,6 +39,16 @@ const styles = (theme) => {
   };
 };
 
+function calculateAvg(biddingRequest) {
+  if (biddingRequest.caretaker.feedbacksGiven > 0) {
+    return (
+      biddingRequest.caretaker.starsRecieved / biddingRequest.caretaker.feedbacksGiven
+    );
+  } else {
+    return 0;
+  }
+}
+
 function BiddingRequestCard(props) {
   const {
     classes,
@@ -52,6 +63,9 @@ function BiddingRequestCard(props) {
       <div className={classes.line}>Caretaker: @{biddingRequest.caretaker.name}</div>
       <div className={classes.line}>Bidding Price: {biddingRequest.price}</div>
       <div className={classes.line}>Remarks: {biddingRequest.remarks}</div>
+      <div className={classes.line}>
+        <Rating name="read-only" value={calculateAvg(biddingRequest)} readOnly />
+      </div>
       <div className={classes.buttonContainer}>
         <Button
           onClick={() => setIsReviewDialogOpen(true, biddingRequest.caretaker._id)}

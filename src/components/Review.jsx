@@ -43,6 +43,7 @@ const styles = (theme) => ({
   reviewCardText: {
     width: "500px",
   },
+  reviewCardRating: {},
 });
 
 /**

@@ -110,7 +110,7 @@ function Review(props) {
       </DialogTitle>
       <DialogContent>
         <div className={classes.displayUs}>
-          {reviews.length == 0 ? (
+          {reviews.length === 0 ? (
             <div className={classes.gridContainerDialog}>
               <Typography variant="h6">No reviews found for the user.</Typography>
             </div>

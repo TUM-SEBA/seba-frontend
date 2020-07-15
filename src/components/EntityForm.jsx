@@ -217,7 +217,7 @@ function EntityForm(props) {
               onChange={handleFileChange}
             />
             <Button variant="contained" color="secondary" onClick={handleBrowseClick}>
-              Browse
+              Browse Images
             </Button>
             <span className={classes.noOfImages}>
               {entityFields["images"].length} Images

@@ -33,6 +33,7 @@ import {showSnackBar} from "../actions/loginPage";
 import {NavigateBefore, NavigateNext} from "@material-ui/icons";
 import {insertBiddingRequest} from "../services/biddingRequestService";
 import {getOffer} from "../services/offerService";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const initialCustomer = {
   _id: "",
@@ -297,6 +298,15 @@ function BiddingRequestForm(props) {
                     <div key={i} className={classes.textFields}>
                       <TextField
                         id={keyName}
+                        InputProps={
+                          keyMap[keyName].type === FieldType.TEXT_FIELD_NUMBER
+                            ? {
+                                endAdornment: (
+                                  <InputAdornment position="end">€</InputAdornment>
+                                ),
+                              }
+                            : {}
+                        }
                         fullWidth
                         type={
                           keyMap[keyName].type === FieldType.TEXT_FIELD

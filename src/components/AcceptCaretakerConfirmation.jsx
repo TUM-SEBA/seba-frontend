@@ -85,12 +85,12 @@ function AcceptCaretakerConfirmation(props) {
         <div className={classes.container}>
           <div className={classes.question}>Initiate pre payment</div>
           <div className={classes.line}>
-            Pre Payment Amount: {biddingRequest.price * 0.2} euro
+            Pre Payment Amount: {biddingRequest.price * 0.2} €
           </div>
           <div className={classes.line}>
-            Post Payment Amount: {biddingRequest.price * 0.8} euro
+            Post Payment Amount: {biddingRequest.price * 0.8} €
           </div>
-          <div className={classes.line}>Total Price: {biddingRequest.price} euro</div>
+          <div className={classes.line}>Total Price: {biddingRequest.price} €</div>
           <div className={classes.line}>Start Date: {biddingRequest.offer.startDate}</div>
           <div className={classes.line}>End Date: {biddingRequest.offer.endDate}</div>
           <div className={classes.insurance}>

@@ -87,6 +87,11 @@ function CaretakerCard(props) {
     isShowStatus,
   } = props;
 
+  /**
+   * Formats the date to a more readable form. (day, month, year)
+   * @param date
+   * @returns {string}
+   */
   function formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),

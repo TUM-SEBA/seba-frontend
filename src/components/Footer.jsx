@@ -31,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ * Footer with about me, and social media buttons.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 const Footer = (props) => {
   const {history, setIsAboutUsDialogOpen} = props;
 

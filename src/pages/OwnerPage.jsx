@@ -119,6 +119,12 @@ const styles = (theme) => ({
   },
 });
 
+/**
+ * Owner page which shows previously created offers, and allows creating new offers and entitties.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 function OfferPage(props) {
   const {
     history,

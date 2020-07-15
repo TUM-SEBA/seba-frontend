@@ -83,6 +83,12 @@ const styles = (theme) => ({
   },
 });
 
+/**
+ * Create a new offer component when you click + button.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 function OfferForm(props) {
   const {
     classes,

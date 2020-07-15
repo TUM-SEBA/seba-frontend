@@ -45,6 +45,12 @@ const styles = (theme) => ({
   },
 });
 
+/**
+ * Shows the reviews of the user
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 function Review(props) {
   const {
     classes,

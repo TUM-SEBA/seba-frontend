@@ -32,6 +32,12 @@ const styles = (theme) => ({
   },
 });
 
+/**
+ * Team55 of Seba which did the project. Contains photos and names of the team.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 function AboutUs(props) {
   const {classes, isAboutUsDialogOpen, setIsAboutUsDialogOpen} = props;
 

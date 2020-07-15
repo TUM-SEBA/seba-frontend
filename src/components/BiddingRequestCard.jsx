@@ -29,13 +29,24 @@ const styles = (theme) => {
     button: {
       width: "100%",
     },
-    reviewButton: {
-      width: "100%",
-      backgroundColor: "#307D3D",
-      color: "white",
-    },
     buttonContainer: {
       margin: `${theme.spacing(1)}px 0`,
+    },
+    rowFlexRating: {
+      margin: `${theme.spacing(1)}px 0`,
+      display: "flex",
+      alignItems: "center",
+    },
+    ratingTextLink: {
+      textDecoration: "underline",
+      color: "blue",
+      cursor: "pointer",
+      paddingLeft: "10px",
+    },
+    remarkDiv: {
+      overflow: "auto",
+      height: "68px",
+      wordBreak: "break-all",
     },
   };
 };
@@ -62,19 +73,17 @@ function BiddingRequestCard(props) {
   return (
     <Card variant="outlined" className={classes.gridItem}>
       <div className={classes.line}>Caretaker: @{biddingRequest.caretaker.name}</div>
-      <div className={classes.line}>Bidding Price: {biddingRequest.price}</div>
-      <div className={classes.line}>Remarks: {biddingRequest.remarks}</div>
-      <div className={classes.line}>
+      <div className={classes.rowFlexRating}>
         <Rating name="read-only" value={calculateAvg(biddingRequest)} readOnly />
-      </div>
-      <div className={classes.buttonContainer}>
-        <Button
+        <span
+          className={classes.ratingTextLink}
           onClick={() => setIsReviewDialogOpen(true, biddingRequest.caretaker._id)}
-          className={classes.reviewButton}
         >
-          Reviews
-        </Button>
+          Total Stars: {biddingRequest.caretaker.starsRecieved}
+        </span>
       </div>
+      <div className={classes.line}>Bidding Price: {biddingRequest.price} €</div>
+      <div className={classes.remarkDiv}>Remarks: {biddingRequest.remarks}</div>
       {offer.status === "Not Assigned" && (
         <CardActions>
           <Grid container spacing={1}>
